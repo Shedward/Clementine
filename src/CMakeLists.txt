@@ -1160,6 +1160,14 @@ optional_source(HAVE_BOX
     internet/boxsettingspage.ui
 )
 
+# Vk.com support
+optional_source(HAVE_VK
+  SOURCES
+    internet/vkservice.cpp
+  HEADERS
+    internet/vkservice.h
+)
+
 # Hack to add Clementine to the Unity system tray whitelist
 optional_source(LINUX
   SOURCES core/ubuntuunityhack.cpp
