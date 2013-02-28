@@ -78,6 +78,10 @@
 #  include "internet/boxsettingspage.h"
 #endif
 
+#ifdef HAVE_VK
+#  include "internet/vksettingspage.h"
+#endif
+
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QPushButton>
@@ -177,6 +181,10 @@ SettingsDialog::SettingsDialog(Application* app, BackgroundStreams* streams, QWi
 
 #ifdef HAVE_SPOTIFY
   AddPage(Page_Spotify, new SpotifySettingsPage(this), providers);
+#endif
+
+#ifdef HAVE_VK
+  AddPage(Page_Vk, new VkSettingsPage(this), providers);
 #endif
 
   AddPage(Page_Magnatune, new MagnatuneSettingsPage(this), providers);
