@@ -1162,6 +1162,9 @@ optional_source(HAVE_BOX
 
 # Vk.com support
 optional_source(HAVE_VK
+  INCLUDE_DIRECTORIES 
+    ${VREEN_INCLUDE_DIRS}
+    ${VREENOAUTH_INCLUDE_DIRS}
   SOURCES
     internet/vkservice.cpp
     internet/vksettingspage.cpp
@@ -1236,6 +1239,10 @@ target_link_libraries(clementine_lib
   z
   Qocoa
 )
+
+if(HAVE_VK)
+    target_link_libraries(clementine_lib ${VREEN_LIBRARIES} ${VREENOAUTH_LIBRARIES})
+endif(HAVE_VK)
 
 if(ENABLE_VISUALISATIONS)
   target_link_libraries(clementine_lib ${LIBPROJECTM_LIBRARIES})

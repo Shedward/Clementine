@@ -465,6 +465,10 @@ if(HAVE_MOODBAR)
   add_subdirectory(gst/moodbar)
 endif()
 
+if (HAVE_VK)
+  add_subdirectory(3rdparty/vreen)
+endif(HAVE_VK)
+
 # Uninstall support
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
