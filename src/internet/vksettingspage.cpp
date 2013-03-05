@@ -42,14 +42,7 @@ void VkSettingsPage::Save()
 {
 }
 
-void VkSettingsPage::LoginClicked()
+void VkSettingsPage::OnlineStateChanged()
 {
 }
 
-void VkSettingsPage::LogoutClicked()
-{
-}
-
-void VkSettingsPage::Connected()
-{
-}

@@ -1,9 +1,13 @@
 #ifndef VKSERVICE_H
 #define VKSERVICE_H
 
+#include "vreen/client.h"
+
 #include "internetservice.h"
 #include "internetmodel.h"
 #include "core/song.h"
+
+#include <boost/scoped_ptr.hpp>
 
 
 class VkService : public InternetService
@@ -15,10 +19,13 @@ public:
 
     static const char* kServiceName;
     static const char* kSettingGroup;
-    static const char* kApiKey;
+    static const uint  kApiKey;
 
-    enum ItemType {
+    enum ItemType {        
         Type_Root = InternetModel::TypeCount,
+
+        Type_NeedLogin,
+
         Type_Recommendations,
         Type_MyMusic,
 
@@ -30,23 +37,28 @@ public:
 
     QStandardItem* CreateRootItem();
     void LazyPopulate(QStandardItem *parent);
-    
-signals:
-    
-public slots:
-    void addSearchPlaylist(const QString &query);
-    void addUserPlaylist(uint uid, uint aid);
-    void addGroupPlaylist(uint gid, uint aid);
+    void ShowContextMenu(const QPoint &global_pos);
+    void ItemDoubleClicked(QStandardItem *item);
 
+public slots:
+    void Login();
+    void Logout();
+    
+private slots:
     void ShowConfig();
 
 private:
     QStandardItem* CreateStandartItem();
-
+    QStandardItem* need_login_;
     QStandardItem* root_item_;
     QStandardItem* recommendations_;
     QStandardItem* my_music_;
     QVector<QStandardItem*> playlists_;
+
+    boost::scoped_ptr<QMenu> context_menu_;
+
+    Vreen::Client client_;
+    bool connected_;
 };
 
 #endif // VKSERVICE_H
