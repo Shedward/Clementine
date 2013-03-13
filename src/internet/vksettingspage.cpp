@@ -2,6 +2,7 @@
 
 #include "ui_vksettingspage.h"
 #include "core/application.h"
+#include "core/logging.h"
 #include "internet/vkservice.h"
 
 
@@ -11,6 +12,8 @@ VkSettingsPage::VkSettingsPage(SettingsDialog *parent)
       service_(dialog()->app()->internet_model()->Service<VkService>())
 {
     ui_->setupUi(this);
+    connect(service_, SIGNAL(LoginSuccess(bool)),
+            SLOT(LoginSuccess(bool)));
 }
 
 VkSettingsPage::~VkSettingsPage()
@@ -22,19 +25,11 @@ void VkSettingsPage::Load()
 {
     QSettings s;
     s.beginGroup(VkService::kSettingGroup);
-    QString name = s.value("name").toString();
-    if (name.isEmpty()) {
-        ui_->name->setText(
-                    tr("Clicking the Login button will "
-                       "open a web browser.  You should "
-                       "return to Clementine after you "
-                       "have logged in."));
-        ui_->photo->setPixmap(QPixmap(":vk/deactivated.gif"));
-        ui_->login_button->setText("Login");
+
+    if (service_->hasAccount()) {
+        Login();
     } else {
-        ui_->name->setText(s.value("name").toString());
-        ui_->photo->setPixmap(QPixmap(s.value("photo").toString()));
-        ui_->login_button->setText("Logout");
+        Logout();
     }
 }
 
@@ -42,7 +37,42 @@ void VkSettingsPage::Save()
 {
 }
 
-void VkSettingsPage::OnlineStateChanged()
+void VkSettingsPage::Login()
 {
+    qLog(Debug) << "Login clicked";
+    ui_->account->setEnabled(false);
+    service_->Login();
+}
+
+void VkSettingsPage::LoginSuccess(bool succ)
+{
+    qLog(Debug) << "LoginSuccess" << succ;
+    if (succ) {
+        ui_->login_button->setText("Logout");
+
+        ui_->name->setText("Loading...");
+        connect(service_, SIGNAL(NameUpdated(QString)),
+                ui_->name, SLOT(setText(QString)));
+
+        connect(ui_->login_button, SIGNAL(clicked()),
+                SLOT(Logout()));
+        disconnect(ui_->login_button, SIGNAL(clicked()),
+                   this, SLOT(Login()));
+    }
+    ui_->account->setEnabled(true);
+}
+
+void VkSettingsPage::Logout()
+{
+    qLog(Debug) << "Logout clicked";
+    service_->Logout();
+
+    ui_->login_button->setText("Login");
+    ui_->name->setText("");
+
+    connect(ui_->login_button, SIGNAL(clicked()),
+            SLOT(Login()));
+    disconnect(ui_->login_button, SIGNAL(clicked()),
+               this, SLOT(Logout()));
 }
 

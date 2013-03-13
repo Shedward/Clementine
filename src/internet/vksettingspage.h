@@ -21,7 +21,10 @@ public:
     void Save();
 
 private slots:
-  void OnlineStateChanged();
+    void LoginSuccess(bool succ);
+
+    void Login();
+    void Logout();
 
 private:
     Ui_VkSettingsPage* ui_;

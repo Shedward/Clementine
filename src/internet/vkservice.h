@@ -1,14 +1,16 @@
 #ifndef VKSERVICE_H
 #define VKSERVICE_H
 
-#include "vreen/client.h"
-
 #include "internetservice.h"
 #include "internetmodel.h"
 #include "core/song.h"
 
 #include <boost/scoped_ptr.hpp>
 
+namespace Vreen {
+class Client;
+class OAuthConnection;
+}
 
 class VkService : public InternetService
 {
@@ -35,30 +37,45 @@ public:
         Type_Search
     };
 
+    /* InternetService interface */
     QStandardItem* CreateRootItem();
     void LazyPopulate(QStandardItem *parent);
     void ShowContextMenu(const QPoint &global_pos);
     void ItemDoubleClicked(QStandardItem *item);
 
-public slots:
+    /* Interface*/
+    void RefreshRootSubitems();
+
+    /* Connection */
     void Login();
     void Logout();
+    bool hasAccount() const { return hasAccount_; }
+
+signals:
+    void NameUpdated(QString name);
+    void LoginSuccess(bool succ);
     
 private slots:
     void ShowConfig();
 
+    void ChangeAccessToken(const QByteArray &token, time_t expiresIn);
+    void OnlineStateChanged(bool online);
+
 private:
+    /* Interface */
     QStandardItem* CreateStandartItem();
+
     QStandardItem* need_login_;
     QStandardItem* root_item_;
     QStandardItem* recommendations_;
     QStandardItem* my_music_;
     QVector<QStandardItem*> playlists_;
-
     boost::scoped_ptr<QMenu> context_menu_;
 
-    Vreen::Client client_;
-    bool connected_;
+    /* Connection */
+    Vreen::Client *client_;
+    Vreen::OAuthConnection *connection_;
+    bool hasAccount_;
 };
 
 #endif // VKSERVICE_H
