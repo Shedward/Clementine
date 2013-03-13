@@ -74,5 +74,6 @@ void VkSettingsPage::Logout()
             SLOT(Login()));
     disconnect(ui_->login_button, SIGNAL(clicked()),
                this, SLOT(Logout()));
+    ui_->account->setEnabled(true);
 }
 

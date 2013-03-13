@@ -10,6 +10,7 @@
 namespace Vreen {
 class Client;
 class OAuthConnection;
+class Buddy;
 }
 
 class VkService : public InternetService
@@ -59,7 +60,9 @@ private slots:
     void ShowConfig();
 
     void ChangeAccessToken(const QByteArray &token, time_t expiresIn);
+    void ChangeUid(int uid);
     void OnlineStateChanged(bool online);
+    void ChangeMe(Vreen::Buddy*me);
 
 private:
     /* Interface */

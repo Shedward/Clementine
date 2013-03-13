@@ -10,8 +10,11 @@
 #include "core/logging.h"
 #include "ui/iconloader.h"
 
-#include "vkservice.h"
 #include "vreen/auth/oauthconnection.h"
+#include "vreen/contact.h"
+#include "vreen/roster.h"
+
+#include "vkservice.h"
 
 #define  __(var) qLog(Debug) << #var " =" << (var);
 
@@ -33,9 +36,8 @@ VkService::VkService(Application *app, InternetModel *parent) :
 
     /* Init connection */
     QByteArray token = s.value("token",QByteArray()).toByteArray();
-    uint uid = s.value("uid",0).toUInt();
+    int uid = s.value("uid",0).toInt();
     hasAccount_ = not (!uid or token.isEmpty());
-    __(token)
 
     connection_ = new Vreen::OAuthConnection(kApiKey,client_);
     connection_->setConnectionOption(Vreen::Connection::ShowAuthDialog,true);
@@ -43,15 +45,15 @@ VkService::VkService(Application *app, InternetModel *parent) :
     if (hasAccount_) {
          qLog(Debug) << "--- Have account";
         time_t expiresIn = s.value("expiresIn", 0).toUInt();
-        uint uid = s.value("uid",0).toUInt();
-        __(expiresIn)
+        int uid = s.value("uid",0).toInt();
         connection_->setAccessToken(token, expiresIn);
         connection_->setUid(uid);
         Login();
-    }
-
+    };
     connect(connection_, SIGNAL(accessTokenChanged(QByteArray,time_t)),
             SLOT(ChangeAccessToken(QByteArray,time_t)));
+    connect(client_->roster(), SIGNAL(uidChanged(int)),
+            SLOT(ChangeUid(int)));
     connect(client_, SIGNAL(onlineStateChanged(bool)),
             SLOT(OnlineStateChanged(bool)));
 
@@ -138,10 +140,13 @@ void VkService::RefreshRootSubitems()
 void VkService::Login()
 {
     qLog(Debug) << "--- Login";
+    client_->connectToHost();
     if (hasAccount_) {
         emit LoginSuccess(true);
+        if (client_->me()) {
+            ChangeMe(client_->me());
+        }
     }
-    client_->connectToHost();
 }
 
 void VkService::Logout()
@@ -172,7 +177,13 @@ void VkService::ChangeAccessToken(const QByteArray &token, time_t expiresIn)
     s.beginGroup(kSettingGroup);
     s.setValue("token", token);
     s.setValue("expiresIn",uint(expiresIn));
-    s.setValue("uid",uint(connection_->uid()));
+}
+
+void VkService::ChangeUid(int uid)
+{
+    QSettings s;
+    s.beginGroup(kSettingGroup);
+    s.setValue("uid", uid);
 }
 
 void VkService::OnlineStateChanged(bool online)
@@ -182,5 +193,20 @@ void VkService::OnlineStateChanged(bool online)
         hasAccount_ = true;
         emit LoginSuccess(true);
         RefreshRootSubitems();
+        connect(client_, SIGNAL(meChanged(Vreen::Buddy*)),
+                SLOT(ChangeMe(Vreen::Buddy*)));
     }
+}
+
+void VkService::ChangeMe(Vreen::Buddy *me)
+{
+    if (!me) {
+        qLog(Warning) << "Me is NULL.";
+        return;
+    }
+
+    emit NameUpdated(me->name());
+    connect(me, SIGNAL(nameChanged(QString)),
+            SIGNAL(NameUpdated(QString)));
+    me->update(QStringList("name"));
 }
