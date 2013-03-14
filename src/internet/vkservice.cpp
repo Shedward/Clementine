@@ -29,7 +29,9 @@ VkService::VkService(Application *app, InternetModel *parent) :
     recommendations_(NULL),
     my_music_(NULL),
     context_menu_(new QMenu),
-    client_(new Vreen::Client)
+    client_(new Vreen::Client),
+    connection_(NULL),
+    hasAccount_(false)
 {
     QSettings s;
     s.beginGroup(kSettingGroup);
@@ -39,21 +41,11 @@ VkService::VkService(Application *app, InternetModel *parent) :
     int uid = s.value("uid",0).toInt();
     hasAccount_ = not (!uid or token.isEmpty());
 
-    connection_ = new Vreen::OAuthConnection(kApiKey,client_);
-    connection_->setConnectionOption(Vreen::Connection::ShowAuthDialog,true);
-    client_->setConnection(connection_);
+
     if (hasAccount_) {
-         qLog(Debug) << "--- Have account";
-        time_t expiresIn = s.value("expiresIn", 0).toUInt();
-        int uid = s.value("uid",0).toInt();
-        connection_->setAccessToken(token, expiresIn);
-        connection_->setUid(uid);
         Login();
     };
-    connect(connection_, SIGNAL(accessTokenChanged(QByteArray,time_t)),
-            SLOT(ChangeAccessToken(QByteArray,time_t)));
-    connect(client_->roster(), SIGNAL(uidChanged(int)),
-            SLOT(ChangeUid(int)));
+
     connect(client_, SIGNAL(onlineStateChanged(bool)),
             SLOT(OnlineStateChanged(bool)));
 
@@ -140,29 +132,62 @@ void VkService::RefreshRootSubitems()
 void VkService::Login()
 {
     qLog(Debug) << "--- Login";
-    client_->connectToHost();
-    if (hasAccount_) {
+
+    if (connection_) {
+        client_->connectToHost();
         emit LoginSuccess(true);
         if (client_->me()) {
             ChangeMe(client_->me());
         }
+    } else {
+        connection_ = new Vreen::OAuthConnection(kApiKey,client_);
+        connection_->setConnectionOption(Vreen::Connection::ShowAuthDialog,true);
+        client_->setConnection(connection_);
+
+        connect(connection_, SIGNAL(accessTokenChanged(QByteArray,time_t)),
+                SLOT(ChangeAccessToken(QByteArray,time_t)));
+        connect(client_->roster(), SIGNAL(uidChanged(int)),
+                SLOT(ChangeUid(int)));
     }
+
+    if (hasAccount_) {
+        qLog(Debug) << "--- Have account";
+
+        QSettings s;
+        s.beginGroup(kSettingGroup);
+        QByteArray token = s.value("token",QByteArray()).toByteArray();
+        time_t expiresIn = s.value("expiresIn", 0).toUInt();
+        int uid = s.value("uid",0).toInt();
+
+        connection_->setAccessToken(token, expiresIn);
+        connection_->setUid(uid);
+    }
+
+    client_->connectToHost();
 }
 
 void VkService::Logout()
 {
     qLog(Debug) << "--- Logout";
-    client_->disconnectFromHost();
-
-    hasAccount_ = false;
-    RefreshRootSubitems();
 
     QSettings s;
     s.beginGroup(kSettingGroup);
     s.setValue("token", QByteArray());
     s.setValue("expiresIn",0);
     s.setValue("uid",uint(0));
-    connection_->clear();
+
+    hasAccount_ = false;
+
+    if (connection_) {
+        client_->disconnectFromHost();
+        connection_->clear();
+        delete connection_;
+        delete client_->roster();
+        delete client_->me();
+        connection_ = NULL;
+    }
+
+    RefreshRootSubitems();
 }
 
 void VkService::ShowConfig()
