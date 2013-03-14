@@ -7,6 +7,10 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#include "vreen/auth/oauthconnection.h"
+
+typedef Vreen::OAuthConnection::Scopes Scopes;
+
 namespace Vreen {
 class Client;
 class OAuthConnection;
@@ -23,6 +27,7 @@ public:
     static const char* kServiceName;
     static const char* kSettingGroup;
     static const uint  kApiKey;
+    static const Scopes kScopes;
 
     enum ItemType {        
         Type_Root = InternetModel::TypeCount,

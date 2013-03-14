@@ -18,9 +18,15 @@
 
 #define  __(var) qLog(Debug) << #var " =" << (var);
 
-const char* VkService::kServiceName = "Vk.com";
-const char* VkService::kSettingGroup = "Vk.com";
-const uint  VkService::kApiKey = 3421812;
+const char*  VkService::kServiceName = "Vk.com";
+const char*  VkService::kSettingGroup = "Vk.com";
+const uint   VkService::kApiKey = 3421812;
+const Scopes VkService::kScopes =
+        Vreen::OAuthConnection::Offline |
+        Vreen::OAuthConnection::Audio |
+        Vreen::OAuthConnection::Friends |
+        Vreen::OAuthConnection::Groups;
+
 
 VkService::VkService(Application *app, InternetModel *parent) :
     InternetService(kServiceName, app, parent, parent),
@@ -41,10 +47,12 @@ VkService::VkService(Application *app, InternetModel *parent) :
     int uid = s.value("uid",0).toInt();
     hasAccount_ = not (!uid or token.isEmpty());
 
-
     if (hasAccount_) {
         Login();
     };
+
+    client_->setInvisible(true); // Disable longPool
+    client_->setTrackMessages(false);
 
     connect(client_, SIGNAL(onlineStateChanged(bool)),
             SLOT(OnlineStateChanged(bool)));
@@ -142,6 +150,7 @@ void VkService::Login()
     } else {
         connection_ = new Vreen::OAuthConnection(kApiKey,client_);
         connection_->setConnectionOption(Vreen::Connection::ShowAuthDialog,true);
+        connection_->setScopes(kScopes);
         client_->setConnection(connection_);
 
         connect(connection_, SIGNAL(accessTokenChanged(QByteArray,time_t)),
