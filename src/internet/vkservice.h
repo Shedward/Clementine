@@ -68,6 +68,7 @@ private slots:
     void ChangeUid(int uid);
     void OnlineStateChanged(bool online);
     void ChangeMe(Vreen::Buddy*me);
+    void Error(Vreen::Client::Error error);
 
 private:
     /* Interface */

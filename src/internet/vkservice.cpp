@@ -56,6 +56,8 @@ VkService::VkService(Application *app, InternetModel *parent) :
 
     connect(client_, SIGNAL(onlineStateChanged(bool)),
             SLOT(OnlineStateChanged(bool)));
+    connect(client_, SIGNAL(error(Vreen::Client::Error)),
+            SLOT(Error(Vreen::Client::Error)));
 
     /* Init interface */
     context_menu_->addActions(GetPlaylistActions());
@@ -243,4 +245,35 @@ void VkService::ChangeMe(Vreen::Buddy *me)
     connect(me, SIGNAL(nameChanged(QString)),
             SIGNAL(NameUpdated(QString)));
     me->update(QStringList("name"));
+}
+
+void VkService::Error(Vreen::Client::Error error)
+{
+    QString msg;
+
+    switch (error) {
+    case Vreen::Client::ErrorApplicationDisabled:
+        msg = "Application disabled";  break;
+    case Vreen::Client::ErrorIncorrectSignature:
+        msg = "Incorrect signature";  break;
+    case Vreen::Client::ErrorAuthorizationFailed:
+        msg = "Authorization failed";
+        emit LoginSuccess(false);
+        break;
+    case Vreen::Client::ErrorToManyRequests:
+        msg = "To many requests";  break;
+    case Vreen::Client::ErrorPermissionDenied:
+        msg = "Permission denied";  break;
+    case Vreen::Client::ErrorCaptchaNeeded:
+        msg = "Captcha needed";  break;
+    case Vreen::Client::ErrorMissingOrInvalidParameter:
+        msg = "Missing or invalid parameter";  break;
+    case Vreen::Client::ErrorNetworkReply:
+        msg = "Network reply";  break;
+    default:
+        msg = "Unknown error";
+        break;
+    }
+
+    qLog(Error) << "Client error: " << error << msg;
 }

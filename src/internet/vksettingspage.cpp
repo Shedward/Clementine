@@ -60,7 +60,6 @@ void VkSettingsPage::LoginSuccess(bool succ)
                    this, SLOT(Login()));
     }
     ui_->account->setEnabled(true);
-    qLog(Debug) << " DONE LoginSuccess" << succ;
 }
 
 void VkSettingsPage::Logout()
