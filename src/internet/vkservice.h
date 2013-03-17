@@ -8,8 +8,10 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "vreen/auth/oauthconnection.h"
+#include "vreen/audio.h"
 
 typedef Vreen::OAuthConnection::Scopes Scopes;
+typedef uint GroupID;
 
 namespace Vreen {
 class Client;
@@ -57,20 +59,36 @@ public:
     void Logout();
     bool hasAccount() const { return hasAccount_; }
 
+    /* Music */
+    uint SongSearch(const QString &query);
+    uint GroupSearch(const QString &query);
+
 signals:
     void NameUpdated(QString name);
     void LoginSuccess(bool succ);
+
+    void SongSearchResult(uint id, const SongList &songs);
+    void GroupSearchResult(uint id, const QVector<GroupID> &groups);
     
-private slots:
+public slots:
     void ShowConfig();
 
+private slots:
     void ChangeAccessToken(const QByteArray &token, time_t expiresIn);
     void ChangeUid(int uid);
     void OnlineStateChanged(bool online);
     void ChangeMe(Vreen::Buddy*me);
     void Error(Vreen::Client::Error error);
 
+    void MyMusicRecived();
+    void SongSearchFinished(int id);
+    void GroupSearchFinished(int id);
 private:
+    /* Music */
+    Vreen::AudioProvider* provider_;
+    SongList FromAudioList(const Vreen::AudioItemList &list);
+    void LoadMyMusic();
+
     /* Interface */
     QStandardItem* CreateStandartItem();
 

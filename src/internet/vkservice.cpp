@@ -1,19 +1,26 @@
+#include <math.h>
+
 #include <QMenu>
 #include <QSettings>
 #include <QByteArray>
 
 #include <boost/scoped_ptr.hpp>
 
-#include "internetmodel.h"
-#include "internetplaylistitem.h"
 #include "core/application.h"
 #include "core/logging.h"
+#include "core/timeconstants.h"
 #include "ui/iconloader.h"
 
+#include "internetmodel.h"
+#include "internetplaylistitem.h"
+#include "globalsearch/globalsearch.h"
+
 #include "vreen/auth/oauthconnection.h"
+#include "vreen/audio.h"
 #include "vreen/contact.h"
 #include "vreen/roster.h"
 
+#include "globalsearch/vksearchprovider.h"
 #include "vkservice.h"
 
 #define  __(var) qLog(Debug) << #var " =" << (var);
@@ -30,6 +37,7 @@ const Scopes VkService::kScopes =
 
 VkService::VkService(Application *app, InternetModel *parent) :
     InternetService(kServiceName, app, parent, parent),
+    provider_(NULL),
     need_login_(NULL),
     root_item_(NULL),
     recommendations_(NULL),
@@ -43,6 +51,11 @@ VkService::VkService(Application *app, InternetModel *parent) :
     s.beginGroup(kSettingGroup);
 
     /* Init connection */
+    provider_ = new Vreen::AudioProvider(client_);
+
+    client_->setTrackMessages(false);
+    client_->setInvisible(true);
+
     QByteArray token = s.value("token",QByteArray()).toByteArray();
     int uid = s.value("uid",0).toInt();
     hasAccount_ = not (!uid or token.isEmpty());
@@ -50,9 +63,6 @@ VkService::VkService(Application *app, InternetModel *parent) :
     if (hasAccount_) {
         Login();
     };
-
-    client_->setInvisible(true); // Disable longPool
-    client_->setTrackMessages(false);
 
     connect(client_, SIGNAL(onlineStateChanged(bool)),
             SLOT(OnlineStateChanged(bool)));
@@ -63,6 +73,10 @@ VkService::VkService(Application *app, InternetModel *parent) :
     context_menu_->addActions(GetPlaylistActions());
     context_menu_->addAction(IconLoader::Load("configure"), tr("Configure Vk.com..."),
                              this, SLOT(ShowConfig()));
+
+    VkSearchProvider* search_provider = new VkSearchProvider(app_, this);
+    search_provider->Init(this);
+    app_->global_search()->AddProvider(search_provider);
 }
 
 VkService::~VkService()
@@ -83,6 +97,10 @@ void VkService::LazyPopulate(QStandardItem *parent)
     case InternetModel::Type_Service:
         RefreshRootSubitems();
         break;
+    case Type_MyMusic: {
+        qDebug() << "Load My Music";
+        LoadMyMusic();
+    }
     default:
         break;
     }
@@ -125,7 +143,8 @@ void VkService::RefreshRootSubitems()
         my_music_ = new QStandardItem(
                     QIcon(":vk/my_music.png"),
                     tr("My Music"));
-        my_music_->setData(Type_MyMusic, InternetModel::Role_CanLazyLoad);
+        my_music_->setData(Type_MyMusic, InternetModel::Role_Type);
+        my_music_->setData(true, InternetModel::Role_CanLazyLoad);
         root_item_->appendRow(my_music_);
     } else {
         need_login_ = new QStandardItem(
@@ -199,6 +218,16 @@ void VkService::Logout()
     }
 
     RefreshRootSubitems();
+}
+
+uint VkService::SongSearch(const QString &query)
+{
+    return 0;
+}
+
+uint VkService::GroupSearch(const QString &query)
+{
+    return 0;
 }
 
 void VkService::ShowConfig()
@@ -276,4 +305,48 @@ void VkService::Error(Vreen::Client::Error error)
     }
 
     qLog(Error) << "Client error: " << error << msg;
+}
+
+void VkService::MyMusicRecived()
+{
+    auto reply = static_cast<Vreen::AudioItemListReply*>(sender());
+    SongList songs = FromAudioList(reply->result());
+
+    foreach (const Song& song, songs) {
+        QStandardItem* child = CreateSongItem(song);
+        child->setData(true, InternetModel::Role_CanBeModified);
+
+        my_music_->appendRow(child);
+    }
+}
+
+void VkService::SongSearchFinished(int id)
+{
+}
+
+void VkService::GroupSearchFinished(int id)
+{
+}
+
+SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
+{
+    Song song;
+    SongList song_list;
+    foreach (Vreen::AudioItem item, list) {
+        song.set_title(item.title());
+        song.set_artist(item.artist());
+        song.set_length_nanosec(floor(item.duration() * kNsecPerMsec));
+        song.set_url(item.url());
+        song.set_id(item.id());
+        song_list.append(song);
+    }
+    return song_list;
+}
+
+
+void VkService::LoadMyMusic()
+{
+    auto myAudio = provider_->getContactAudio();
+    connect(myAudio,SIGNAL(resultReady(QVariant)),
+            SLOT(MyMusicRecived()));
 }

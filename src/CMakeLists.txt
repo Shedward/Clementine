@@ -1168,9 +1168,11 @@ optional_source(HAVE_VK
   SOURCES
     internet/vkservice.cpp
     internet/vksettingspage.cpp
+    globalsearch/vksearchprovider.cpp
   HEADERS
     internet/vkservice.h
     internet/vksettingspage.h
+    globalsearch/vksearchprovider.h
   UI
     internet/vksettingspage.ui
 )
