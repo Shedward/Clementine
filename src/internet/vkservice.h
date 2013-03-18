@@ -63,15 +63,19 @@ public:
     /* Music */
     uint SongSearch(const QString &query);
     uint GroupSearch(const QString &query);
+
 signals:
     void NameUpdated(QString name);
     void LoginSuccess(bool succ);
+
+    void SongListLoaded(int id, SongList songs);
 
     void SongSearchResult(uint id, const SongList &songs);
     void GroupSearchResult(uint id, const QVector<GroupID> &groups);
     
 public slots:
     void ShowConfig();
+    void LoadSongList(int id, int count = 0); // zero meants - load full list
 
 private slots:
     /* Connection */
@@ -82,9 +86,10 @@ private slots:
     void Error(Vreen::Client::Error error);
 
     /* Music */
+    void SongListRecived(int id, Vreen::AudioItemListReply *reply);
+    void CountRecived(int id, Vreen::IntReply* reply);
 
-    void MyMusicRecived();
-    void MyAudioCountRecived();
+    void MyMusicLoaded(int id, SongList songs);
 
     void SongSearchFinished(int id);
     void GroupSearchFinished(int id);
@@ -110,7 +115,7 @@ private:
     /* Music */
     Vreen::AudioProvider* provider_;
     SongList FromAudioList(const Vreen::AudioItemList &list);
-    void LoadMyMusic();
+    void UpdateMyMusic();
 };
 
 #endif // VKSERVICE_H

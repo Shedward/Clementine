@@ -7,6 +7,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "core/application.h"
+#include "core/closure.h"
 #include "core/logging.h"
 #include "core/timeconstants.h"
 #include "ui/iconloader.h"
@@ -23,7 +24,8 @@
 #include "globalsearch/vksearchprovider.h"
 #include "vkservice.h"
 
-#define  __(var) qLog(Debug) << #var " =" << (var);
+#define  VAR(var) qLog(Debug) << ("---    where " #var " =") << (var);
+#define  TRACE qLog(Debug) << "--- " << __PRETTY_FUNCTION__ ;
 
 const char*  VkService::kServiceName = "Vk.com";
 const char*  VkService::kSettingGroup = "Vk.com";
@@ -99,7 +101,7 @@ void VkService::LazyPopulate(QStandardItem *parent)
         break;
     case Type_MyMusic: {
         qDebug() << "Load My Music";
-        LoadMyMusic();
+        UpdateMyMusic();
     }
     default:
         break;
@@ -166,8 +168,6 @@ void VkService::RefreshRootSubitems()
 
 void VkService::Login()
 {
-    qLog(Debug) << "--- Login";
-
     if (connection_) {
         client_->connectToHost();
         emit LoginSuccess(true);
@@ -204,8 +204,6 @@ void VkService::Login()
 
 void VkService::Logout()
 {
-    qLog(Debug) << "--- Logout";
-
     QSettings s;
     s.beginGroup(kSettingGroup);
     s.setValue("token", QByteArray());
@@ -243,7 +241,7 @@ void VkService::ShowConfig()
 
 void VkService::ChangeAccessToken(const QByteArray &token, time_t expiresIn)
 {
-    qLog(Debug) << "--- Access token changed";
+    TRACE VAR(token)
     QSettings s;
     s.beginGroup(kSettingGroup);
     s.setValue("token", token);
@@ -313,52 +311,78 @@ void VkService::Error(Vreen::Client::Error error)
     qLog(Error) << "Client error: " << error << msg;
 }
 
-void VkService::LoadMyMusic()
+void VkService::UpdateMyMusic()
 {
+    TRACE
+
     ClearStandartItem(my_music_);
     my_music_->appendRow(loading_);
 
-    auto countOfMyAudio = provider_->getCount();
-    connect(countOfMyAudio, SIGNAL(resultReady(QVariant)),
-                            SLOT(MyAudioCountRecived()));
+    LoadSongList(0);
+
+    connect(this, SIGNAL(SongListLoaded(int,SongList)),
+            this, SLOT(MyMusicLoaded(int,SongList)));
 }
 
-void VkService::MyAudioCountRecived()
+void VkService::MyMusicLoaded(int id, SongList songs)
 {
-    int count = static_cast<Vreen::IntReply*>(sender())->result();
-    auto myAudio = provider_->getContactAudio(0,count);
-    connect(myAudio, SIGNAL(resultReady(QVariant)),
-                    SLOT(MyMusicRecived()));
-}
+    TRACE VAR(id) VAR(&songs)
 
-void VkService::MyMusicRecived()
-{
-    auto reply = static_cast<Vreen::AudioItemListReply*>(sender());
-    SongList songs = FromAudioList(reply->result());
-
-    ClearStandartItem(my_music_);
-    foreach (const Song& song, songs) {
-        QStandardItem* child = CreateSongItem(song);
-        child->setData(true, InternetModel::Role_CanBeModified);
-
-        my_music_->appendRow(child);
+    if(id == 0) {
+        ClearStandartItem(my_music_);
+        foreach (auto song, songs) {
+            my_music_->appendRow(CreateSongItem(song));
+        }
     }
 }
 
-void VkService::SongSearchFinished(int id)
+
+/***
+ * Load song list methods
+ */
+
+void VkService::LoadSongList(int id, int count)
 {
+    TRACE VAR(id) VAR(count)
+
+    auto countOfMyAudio = provider_->getCount(id);
+    if (count > 0) {
+        auto myAudio = provider_->getContactAudio(id,count);
+        NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
+                   SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
+                   id, myAudio);
+    } else {
+        NewClosure(countOfMyAudio, SIGNAL(resultReady(QVariant)), this,
+                   SLOT(CountRecived(int, Vreen::IntReply*)),
+                   id, countOfMyAudio);
+    }
 }
 
-void VkService::GroupSearchFinished(int id)
+void VkService::CountRecived(int id, Vreen::IntReply* reply)
 {
+    TRACE VAR(id)
+
+    int count = reply->result();
+    auto myAudio = provider_->getContactAudio(id,count);
+    NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
+               SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
+               id, myAudio);
+}
+
+void VkService::SongListRecived(int id, Vreen::AudioItemListReply* reply)
+{
+    TRACE VAR(id)
+    SongList songs = FromAudioList(reply->result());
+    emit SongListLoaded(id, songs);
 }
 
 SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
 {
+    TRACE VAR(&list)
+
     Song song;
     SongList song_list;
     foreach (Vreen::AudioItem item, list) {
-        song.set_valid(true);
         song.set_title(item.title().trimmed());
         song.set_artist(item.artist());
         song.set_length_nanosec(floor(item.duration() * kNsecPerSec));
@@ -369,6 +393,23 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
     return song_list;
 }
 
+
+/***
+ * Search
+ */
+
+void VkService::SongSearchFinished(int id)
+{
+}
+
+void VkService::GroupSearchFinished(int id)
+{
+}
+
+
+/***
+ * Utils
+ */
 
 void VkService::ClearStandartItem(QStandardItem * item)
 {
