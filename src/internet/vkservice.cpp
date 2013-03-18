@@ -124,16 +124,13 @@ void VkService::ItemDoubleClicked(QStandardItem *item)
 
 void VkService::RefreshRootSubitems()
 {
-    if (root_item_->hasChildren()){
-        root_item_->removeRows(0, root_item_->rowCount());
-    }
+    ClearStandartItem(root_item_);
 
     recommendations_ = NULL;
     my_music_ = NULL;
     need_login_ = NULL;
 
     if (hasAccount_) {
-
         recommendations_ = new QStandardItem(
                     QIcon(":vk/recommends.png"),
                     tr("My Recommendations"));
@@ -145,7 +142,16 @@ void VkService::RefreshRootSubitems()
                     tr("My Music"));
         my_music_->setData(Type_MyMusic, InternetModel::Role_Type);
         my_music_->setData(true, InternetModel::Role_CanLazyLoad);
+        my_music_->setData(InternetModel::PlayBehaviour_MultipleItems,
+                           InternetModel::Role_PlayBehaviour);
         root_item_->appendRow(my_music_);
+
+        loading_ = new QStandardItem(
+                    QIcon(),
+                    tr("Loading...")
+                    );
+        loading_->setData(Type_Loading, InternetModel::Role_Type);
+        qDebug() << "size" << sizeof(*loading_);
     } else {
         need_login_ = new QStandardItem(
                     QIcon(),
@@ -309,8 +315,10 @@ void VkService::Error(Vreen::Client::Error error)
 
 void VkService::LoadMyMusic()
 {
-    auto countOfMyAudio = provider_->getCount();
+    ClearStandartItem(my_music_);
+    my_music_->appendRow(loading_);
 
+    auto countOfMyAudio = provider_->getCount();
     connect(countOfMyAudio, SIGNAL(resultReady(QVariant)),
                             SLOT(MyAudioCountRecived()));
 }
@@ -328,6 +336,7 @@ void VkService::MyMusicRecived()
     auto reply = static_cast<Vreen::AudioItemListReply*>(sender());
     SongList songs = FromAudioList(reply->result());
 
+    ClearStandartItem(my_music_);
     foreach (const Song& song, songs) {
         QStandardItem* child = CreateSongItem(song);
         child->setData(true, InternetModel::Role_CanBeModified);
@@ -349,16 +358,21 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
     Song song;
     SongList song_list;
     foreach (Vreen::AudioItem item, list) {
+        song.set_valid(true);
         song.set_title(item.title().trimmed());
-        qDebug() << song.title();
         song.set_artist(item.artist());
-        qDebug() << song.artist();
         song.set_length_nanosec(floor(item.duration() * kNsecPerSec));
-        qDebug() << song.length_nanosec();
         song.set_url(item.url());
-        qDebug() << song.url();
-        song.set_id(item.id());
+
         song_list.append(song);
     }
     return song_list;
+}
+
+
+void VkService::ClearStandartItem(QStandardItem * item)
+{
+    if (item->hasChildren()) {
+        item->removeRows(0, item->rowCount());
+    }
 }

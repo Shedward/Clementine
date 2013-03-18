@@ -35,6 +35,7 @@ public:
         Type_Root = InternetModel::TypeCount,
 
         Type_NeedLogin,
+        Type_Loading,
 
         Type_Recommendations,
         Type_MyMusic,
@@ -62,7 +63,6 @@ public:
     /* Music */
     uint SongSearch(const QString &query);
     uint GroupSearch(const QString &query);
-
 signals:
     void NameUpdated(QString name);
     void LoginSuccess(bool succ);
@@ -92,8 +92,10 @@ private slots:
 private:
     /* Interface */
     QStandardItem* CreateStandartItem();
+    void ClearStandartItem(QStandardItem*item);
 
     QStandardItem* need_login_;
+    QStandardItem* loading_;
     QStandardItem* root_item_;
     QStandardItem* recommendations_;
     QStandardItem* my_music_;
