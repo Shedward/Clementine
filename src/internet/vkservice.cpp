@@ -37,7 +37,6 @@ const Scopes VkService::kScopes =
 
 VkService::VkService(Application *app, InternetModel *parent) :
     InternetService(kServiceName, app, parent, parent),
-    provider_(NULL),
     need_login_(NULL),
     root_item_(NULL),
     recommendations_(NULL),
@@ -45,7 +44,8 @@ VkService::VkService(Application *app, InternetModel *parent) :
     context_menu_(new QMenu),
     client_(new Vreen::Client),
     connection_(NULL),
-    hasAccount_(false)
+    hasAccount_(false),
+    provider_(NULL)
 {
     QSettings s;
     s.beginGroup(kSettingGroup);
@@ -307,6 +307,22 @@ void VkService::Error(Vreen::Client::Error error)
     qLog(Error) << "Client error: " << error << msg;
 }
 
+void VkService::LoadMyMusic()
+{
+    auto countOfMyAudio = provider_->getCount();
+
+    connect(countOfMyAudio, SIGNAL(resultReady(QVariant)),
+                            SLOT(MyAudioCountRecived()));
+}
+
+void VkService::MyAudioCountRecived()
+{
+    int count = static_cast<Vreen::IntReply*>(sender())->result();
+    auto myAudio = provider_->getContactAudio(0,count);
+    connect(myAudio, SIGNAL(resultReady(QVariant)),
+                    SLOT(MyMusicRecived()));
+}
+
 void VkService::MyMusicRecived()
 {
     auto reply = static_cast<Vreen::AudioItemListReply*>(sender());
@@ -333,20 +349,16 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
     Song song;
     SongList song_list;
     foreach (Vreen::AudioItem item, list) {
-        song.set_title(item.title());
+        song.set_title(item.title().trimmed());
+        qDebug() << song.title();
         song.set_artist(item.artist());
-        song.set_length_nanosec(floor(item.duration() * kNsecPerMsec));
+        qDebug() << song.artist();
+        song.set_length_nanosec(floor(item.duration() * kNsecPerSec));
+        qDebug() << song.length_nanosec();
         song.set_url(item.url());
+        qDebug() << song.url();
         song.set_id(item.id());
         song_list.append(song);
     }
     return song_list;
-}
-
-
-void VkService::LoadMyMusic()
-{
-    auto myAudio = provider_->getContactAudio();
-    connect(myAudio,SIGNAL(resultReady(QVariant)),
-            SLOT(MyMusicRecived()));
 }

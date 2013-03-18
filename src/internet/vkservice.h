@@ -74,21 +74,22 @@ public slots:
     void ShowConfig();
 
 private slots:
+    /* Connection */
     void ChangeAccessToken(const QByteArray &token, time_t expiresIn);
     void ChangeUid(int uid);
     void OnlineStateChanged(bool online);
     void ChangeMe(Vreen::Buddy*me);
     void Error(Vreen::Client::Error error);
 
+    /* Music */
+
     void MyMusicRecived();
+    void MyAudioCountRecived();
+
     void SongSearchFinished(int id);
     void GroupSearchFinished(int id);
-private:
-    /* Music */
-    Vreen::AudioProvider* provider_;
-    SongList FromAudioList(const Vreen::AudioItemList &list);
-    void LoadMyMusic();
 
+private:
     /* Interface */
     QStandardItem* CreateStandartItem();
 
@@ -103,6 +104,11 @@ private:
     Vreen::Client *client_;
     Vreen::OAuthConnection *connection_;
     bool hasAccount_;
+
+    /* Music */
+    Vreen::AudioProvider* provider_;
+    SongList FromAudioList(const Vreen::AudioItemList &list);
+    void LoadMyMusic();
 };
 
 #endif // VKSERVICE_H
