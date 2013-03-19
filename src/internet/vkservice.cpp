@@ -24,9 +24,6 @@
 #include "globalsearch/vksearchprovider.h"
 #include "vkservice.h"
 
-#define  VAR(var) qLog(Debug) << ("---    where " #var " =") << (var);
-#define  TRACE qLog(Debug) << "--- " << __PRETTY_FUNCTION__ ;
-
 const char*  VkService::kServiceName = "Vk.com";
 const char*  VkService::kSettingGroup = "Vk.com";
 const uint   VkService::kApiKey = 3421812;
@@ -47,7 +44,8 @@ VkService::VkService(Application *app, InternetModel *parent) :
     client_(new Vreen::Client),
     connection_(NULL),
     hasAccount_(false),
-    provider_(NULL)
+    provider_(NULL),
+    last_id_(0)
 {
     QSettings s;
     s.beginGroup(kSettingGroup);
@@ -224,16 +222,6 @@ void VkService::Logout()
     RefreshRootSubitems();
 }
 
-uint VkService::SongSearch(const QString &query)
-{
-    return 0;
-}
-
-uint VkService::GroupSearch(const QString &query)
-{
-    return 0;
-}
-
 void VkService::ShowConfig()
 {
     app_->OpenSettingsDialogAtPage(SettingsDialog::Page_Vk);
@@ -398,13 +386,37 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
  * Search
  */
 
-void VkService::SongSearchFinished(int id)
+int VkService::SongSearch(const QString &query, int count = 50, int offset = 0)
+{
+    TRACE VAR(query) VAR(count) VAR(offset)
+
+    uint id = ++last_id_;
+
+    auto reply = provider_->searchAudio(query,count,offset);
+    NewClosure(reply, SIGNAL(resultReady(QVariant)), this,
+               SLOT(SongSearchRecived(int,Vreen::AudioItemListReply*)),
+               id, reply);
+
+    return id;
+}
+
+void VkService::SongSearchRecived(int id, Vreen::AudioItemListReply *reply)
+{
+    TRACE VAR(id) VAR(reply)
+
+    SongList songs = FromAudioList(reply->result());
+    emit SongSearchResult(id, songs);
+}
+
+uint VkService::GroupSearch(const QString &query)
+{
+    return ++last_id_;
+}
+
+void VkService::GroupSearchRecived(int id)
 {
 }
 
-void VkService::GroupSearchFinished(int id)
-{
-}
 
 
 /***

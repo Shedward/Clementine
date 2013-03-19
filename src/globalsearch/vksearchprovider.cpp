@@ -1,4 +1,5 @@
 #include "vksearchprovider.h"
+#include "core/logging.h"
 
 VkSearchProvider::VkSearchProvider(Application* app, QObject* parent) :
     SearchProvider(app,parent),
@@ -8,20 +9,24 @@ VkSearchProvider::VkSearchProvider(Application* app, QObject* parent) :
 
 void VkSearchProvider::Init(VkService *service)
 {
+    TRACE
+
     service_ = service;
     SearchProvider::Init("Vk.com", "vk.com",
                          QIcon(":providers/vk.png"),
-                         WantsDelayedQueries | CanGiveSuggestions | CanShowConfig);
+                         WantsDelayedQueries | CanShowConfig);
+
+    connect(service_, SIGNAL(SongSearchResult(int,SongList)),
+            this, SLOT(SongSearchResult(int,SongList)));
 
 }
 
 void VkSearchProvider::SearchAsync(int id, const QString &query)
 {
-}
+    TRACE VAR(id) VAR(query);
 
-QStringList VkSearchProvider::GetSuggestions(int count)
-{
-    return QStringList("Temporary list");
+    const int service_id = service_->SongSearch(query,100,0);
+    pending_searches_[service_id] = PendingState(id, TokenizeQuery(query));
 }
 
 bool VkSearchProvider::IsLoggedIn()
@@ -36,6 +41,8 @@ void VkSearchProvider::ShowConfig()
 
 void VkSearchProvider::SongSearchResult(int id, const SongList &songs)
 {
+    TRACE VAR(id) VAR(&songs)
+
     // Map back to the original id.
     const PendingState state = pending_searches_.take(id);
     const int global_search_id = state.orig_id_;

@@ -16,7 +16,6 @@ public:
     VkSearchProvider(Application* app, QObject* parent = 0);
     void Init(VkService* service);
     void SearchAsync(int id, const QString &query);
-    QStringList GetSuggestions(int count);
     bool IsLoggedIn();
     void ShowConfig();
     InternetService* internet_service() { return service_; }
@@ -26,10 +25,9 @@ public slots:
     void GroupSearchResult(int id, const QVector<GroupID>& groups);
     void GroupSongLoaded(GroupID id, SongList& songs);
 
-    void MaybeSearchFinished(int id);
 private:
+    void MaybeSearchFinished(int id);
     VkService* service_;
-    QImage icon_;
     QMap<int, PendingState> pending_searches_;
 };
 

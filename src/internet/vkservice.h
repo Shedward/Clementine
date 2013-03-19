@@ -10,6 +10,9 @@
 #include "vreen/auth/oauthconnection.h"
 #include "vreen/audio.h"
 
+#define  VAR(var) qLog(Debug) << ("---    where " #var " =") << (var);
+#define  TRACE qLog(Debug) << "--- " << __PRETTY_FUNCTION__ ;
+
 typedef Vreen::OAuthConnection::Scopes Scopes;
 typedef uint GroupID;
 
@@ -61,8 +64,9 @@ public:
     bool hasAccount() const { return hasAccount_; }
 
     /* Music */
-    uint SongSearch(const QString &query);
+    int SongSearch(const QString &query, int count, int offset);
     uint GroupSearch(const QString &query);
+    void UpdateMyMusic();
 
 signals:
     void NameUpdated(QString name);
@@ -70,8 +74,8 @@ signals:
 
     void SongListLoaded(int id, SongList songs);
 
-    void SongSearchResult(uint id, const SongList &songs);
-    void GroupSearchResult(uint id, const QVector<GroupID> &groups);
+    void SongSearchResult(int id, SongList songs);
+    void GroupSearchResult(int id, QVector<GroupID> groups);
     
 public slots:
     void ShowConfig();
@@ -88,11 +92,10 @@ private slots:
     /* Music */
     void SongListRecived(int id, Vreen::AudioItemListReply *reply);
     void CountRecived(int id, Vreen::IntReply* reply);
+    void SongSearchRecived(int id, Vreen::AudioItemListReply *reply);
+    void GroupSearchRecived(int id);
 
     void MyMusicLoaded(int id, SongList songs);
-
-    void SongSearchFinished(int id);
-    void GroupSearchFinished(int id);
 
 private:
     /* Interface */
@@ -114,8 +117,8 @@ private:
 
     /* Music */
     Vreen::AudioProvider* provider_;
+    uint last_id_;
     SongList FromAudioList(const Vreen::AudioItemList &list);
-    void UpdateMyMusic();
 };
 
 #endif // VKSERVICE_H
