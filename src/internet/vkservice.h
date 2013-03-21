@@ -119,6 +119,7 @@ private:
     Vreen::AudioProvider* provider_;
     uint last_id_;
     SongList FromAudioList(const Vreen::AudioItemList &list);
+    void ClearSimilarSongs(SongList &list);
 };
 
 #endif // VKSERVICE_H

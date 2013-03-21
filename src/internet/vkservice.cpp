@@ -5,6 +5,7 @@
 #include <QByteArray>
 
 #include <boost/scoped_ptr.hpp>
+#include <algorithm>
 
 #include "core/application.h"
 #include "core/closure.h"
@@ -364,6 +365,14 @@ void VkService::SongListRecived(int id, Vreen::AudioItemListReply* reply)
     emit SongListLoaded(id, songs);
 }
 
+
+static inline QString ClearString(QString str) {
+    /* Remove all unicode symbols */
+    str = str.remove(QRegExp("^[^\\w]*"));
+    str = str.remove(QRegExp("[^])\\w]*$"));
+    return str;
+}
+
 SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
 {
     TRACE VAR(&list)
@@ -371,13 +380,14 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
     Song song;
     SongList song_list;
     foreach (Vreen::AudioItem item, list) {
-        song.set_title(item.title().trimmed());
-        song.set_artist(item.artist());
+        song.set_title(ClearString(item.title()));
+        song.set_artist(ClearString(item.artist()));
         song.set_length_nanosec(floor(item.duration() * kNsecPerSec));
         song.set_url(item.url());
 
         song_list.append(song);
     }
+    ClearSimilarSongs(song_list);
     return song_list;
 }
 
@@ -392,7 +402,7 @@ int VkService::SongSearch(const QString &query, int count = 50, int offset = 0)
 
     uint id = ++last_id_;
 
-    auto reply = provider_->searchAudio(query,count,offset);
+    auto reply = provider_->searchAudio(query,count,offset,false,Vreen::AudioProvider::SortByPopularity);
     NewClosure(reply, SIGNAL(resultReady(QVariant)), this,
                SLOT(SongSearchRecived(int,Vreen::AudioItemListReply*)),
                id, reply);
@@ -417,8 +427,6 @@ void VkService::GroupSearchRecived(int id)
 {
 }
 
-
-
 /***
  * Utils
  */
@@ -428,4 +436,27 @@ void VkService::ClearStandartItem(QStandardItem * item)
     if (item->hasChildren()) {
         item->removeRows(0, item->rowCount());
     }
+}
+
+void VkService::ClearSimilarSongs(SongList &list)
+{
+    /* Search result sorted by relevance, and better quality songs usualy come first.
+     * Stable sort don't mix similar song, so std::unique will remove bad quality coptes
+     */
+
+    qStableSort(list.begin(), list.end(), [](const Song &a, const Song &b){
+        return (a.artist().localeAwareCompare(b.artist()) > 0)
+                or (a.title().localeAwareCompare(b.title()) > 0);
+    });
+
+    int old = list.count();
+
+    auto end = std::unique(list.begin(), list.end(), [](const Song &a, const Song &b){
+        return (a.artist().localeAwareCompare(b.artist()) == 0)
+                and (a.title().localeAwareCompare(b.title()) == 0);
+    });
+
+    list.erase(end, list.end());
+
+    qDebug() << "Cleared" << old - list.count() << "items";
 }
