@@ -26,6 +26,8 @@ void VkSettingsPage::Load()
     QSettings s;
     s.beginGroup(VkService::kSettingGroup);
 
+    ui_->maxGlobalSearch->setValue(s.value("maxSearchResult",100).toInt());
+
     if (service_->hasAccount()) {
         Login();
     } else {
@@ -35,6 +37,10 @@ void VkSettingsPage::Load()
 
 void VkSettingsPage::Save()
 {
+    QSettings s;
+    s.beginGroup(VkService::kSettingGroup);
+
+    s.setValue("maxSearchResult",ui_->maxGlobalSearch->value());
 }
 
 void VkSettingsPage::Login()

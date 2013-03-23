@@ -55,28 +55,41 @@
      <property name="title">
       <string>Preferences</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QLabel" name="dflabel">
-        <property name="text">
-         <string>Downloads folder:</string>
-        </property>
-        <property name="buddy">
-         <cstring>downloadFolder</cstring>
-        </property>
-       </widget>
-      </item>
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QLineEdit" name="downloadFolder"/>
-        </item>
-        <item>
-         <widget class="QToolButton" name="chooseDownloadsFolder">
+         <widget class="QLabel" name="label">
           <property name="text">
-           <string>...</string>
+           <string>Max global search results</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="maxGlobalSearch">
+          <property name="minimum">
+           <number>50</number>
+          </property>
+          <property name="maximum">
+           <number>3000</number>
+          </property>
+          <property name="singleStep">
+           <number>50</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>

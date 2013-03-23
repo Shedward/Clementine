@@ -9,6 +9,7 @@
 
 #include "vreen/auth/oauthconnection.h"
 #include "vreen/audio.h"
+#include "vreen/contact.h"
 
 #define  VAR(var) qLog(Debug) << ("---    where " #var " =") << (var);
 #define  TRACE qLog(Debug) << "--- " << __PRETTY_FUNCTION__ ;
@@ -65,8 +66,9 @@ public:
 
     /* Music */
     int SongSearch(const QString &query, int count, int offset);
-    uint GroupSearch(const QString &query);
+    int GroupSearch(const QString &query, int count, int offset);
     void UpdateMyMusic();
+    void UpdateRecommendations();
 
 signals:
     void NameUpdated(QString name);
@@ -75,7 +77,7 @@ signals:
     void SongListLoaded(int id, SongList songs);
 
     void SongSearchResult(int id, SongList songs);
-    void GroupSearchResult(int id, QVector<GroupID> groups);
+    void GroupSearchResult(int id, Vreen::GroupList groups);
     
 public slots:
     void ShowConfig();
@@ -96,6 +98,7 @@ private slots:
     void GroupSearchRecived(int id);
 
     void MyMusicLoaded(int id, SongList songs);
+    void RecommendationsLoaded(int id, SongList songs);
 
 private:
     /* Interface */

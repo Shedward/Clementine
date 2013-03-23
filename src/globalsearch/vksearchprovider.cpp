@@ -25,7 +25,12 @@ void VkSearchProvider::SearchAsync(int id, const QString &query)
 {
     TRACE VAR(id) VAR(query);
 
-    const int service_id = service_->SongSearch(query,100,0);
+    QSettings s;
+    s.beginGroup(VkService::kSettingGroup);
+
+    int count = s.value("maxSearchResult",100).toInt();
+
+    const int service_id = service_->SongSearch(query,count,0);
     pending_searches_[service_id] = PendingState(id, TokenizeQuery(query));
 }
 
@@ -48,10 +53,10 @@ void VkSearchProvider::SongSearchResult(int id, const SongList &songs)
     const int global_search_id = state.orig_id_;
 
     ResultList ret;
+
     foreach (const Song& song, songs) {
       Result result(this);
       result.metadata_ = song;
-
       ret << result;
     }
 

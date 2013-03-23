@@ -98,10 +98,16 @@ void VkService::LazyPopulate(QStandardItem *parent)
     case InternetModel::Type_Service:
         RefreshRootSubitems();
         break;
-    case Type_MyMusic: {
+
+    case Type_MyMusic:
         qDebug() << "Load My Music";
         UpdateMyMusic();
-    }
+        break;
+
+    case Type_Recommendations:
+        qDebug() << "Load Recommendation";
+        UpdateRecommendations();
+        break;
     default:
         break;
     }
@@ -136,6 +142,9 @@ void VkService::RefreshRootSubitems()
                     QIcon(":vk/recommends.png"),
                     tr("My Recommendations"));
         recommendations_->setData(Type_Recommendations, InternetModel::Role_Type);
+        recommendations_->setData(true, InternetModel::Role_CanLazyLoad);
+        recommendations_->setData(InternetModel::PlayBehaviour_MultipleItems,
+                                  InternetModel::Role_PlayBehaviour);
         root_item_->appendRow(recommendations_);
 
         my_music_ = new QStandardItem(
@@ -313,6 +322,22 @@ void VkService::UpdateMyMusic()
             this, SLOT(MyMusicLoaded(int,SongList)));
 }
 
+void VkService::UpdateRecommendations()
+{
+    TRACE
+
+    ClearStandartItem(recommendations_);
+    recommendations_->appendRow(loading_);
+
+    auto myAudio = provider_->getRecommendationsForUser(0,100,0);
+    NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
+               SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
+               -1, myAudio);
+
+    connect(this, SIGNAL(SongListLoaded(int,SongList)),
+            this, SLOT(RecommendationsLoaded(int,SongList)));
+}
+
 void VkService::MyMusicLoaded(int id, SongList songs)
 {
     TRACE VAR(id) VAR(&songs)
@@ -321,6 +346,18 @@ void VkService::MyMusicLoaded(int id, SongList songs)
         ClearStandartItem(my_music_);
         foreach (auto song, songs) {
             my_music_->appendRow(CreateSongItem(song));
+        }
+    }
+}
+
+void VkService::RecommendationsLoaded(int id, SongList songs)
+{
+    TRACE VAR(id) VAR(&songs)
+
+    if(id == -1) {
+        ClearStandartItem(recommendations_);
+        foreach (auto song, songs) {
+            recommendations_->appendRow(CreateSongItem(song));
         }
     }
 }
@@ -352,6 +389,7 @@ void VkService::CountRecived(int id, Vreen::IntReply* reply)
     TRACE VAR(id)
 
     int count = reply->result();
+
     auto myAudio = provider_->getContactAudio(id,count);
     NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
                SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
@@ -387,7 +425,7 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
 
         song_list.append(song);
     }
-    ClearSimilarSongs(song_list);
+
     return song_list;
 }
 
@@ -415,10 +453,11 @@ void VkService::SongSearchRecived(int id, Vreen::AudioItemListReply *reply)
     TRACE VAR(id) VAR(reply)
 
     SongList songs = FromAudioList(reply->result());
+    ClearSimilarSongs(songs);
     emit SongSearchResult(id, songs);
 }
 
-uint VkService::GroupSearch(const QString &query)
+int VkService::GroupSearch(const QString &query, int count, int offset)
 {
     return ++last_id_;
 }
