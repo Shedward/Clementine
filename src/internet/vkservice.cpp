@@ -16,6 +16,7 @@
 #include "internetmodel.h"
 #include "internetplaylistitem.h"
 #include "globalsearch/globalsearch.h"
+#include "searchboxwidget.h"
 
 #include "vreen/auth/oauthconnection.h"
 #include "vreen/audio.h"
@@ -37,11 +38,11 @@ const Scopes VkService::kScopes =
 
 VkService::VkService(Application *app, InternetModel *parent) :
     InternetService(kServiceName, app, parent, parent),
-    need_login_(NULL),
     root_item_(NULL),
     recommendations_(NULL),
     my_music_(NULL),
     context_menu_(new QMenu),
+    search_box_(new SearchBoxWidget(this)),
     client_(new Vreen::Client),
     connection_(NULL),
     hasAccount_(false),
@@ -59,7 +60,7 @@ VkService::VkService(Application *app, InternetModel *parent) :
 
     QByteArray token = s.value("token",QByteArray()).toByteArray();
     int uid = s.value("uid",0).toInt();
-    hasAccount_ = not (!uid or token.isEmpty());
+    hasAccount_ = (uid != 0) and !token.isEmpty();
 
     if (hasAccount_) {
         Login();
@@ -78,12 +79,17 @@ VkService::VkService(Application *app, InternetModel *parent) :
     VkSearchProvider* search_provider = new VkSearchProvider(app_, this);
     search_provider->Init(this);
     app_->global_search()->AddProvider(search_provider);
+
+    connect(search_box_, SIGNAL(TextChanged(QString)), SLOT(Search(QString)));
 }
 
 VkService::~VkService()
 {
 }
 
+/***
+ * Interface
+ */
 
 QStandardItem *VkService::CreateRootItem()
 {
@@ -98,16 +104,13 @@ void VkService::LazyPopulate(QStandardItem *parent)
     case InternetModel::Type_Service:
         RefreshRootSubitems();
         break;
-
     case Type_MyMusic:
-        qDebug() << "Load My Music";
         UpdateMyMusic();
         break;
-
     case Type_Recommendations:
-        qDebug() << "Load Recommendation";
         UpdateRecommendations();
         break;
+
     default:
         break;
     }
@@ -124,55 +127,45 @@ void VkService::ShowContextMenu(const QPoint &global_pos)
 
 void VkService::ItemDoubleClicked(QStandardItem *item)
 {
-    if (item == need_login_) {
+    switch (item->data(InternetModel::Role_Type).toInt()) {
+    case Type_NeedLogin:
         ShowConfig();
+        break;
+    case Type_MoreRecommendations:
+        MoreRecommendations();
+        break;
     }
+}
+
+void VkService::ShowConfig()
+{
+    app_->OpenSettingsDialogAtPage(SettingsDialog::Page_Vk);
 }
 
 void VkService::RefreshRootSubitems()
 {
     ClearStandartItem(root_item_);
 
-    recommendations_ = NULL;
-    my_music_ = NULL;
-    need_login_ = NULL;
-
     if (hasAccount_) {
-        recommendations_ = new QStandardItem(
-                    QIcon(":vk/recommends.png"),
-                    tr("My Recommendations"));
-        recommendations_->setData(Type_Recommendations, InternetModel::Role_Type);
-        recommendations_->setData(true, InternetModel::Role_CanLazyLoad);
-        recommendations_->setData(InternetModel::PlayBehaviour_MultipleItems,
-                                  InternetModel::Role_PlayBehaviour);
-        root_item_->appendRow(recommendations_);
-
-        my_music_ = new QStandardItem(
-                    QIcon(":vk/my_music.png"),
-                    tr("My Music"));
-        my_music_->setData(Type_MyMusic, InternetModel::Role_Type);
-        my_music_->setData(true, InternetModel::Role_CanLazyLoad);
-        my_music_->setData(InternetModel::PlayBehaviour_MultipleItems,
-                           InternetModel::Role_PlayBehaviour);
-        root_item_->appendRow(my_music_);
-
-        loading_ = new QStandardItem(
-                    QIcon(),
-                    tr("Loading...")
-                    );
-        loading_->setData(Type_Loading, InternetModel::Role_Type);
-        qDebug() << "size" << sizeof(*loading_);
+        CreateAndAppendRow(root_item_, Type_Recommendations);
+        CreateAndAppendRow(root_item_, Type_MyMusic);
     } else {
-        need_login_ = new QStandardItem(
-                    QIcon(),
-                    tr("Double click to login")
-                    );
-        need_login_->setData(Type_NeedLogin, InternetModel::Role_Type);
-        need_login_->setData(InternetModel::PlayBehaviour_DoubleClickAction,
-                             InternetModel::Role_PlayBehaviour);
-        root_item_->appendRow(need_login_);
+        CreateAndAppendRow(root_item_, Type_NeedLogin);
     }
 }
+
+QWidget *VkService::HeaderWidget() const
+{
+    if (hasAccount()) {
+        return search_box_;
+    } else {
+        return NULL;
+    }
+}
+
+/***
+ * Connection
+ */
 
 void VkService::Login()
 {
@@ -230,11 +223,6 @@ void VkService::Logout()
     }
 
     RefreshRootSubitems();
-}
-
-void VkService::ShowConfig()
-{
-    app_->OpenSettingsDialogAtPage(SettingsDialog::Page_Vk);
 }
 
 void VkService::ChangeAccessToken(const QByteArray &token, time_t expiresIn)
@@ -309,33 +297,21 @@ void VkService::Error(Vreen::Client::Error error)
     qLog(Error) << "Client error: " << error << msg;
 }
 
+/***
+ * My Music
+ */
+
 void VkService::UpdateMyMusic()
 {
     TRACE
 
     ClearStandartItem(my_music_);
-    my_music_->appendRow(loading_);
+    CreateAndAppendRow(my_music_,Type_Loading);
 
     LoadSongList(0);
 
     connect(this, SIGNAL(SongListLoaded(int,SongList)),
             this, SLOT(MyMusicLoaded(int,SongList)));
-}
-
-void VkService::UpdateRecommendations()
-{
-    TRACE
-
-    ClearStandartItem(recommendations_);
-    recommendations_->appendRow(loading_);
-
-    auto myAudio = provider_->getRecommendationsForUser(0,100,0);
-    NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
-               SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
-               -1, myAudio);
-
-    connect(this, SIGNAL(SongListLoaded(int,SongList)),
-            this, SLOT(RecommendationsLoaded(int,SongList)));
 }
 
 void VkService::MyMusicLoaded(int id, SongList songs)
@@ -350,15 +326,53 @@ void VkService::MyMusicLoaded(int id, SongList songs)
     }
 }
 
+/***
+ * Recommendation
+ */
+
+void VkService::UpdateRecommendations()
+{
+    TRACE
+
+    ClearStandartItem(recommendations_);
+    CreateAndAppendRow(recommendations_,Type_Loading);
+
+    auto myAudio = provider_->getRecommendationsForUser(0,50,0);
+    NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
+               SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
+               -1, myAudio);
+
+    connect(this, SIGNAL(SongListLoaded(int,SongList)),
+            this, SLOT(RecommendationsLoaded(int,SongList)));
+}
+
+inline static void RemoveLastRow(QStandardItem* item){
+    item->removeRow(item->rowCount() - 1);
+}
+
+void VkService::MoreRecommendations()
+{
+    TRACE
+
+    RemoveLastRow(recommendations_);
+    CreateAndAppendRow(recommendations_,Type_Loading);
+    auto myAudio = provider_->getRecommendationsForUser(0,50,recommendations_->rowCount()-1);
+
+    NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
+               SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
+               -1, myAudio);
+}
+
 void VkService::RecommendationsLoaded(int id, SongList songs)
 {
     TRACE VAR(id) VAR(&songs)
 
     if(id == -1) {
-        ClearStandartItem(recommendations_);
+        RemoveLastRow(recommendations_);
         foreach (auto song, songs) {
             recommendations_->appendRow(CreateSongItem(song));
         }
+        CreateAndAppendRow(recommendations_,Type_MoreRecommendations);
     }
 }
 
@@ -384,6 +398,11 @@ void VkService::LoadSongList(int id, int count)
     }
 }
 
+void VkService::Search(QString query)
+{
+    qDebug() << "====" << query;
+}
+
 void VkService::CountRecived(int id, Vreen::IntReply* reply)
 {
     TRACE VAR(id)
@@ -404,7 +423,7 @@ void VkService::SongListRecived(int id, Vreen::AudioItemListReply* reply)
 }
 
 
-static inline QString ClearString(QString str) {
+static QString ClearString(QString str) {
     /* Remove all unicode symbols */
     str = str.remove(QRegExp("^[^\\w]*"));
     str = str.remove(QRegExp("[^])\\w]*$"));
@@ -469,6 +488,60 @@ void VkService::GroupSearchRecived(int id)
 /***
  * Utils
  */
+QStandardItem* VkService::CreateAndAppendRow(QStandardItem *parent, VkService::ItemType type){
+
+    QStandardItem* item;
+
+    switch (type) {
+    case Type_NeedLogin:
+        item = new QStandardItem(
+                    QIcon(),
+                    tr("Double click to login")
+                    );
+        item->setData(InternetModel::PlayBehaviour_DoubleClickAction,
+                             InternetModel::Role_PlayBehaviour);
+    case Type_Loading:
+        item = new QStandardItem(
+                    QIcon(),
+                    tr("Loading...")
+                    );
+        break;
+
+    case Type_MoreRecommendations:
+        item = new QStandardItem(
+                    QIcon(),
+                    tr("More")
+                    );
+        item->setData(InternetModel::PlayBehaviour_DoubleClickAction,
+                             InternetModel::Role_PlayBehaviour);
+        break;
+
+    case Type_Recommendations:
+        item = new QStandardItem(
+                    QIcon(":vk/recommends.png"),
+                    tr("My Recommendations"));
+        item->setData(true, InternetModel::Role_CanLazyLoad);
+        item->setData(InternetModel::PlayBehaviour_MultipleItems,
+                                  InternetModel::Role_PlayBehaviour);
+        recommendations_ = item;
+        break;
+
+    case Type_MyMusic:
+        item = new QStandardItem(
+                    QIcon(":vk/my_music.png"),
+                    tr("My Music"));
+        item->setData(true, InternetModel::Role_CanLazyLoad);
+        item->setData(InternetModel::PlayBehaviour_MultipleItems,
+                           InternetModel::Role_PlayBehaviour);
+        my_music_ = item;
+    default:
+        break;
+    }
+
+    item->setData(type, InternetModel::Role_Type);
+    parent->appendRow(item);
+    return item;
+}
 
 void VkService::ClearStandartItem(QStandardItem * item)
 {
@@ -480,7 +553,7 @@ void VkService::ClearStandartItem(QStandardItem * item)
 void VkService::ClearSimilarSongs(SongList &list)
 {
     /* Search result sorted by relevance, and better quality songs usualy come first.
-     * Stable sort don't mix similar song, so std::unique will remove bad quality coptes
+     * Stable sort don't mix similar song, so std::unique will remove bad quality copies.
      */
 
     qStableSort(list.begin(), list.end(), [](const Song &a, const Song &b){

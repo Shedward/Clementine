@@ -23,6 +23,8 @@ class OAuthConnection;
 class Buddy;
 }
 
+class SearchBoxWidget;
+
 class VkService : public InternetService
 {
     Q_OBJECT
@@ -39,7 +41,9 @@ public:
         Type_Root = InternetModel::TypeCount,
 
         Type_NeedLogin,
+
         Type_Loading,
+        Type_MoreRecommendations,
 
         Type_Recommendations,
         Type_MyMusic,
@@ -48,7 +52,8 @@ public:
         Type_Friend,
         Type_Playlist,
         Type_Search
-    };
+    };    QStandardItem* loading_;
+    QStandardItem* more_recommendations;
 
     /* InternetService interface */
     QStandardItem* CreateRootItem();
@@ -58,6 +63,7 @@ public:
 
     /* Interface*/
     void RefreshRootSubitems();
+    QWidget* HeaderWidget() const;
 
     /* Connection */
     void Login();
@@ -69,6 +75,7 @@ public:
     int GroupSearch(const QString &query, int count, int offset);
     void UpdateMyMusic();
     void UpdateRecommendations();
+    void MoreRecommendations();
 
 signals:
     void NameUpdated(QString name);
@@ -81,7 +88,8 @@ signals:
     
 public slots:
     void ShowConfig();
-    void LoadSongList(int id, int count = 0); // zero meants - load full list
+    void LoadSongList(int id, int count = 0); // zero means - load full list
+    void Search(QString query);
 
 private slots:
     /* Connection */
@@ -102,16 +110,14 @@ private slots:
 
 private:
     /* Interface */
-    QStandardItem* CreateStandartItem();
+    QStandardItem *CreateAndAppendRow(QStandardItem *parent, VkService::ItemType type);
     void ClearStandartItem(QStandardItem*item);
-
-    QStandardItem* need_login_;
-    QStandardItem* loading_;
     QStandardItem* root_item_;
     QStandardItem* recommendations_;
     QStandardItem* my_music_;
     QVector<QStandardItem*> playlists_;
     boost::scoped_ptr<QMenu> context_menu_;
+    SearchBoxWidget* search_box_;
 
     /* Connection */
     Vreen::Client *client_;
