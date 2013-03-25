@@ -11,6 +11,8 @@
 #include "vreen/audio.h"
 #include "vreen/contact.h"
 
+#include "vkurlhandler.h"
+
 #define  VAR(var) qLog(Debug) << ("---    where " #var " =") << (var);
 #define  TRACE qLog(Debug) << "--- " << __PRETTY_FUNCTION__ ;
 
@@ -34,6 +36,7 @@ public:
 
     static const char* kServiceName;
     static const char* kSettingGroup;
+    static const char* kUrlScheme;
     static const uint  kApiKey;
     static const Scopes kScopes;
 
@@ -69,8 +72,10 @@ public:
     void Login();
     void Logout();
     bool hasAccount() const { return hasAccount_; }
+    bool WaitForReply(Vreen::Reply *reply);
 
     /* Music */
+    QUrl GetSongUrl(QString song_id);
     int SongSearch(const QString &query, int count, int offset);
     int GroupSearch(const QString &query, int count, int offset);
     void UpdateMyMusic();
@@ -123,6 +128,7 @@ private:
     Vreen::Client *client_;
     Vreen::OAuthConnection *connection_;
     bool hasAccount_;
+    VkUrlHandler* url_handler_;
 
     /* Music */
     Vreen::AudioProvider* provider_;

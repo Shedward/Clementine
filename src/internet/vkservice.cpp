@@ -3,6 +3,8 @@
 #include <QMenu>
 #include <QSettings>
 #include <QByteArray>
+#include <QEventLoop>
+#include <QTimer>
 
 #include <boost/scoped_ptr.hpp>
 #include <algorithm>
@@ -10,6 +12,7 @@
 #include "core/application.h"
 #include "core/closure.h"
 #include "core/logging.h"
+#include "core/player.h"
 #include "core/timeconstants.h"
 #include "ui/iconloader.h"
 
@@ -28,6 +31,7 @@
 
 const char*  VkService::kServiceName = "Vk.com";
 const char*  VkService::kSettingGroup = "Vk.com";
+const char*  VkService::kUrlScheme = "vk";
 const uint   VkService::kApiKey = 3421812;
 const Scopes VkService::kScopes =
         Vreen::OAuthConnection::Offline |
@@ -46,6 +50,7 @@ VkService::VkService(Application *app, InternetModel *parent) :
     client_(new Vreen::Client),
     connection_(NULL),
     hasAccount_(false),
+    url_handler_(new VkUrlHandler(this, this)),
     provider_(NULL),
     last_id_(0)
 {
@@ -79,7 +84,7 @@ VkService::VkService(Application *app, InternetModel *parent) :
     VkSearchProvider* search_provider = new VkSearchProvider(app_, this);
     search_provider->Init(this);
     app_->global_search()->AddProvider(search_provider);
-
+ app_->player()->RegisterUrlHandler(url_handler_);
     connect(search_box_, SIGNAL(TextChanged(QString)), SLOT(Search(QString)));
 }
 
@@ -381,6 +386,14 @@ void VkService::RecommendationsLoaded(int id, SongList songs)
  * Load song list methods
  */
 
+QUrl VkService::GetSongUrl(QString song_id)
+{
+    auto audioList = provider_->getAudioByIds(song_id);
+    WaitForReply(audioList);
+    Vreen::AudioItem song = audioList->result()[0];
+    return song.url();
+}
+
 void VkService::LoadSongList(int id, int count)
 {
     TRACE VAR(id) VAR(count)
@@ -440,7 +453,13 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
         song.set_title(ClearString(item.title()));
         song.set_artist(ClearString(item.artist()));
         song.set_length_nanosec(floor(item.duration() * kNsecPerSec));
-        song.set_url(item.url());
+
+        QString url = QString("vk://song/%1_%2").
+                arg(item.ownerId()).
+                arg(item.id());
+
+        qDebug() << url;
+        song.set_url(QUrl(url));
 
         song_list.append(song);
     }
@@ -571,4 +590,19 @@ void VkService::ClearSimilarSongs(SongList &list)
     list.erase(end, list.end());
 
     qDebug() << "Cleared" << old - list.count() << "items";
+}
+
+bool VkService::WaitForReply(Vreen::Reply* reply) {
+    QEventLoop event_loop;
+    QTimer timeout_timer;
+    connect(&timeout_timer, SIGNAL(timeout()), &event_loop, SLOT(quit()));
+    connect(reply, SIGNAL(resultReady(QVariant)), &event_loop, SLOT(quit()));
+    timeout_timer.start(10000);
+    event_loop.exec();
+    if (!timeout_timer.isActive()) {
+      qLog(Error) << "Vk.com request timeout";
+      return false;
+    }
+    timeout_timer.stop();
+    return true;
 }
