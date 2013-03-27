@@ -7,11 +7,11 @@
 #include <QTimer>
 
 #include <boost/scoped_ptr.hpp>
-#include <algorithm>
 
 #include "core/application.h"
 #include "core/closure.h"
 #include "core/logging.h"
+#include "core/mergedproxymodel.h"
 #include "core/player.h"
 #include "core/timeconstants.h"
 #include "ui/iconloader.h"
@@ -42,16 +42,17 @@ const Scopes VkService::kScopes =
 
 VkService::VkService(Application *app, InternetModel *parent) :
     InternetService(kServiceName, app, parent, parent),
-    root_item_(NULL),
-    recommendations_(NULL),
-    my_music_(NULL),
+    root_item_(nullptr),
+    recommendations_(nullptr),
+    my_music_(nullptr),
+    search_(nullptr),
     context_menu_(new QMenu),
     search_box_(new SearchBoxWidget(this)),
     client_(new Vreen::Client),
-    connection_(NULL),
+    connection_(nullptr),
     hasAccount_(false),
     url_handler_(new VkUrlHandler(this, this)),
-    provider_(NULL),
+    provider_(nullptr),
     last_id_(0)
 {
     QSettings s;
@@ -164,7 +165,7 @@ QWidget *VkService::HeaderWidget() const
     if (hasAccount()) {
         return search_box_;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -224,7 +225,7 @@ void VkService::Logout()
         delete connection_;
         delete client_->roster();
         delete client_->me();
-        connection_ = NULL;
+        connection_ = nullptr;
     }
 
     RefreshRootSubitems();
@@ -261,7 +262,7 @@ void VkService::OnlineStateChanged(bool online)
 void VkService::ChangeMe(Vreen::Buddy *me)
 {
     if (!me) {
-        qLog(Warning) << "Me is NULL.";
+        qLog(Warning) << "Me is nullptr.";
         return;
     }
 
@@ -325,9 +326,7 @@ void VkService::MyMusicLoaded(int id, SongList songs)
 
     if(id == 0) {
         ClearStandartItem(my_music_);
-        foreach (auto song, songs) {
-            my_music_->appendRow(CreateSongItem(song));
-        }
+        AppendSongs(my_music_,songs);
     }
 }
 
@@ -359,7 +358,7 @@ void VkService::MoreRecommendations()
 {
     TRACE
 
-    RemoveLastRow(recommendations_);
+    RemoveLastRow(recommendations_); // Last row is "More"
     CreateAndAppendRow(recommendations_,Type_Loading);
     auto myAudio = provider_->getRecommendationsForUser(0,50,recommendations_->rowCount()-1);
 
@@ -373,14 +372,47 @@ void VkService::RecommendationsLoaded(int id, SongList songs)
     TRACE VAR(id) VAR(&songs)
 
     if(id == -1) {
-        RemoveLastRow(recommendations_);
-        foreach (auto song, songs) {
-            recommendations_->appendRow(CreateSongItem(song));
-        }
+        RemoveLastRow(recommendations_); // Last row is "Loading..."
+        AppendSongs(recommendations_,songs);
         CreateAndAppendRow(recommendations_,Type_MoreRecommendations);
     }
 }
 
+/***
+ * Search
+ */
+
+void VkService::Search(QString query)
+{
+    if (query.isEmpty()) {
+        root_item_->removeRow(search_->row());
+        search_ = nullptr;
+        search_id_ = 0;
+    } else {
+        if (!search_) {
+            CreateAndAppendRow(root_item_,Type_Search);
+            connect(this, SIGNAL(SongSearchResult(int,SongList)),
+                    SLOT(SearchLoaded(int,SongList)));
+        }
+        search_id_ = SongSearch(query);
+    }
+}
+
+void VkService::SearchLoaded(int id, SongList songs)
+{
+    if (id == search_id_){
+        if (search_) {
+            ClearStandartItem(search_);
+            if (songs.count() > 0) {
+                AppendSongs(search_, songs);
+            } else {
+                search_->appendRow(new QStandardItem("Nothing found"));
+            }
+            QModelIndex index = model()->merged_model()->mapFromSource(search_->index());
+            ScrollToIndex(index);
+        }
+    }
+}
 
 /***
  * Load song list methods
@@ -409,11 +441,6 @@ void VkService::LoadSongList(int id, int count)
                    SLOT(CountRecived(int, Vreen::IntReply*)),
                    id, countOfMyAudio);
     }
-}
-
-void VkService::Search(QString query)
-{
-    qDebug() << "====" << query;
 }
 
 void VkService::CountRecived(int id, Vreen::IntReply* reply)
@@ -472,7 +499,7 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
  * Search
  */
 
-int VkService::SongSearch(const QString &query, int count = 50, int offset = 0)
+int VkService::SongSearch(const QString &query, int count, int offset)
 {
     TRACE VAR(query) VAR(count) VAR(offset)
 
@@ -491,7 +518,6 @@ void VkService::SongSearchRecived(int id, Vreen::AudioItemListReply *reply)
     TRACE VAR(id) VAR(reply)
 
     SongList songs = FromAudioList(reply->result());
-    ClearSimilarSongs(songs);
     emit SongSearchResult(id, songs);
 }
 
@@ -553,6 +579,15 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem *parent, VkService::I
         item->setData(InternetModel::PlayBehaviour_MultipleItems,
                            InternetModel::Role_PlayBehaviour);
         my_music_ = item;
+        break;
+
+    case Type_Search:
+        item = new QStandardItem(
+                    QIcon(":vk/find.png"),
+                    tr("Search"));
+        item->setData(InternetModel::PlayBehaviour_MultipleItems,
+                           InternetModel::Role_PlayBehaviour);
+        search_ = item;
     default:
         break;
     }
@@ -562,34 +597,18 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem *parent, VkService::I
     return item;
 }
 
+void VkService::AppendSongs(QStandardItem *parent, const SongList &songs)
+{
+    foreach (auto song, songs) {
+        parent->appendRow(CreateSongItem(song));
+    }
+}
+
 void VkService::ClearStandartItem(QStandardItem * item)
 {
     if (item->hasChildren()) {
         item->removeRows(0, item->rowCount());
     }
-}
-
-void VkService::ClearSimilarSongs(SongList &list)
-{
-    /* Search result sorted by relevance, and better quality songs usualy come first.
-     * Stable sort don't mix similar song, so std::unique will remove bad quality copies.
-     */
-
-    qStableSort(list.begin(), list.end(), [](const Song &a, const Song &b){
-        return (a.artist().localeAwareCompare(b.artist()) > 0)
-                or (a.title().localeAwareCompare(b.title()) > 0);
-    });
-
-    int old = list.count();
-
-    auto end = std::unique(list.begin(), list.end(), [](const Song &a, const Song &b){
-        return (a.artist().localeAwareCompare(b.artist()) == 0)
-                and (a.title().localeAwareCompare(b.title()) == 0);
-    });
-
-    list.erase(end, list.end());
-
-    qDebug() << "Cleared" << old - list.count() << "items";
 }
 
 bool VkService::WaitForReply(Vreen::Reply* reply) {

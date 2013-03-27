@@ -76,7 +76,7 @@ public:
 
     /* Music */
     QUrl GetSongUrl(QString song_id);
-    int SongSearch(const QString &query, int count, int offset);
+    int SongSearch(const QString &query, int count = 50, int offset = 0);
     int GroupSearch(const QString &query, int count, int offset);
     void UpdateMyMusic();
     void UpdateRecommendations();
@@ -112,6 +112,7 @@ private slots:
 
     void MyMusicLoaded(int id, SongList songs);
     void RecommendationsLoaded(int id, SongList songs);
+    void SearchLoaded(int id, SongList songs);
 
 private:
     /* Interface */
@@ -120,6 +121,7 @@ private:
     QStandardItem* root_item_;
     QStandardItem* recommendations_;
     QStandardItem* my_music_;
+    QStandardItem* search_;
     QVector<QStandardItem*> playlists_;
     boost::scoped_ptr<QMenu> context_menu_;
     SearchBoxWidget* search_box_;
@@ -133,8 +135,9 @@ private:
     /* Music */
     Vreen::AudioProvider* provider_;
     uint last_id_;
+    uint search_id_;
     SongList FromAudioList(const Vreen::AudioItemList &list);
-    void ClearSimilarSongs(SongList &list);
+    void AppendSongs(QStandardItem *parent, const SongList &songs);
 };
 
 #endif // VKSERVICE_H

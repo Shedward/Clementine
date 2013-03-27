@@ -1,4 +1,7 @@
 #include "vksearchprovider.h"
+
+#include <algorithm>
+
 #include "core/logging.h"
 
 VkSearchProvider::VkSearchProvider(Application* app, QObject* parent) :
@@ -44,13 +47,15 @@ void VkSearchProvider::ShowConfig()
     service_->ShowConfig();
 }
 
-void VkSearchProvider::SongSearchResult(int id, const SongList &songs)
+void VkSearchProvider::SongSearchResult(int id, SongList &songs)
 {
     TRACE VAR(id) VAR(&songs)
 
     // Map back to the original id.
     const PendingState state = pending_searches_.take(id);
     const int global_search_id = state.orig_id_;
+
+    ClearSimilarSongs(songs);
 
     ResultList ret;
 
@@ -78,4 +83,27 @@ void VkSearchProvider::MaybeSearchFinished(int id)
     if (pending_searches_.keys(PendingState(id, QStringList())).isEmpty()) {
       emit SearchFinished(id);
     }
+}
+
+void VkSearchProvider::ClearSimilarSongs(SongList &list)
+{
+    /* Search result sorted by relevance, and better quality songs usualy come first.
+     * Stable sort don't mix similar song, so std::unique will remove bad quality copies.
+     */
+
+    qStableSort(list.begin(), list.end(), [](const Song &a, const Song &b){
+        return (a.artist().localeAwareCompare(b.artist()) > 0)
+                or (a.title().localeAwareCompare(b.title()) > 0);
+    });
+
+    int old = list.count();
+
+    auto end = std::unique(list.begin(), list.end(), [](const Song &a, const Song &b){
+        return (a.artist().localeAwareCompare(b.artist()) == 0)
+                and (a.title().localeAwareCompare(b.title()) == 0);
+    });
+
+    list.erase(end, list.end());
+
+    qDebug() << "Cleared" << old - list.count() << "items";
 }
