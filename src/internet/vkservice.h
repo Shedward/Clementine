@@ -88,7 +88,7 @@ signals:
 
     void SongListLoaded(int id, SongList songs);
 
-    void SongSearchResult(int id, SongList songs);
+    void SongSearchResult(int id, const SongList &songs);
     void GroupSearchResult(int id, Vreen::GroupList groups);
     
 public slots:
@@ -110,9 +110,9 @@ private slots:
     void SongSearchRecived(int id, Vreen::AudioItemListReply *reply);
     void GroupSearchRecived(int id);
 
-    void MyMusicLoaded(int id, SongList songs);
-    void RecommendationsLoaded(int id, SongList songs);
-    void SearchLoaded(int id, SongList songs);
+    void MyMusicLoaded(int id, const SongList &songs);
+    void RecommendationsLoaded(int id, const SongList &songs);
+    void SearchLoaded(int id, const SongList &songs);
 
 private:
     /* Interface */

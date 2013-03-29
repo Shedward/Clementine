@@ -47,26 +47,28 @@ void VkSearchProvider::ShowConfig()
     service_->ShowConfig();
 }
 
-void VkSearchProvider::SongSearchResult(int id, SongList &songs)
+void VkSearchProvider::SongSearchResult(int id, SongList songs)
 {
-    TRACE VAR(id) VAR(&songs)
+    TRACE VAR(id) VAR(&songs);
 
     // Map back to the original id.
-    const PendingState state = pending_searches_.take(id);
-    const int global_search_id = state.orig_id_;
+    if (pending_searches_.contains(id)) {
+        const PendingState state = pending_searches_.take(id);
+        const int global_search_id = state.orig_id_;
 
-    ClearSimilarSongs(songs);
+        ClearSimilarSongs(songs);
 
-    ResultList ret;
+        ResultList ret;
 
-    foreach (const Song& song, songs) {
-      Result result(this);
-      result.metadata_ = song;
-      ret << result;
-    }
+        foreach (const Song& song, songs) {
+            Result result(this);
+            result.metadata_ = song;
+            ret << result;
+        }
 
-    emit ResultsAvailable(global_search_id, ret);
-    MaybeSearchFinished(global_search_id);
+        emit ResultsAvailable(global_search_id, ret);
+        MaybeSearchFinished(global_search_id);
+   }
 }
 
 void VkSearchProvider::GroupSearchResult(int id, const QVector<GroupID> &groups)

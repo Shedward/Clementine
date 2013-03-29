@@ -53,7 +53,8 @@ VkService::VkService(Application *app, InternetModel *parent) :
     hasAccount_(false),
     url_handler_(new VkUrlHandler(this, this)),
     provider_(nullptr),
-    last_id_(0)
+    last_id_(0),
+    search_id_(0)
 {
     QSettings s;
     s.beginGroup(kSettingGroup);
@@ -85,7 +86,7 @@ VkService::VkService(Application *app, InternetModel *parent) :
     VkSearchProvider* search_provider = new VkSearchProvider(app_, this);
     search_provider->Init(this);
     app_->global_search()->AddProvider(search_provider);
- app_->player()->RegisterUrlHandler(url_handler_);
+    app_->player()->RegisterUrlHandler(url_handler_);
     connect(search_box_, SIGNAL(TextChanged(QString)), SLOT(Search(QString)));
 }
 
@@ -262,7 +263,7 @@ void VkService::OnlineStateChanged(bool online)
 void VkService::ChangeMe(Vreen::Buddy *me)
 {
     if (!me) {
-        qLog(Warning) << "Me is nullptr.";
+        qLog(Warning) << "Me is NULL.";
         return;
     }
 
@@ -320,7 +321,7 @@ void VkService::UpdateMyMusic()
             this, SLOT(MyMusicLoaded(int,SongList)));
 }
 
-void VkService::MyMusicLoaded(int id, SongList songs)
+void VkService::MyMusicLoaded(int id, const SongList &songs)
 {
     TRACE VAR(id) VAR(&songs)
 
@@ -367,7 +368,7 @@ void VkService::MoreRecommendations()
                -1, myAudio);
 }
 
-void VkService::RecommendationsLoaded(int id, SongList songs)
+void VkService::RecommendationsLoaded(int id, const SongList &songs)
 {
     TRACE VAR(id) VAR(&songs)
 
@@ -398,8 +399,10 @@ void VkService::Search(QString query)
     }
 }
 
-void VkService::SearchLoaded(int id, SongList songs)
+void VkService::SearchLoaded(int id, const SongList &songs)
 {
+    TRACE VAR(id) VAR(search_id_);
+
     if (id == search_id_){
         if (search_) {
             ClearStandartItem(search_);
@@ -485,7 +488,6 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
                 arg(item.ownerId()).
                 arg(item.id());
 
-        qDebug() << url;
         song.set_url(QUrl(url));
 
         song_list.append(song);

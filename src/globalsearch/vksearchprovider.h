@@ -21,7 +21,7 @@ public:
     InternetService* internet_service() { return service_; }
     
 public slots:
-    void SongSearchResult(int id, SongList &songs);
+    void SongSearchResult(int id, SongList songs);
     void GroupSearchResult(int id, const QVector<GroupID>& groups);
     void GroupSongLoaded(GroupID id, SongList& songs);
 
