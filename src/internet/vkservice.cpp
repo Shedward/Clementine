@@ -425,8 +425,13 @@ QUrl VkService::GetSongUrl(QString song_id)
 {
     auto audioList = provider_->getAudioByIds(song_id);
     WaitForReply(audioList);
-    Vreen::AudioItem song = audioList->result()[0];
-    return song.url();
+    if (not audioList->result().isEmpty()) {
+         Vreen::AudioItem song = audioList->result()[0];
+         return song.url();
+    } else {
+        qLog(Info) << "Unresolved url by id" << song_id;
+        return QUrl();
+    }
 }
 
 void VkService::LoadSongList(int id, int count)
