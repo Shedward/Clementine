@@ -46,7 +46,7 @@ public:
         Type_NeedLogin,
 
         Type_Loading,
-        Type_MoreRecommendations,
+        Type_More,
 
         Type_Recommendations,
         Type_MyMusic,

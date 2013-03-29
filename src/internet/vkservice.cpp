@@ -137,7 +137,7 @@ void VkService::ItemDoubleClicked(QStandardItem *item)
     case Type_NeedLogin:
         ShowConfig();
         break;
-    case Type_MoreRecommendations:
+    case Type_More:
         MoreRecommendations();
         break;
     }
@@ -374,7 +374,7 @@ void VkService::RecommendationsLoaded(int id, SongList songs)
     if(id == -1) {
         RemoveLastRow(recommendations_); // Last row is "Loading..."
         AppendSongs(recommendations_,songs);
-        CreateAndAppendRow(recommendations_,Type_MoreRecommendations);
+        CreateAndAppendRow(recommendations_,Type_More);
     }
 }
 
@@ -552,7 +552,7 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem *parent, VkService::I
                     );
         break;
 
-    case Type_MoreRecommendations:
+    case Type_More:
         item = new QStandardItem(
                     QIcon(),
                     tr("More")
