@@ -39,6 +39,8 @@ const Scopes VkService::kScopes =
         Vreen::OAuthConnection::Friends |
         Vreen::OAuthConnection::Groups;
 
+uint VkService::RequestID::last_id_ = 0;
+
 
 VkService::VkService(Application *app, InternetModel *parent) :
     InternetService(kServiceName, app, parent, parent),
@@ -53,8 +55,7 @@ VkService::VkService(Application *app, InternetModel *parent) :
     hasAccount_(false),
     url_handler_(new VkUrlHandler(this, this)),
     provider_(nullptr),
-    last_id_(0),
-    search_id_(0)
+    max_search_id_(0)
 {
     QSettings s;
     s.beginGroup(kSettingGroup);
@@ -317,15 +318,15 @@ void VkService::UpdateMyMusic()
 
     LoadSongList(0);
 
-    connect(this, SIGNAL(SongListLoaded(int,SongList)),
-            this, SLOT(MyMusicLoaded(int,SongList)));
+    connect(this, SIGNAL(SongListLoaded(RequestID,SongList)),
+            this, SLOT(MyMusicLoaded(RequestID,SongList)));
 }
 
-void VkService::MyMusicLoaded(int id, const SongList &songs)
+void VkService::MyMusicLoaded(RequestID rid, const SongList &songs)
 {
-    TRACE VAR(id) VAR(&songs)
+    TRACE VAR(rid.id()) VAR(rid.type()) VAR(&songs)
 
-    if(id == 0) {
+    if(rid.type() == UserAudio and rid.id() == 0) {
         ClearStandartItem(my_music_);
         AppendSongs(my_music_,songs);
     }
@@ -344,11 +345,11 @@ void VkService::UpdateRecommendations()
 
     auto myAudio = provider_->getRecommendationsForUser(0,50,0);
     NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
-               SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
-               -1, myAudio);
+               SLOT(SongListRecived(RequestID,Vreen::AudioItemListReply*)),
+               RequestID(UserRecomendations), myAudio);
 
-    connect(this, SIGNAL(SongListLoaded(int,SongList)),
-            this, SLOT(RecommendationsLoaded(int,SongList)));
+    connect(this, SIGNAL(SongListLoaded(RequestID,SongList)),
+            this, SLOT(RecommendationsLoaded(RequestID,SongList)));
 }
 
 inline static void RemoveLastRow(QStandardItem* item){
@@ -364,15 +365,15 @@ void VkService::MoreRecommendations()
     auto myAudio = provider_->getRecommendationsForUser(0,50,recommendations_->rowCount()-1);
 
     NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
-               SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
-               -1, myAudio);
+               SLOT(SongListRecived(RequestID,Vreen::AudioItemListReply*)),
+               RequestID(UserRecomendations), myAudio);
 }
 
-void VkService::RecommendationsLoaded(int id, const SongList &songs)
+void VkService::RecommendationsLoaded(RequestID id, const SongList &songs)
 {
-    TRACE VAR(id) VAR(&songs)
+    TRACE VAR(id.id()) VAR(&songs)
 
-    if(id == -1) {
+    if(id.type() == UserRecomendations) {
         RemoveLastRow(recommendations_); // Last row is "Loading..."
         AppendSongs(recommendations_,songs);
         CreateAndAppendRow(recommendations_,Type_More);
@@ -388,22 +389,23 @@ void VkService::Search(QString query)
     if (query.isEmpty()) {
         root_item_->removeRow(search_->row());
         search_ = nullptr;
-        search_id_ = 0;
+        max_search_id_ = 0;
     } else {
         if (!search_) {
             CreateAndAppendRow(root_item_,Type_Search);
-            connect(this, SIGNAL(SongSearchResult(int,SongList)),
-                    SLOT(SearchLoaded(int,SongList)));
+            connect(this, SIGNAL(SongSearchResult(RequestID,SongList)),
+                    SLOT(SearchLoaded(RequestID,SongList)));
         }
-        search_id_ = SongSearch(query);
+        SongSearch(RequestID(LocalSearch), query);
     }
 }
 
-void VkService::SearchLoaded(int id, const SongList &songs)
+void VkService::SearchLoaded(RequestID id, const SongList &songs)
 {
-    TRACE VAR(id) VAR(search_id_);
+    TRACE VAR(id.id()) VAR(max_search_id_);
 
-    if (id == search_id_){
+    if (id.type() == LocalSearch and id.id() >= max_search_id_){
+        max_search_id_= id.id();
         if (search_) {
             ClearStandartItem(search_);
             if (songs.count() > 0) {
@@ -434,40 +436,41 @@ QUrl VkService::GetSongUrl(QString song_id)
     }
 }
 
-void VkService::LoadSongList(int id, int count)
+void VkService::LoadSongList(uint uid, int count)
 {
-    TRACE VAR(id) VAR(count)
+    TRACE VAR(uid) VAR(count)
 
-    auto countOfMyAudio = provider_->getCount(id);
     if (count > 0) {
-        auto myAudio = provider_->getContactAudio(id,count);
+        auto myAudio = provider_->getContactAudio(uid,count);
         NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
-                   SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
-                   id, myAudio);
+                   SLOT(SongListRecived(RequestID,Vreen::AudioItemListReply*)),
+                   RequestID(UserAudio,uid), myAudio);
     } else {
+        // If count undefined load all
+        auto countOfMyAudio = provider_->getCount(uid);
         NewClosure(countOfMyAudio, SIGNAL(resultReady(QVariant)), this,
-                   SLOT(CountRecived(int, Vreen::IntReply*)),
-                   id, countOfMyAudio);
+                   SLOT(CountRecived(RequestID,Vreen::IntReply*)),
+                   RequestID(UserAudio,uid), countOfMyAudio);
     }
 }
 
-void VkService::CountRecived(int id, Vreen::IntReply* reply)
+void VkService::CountRecived(RequestID rid, Vreen::IntReply* reply)
 {
-    TRACE VAR(id)
+    TRACE VAR(rid.id())
 
     int count = reply->result();
 
-    auto myAudio = provider_->getContactAudio(id,count);
+    auto myAudio = provider_->getContactAudio(0,count);
     NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
-               SLOT(SongListRecived(int,Vreen::AudioItemListReply*)),
-               id, myAudio);
+               SLOT(SongListRecived(RequestID,Vreen::AudioItemListReply*)),
+               rid, myAudio);
 }
 
-void VkService::SongListRecived(int id, Vreen::AudioItemListReply* reply)
+void VkService::SongListRecived(RequestID rid, Vreen::AudioItemListReply* reply)
 {
-    TRACE VAR(id)
+    TRACE VAR(rid.id())
     SongList songs = FromAudioList(reply->result());
-    emit SongListLoaded(id, songs);
+    emit SongListLoaded(rid, songs);
 }
 
 
@@ -506,23 +509,19 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
  * Search
  */
 
-int VkService::SongSearch(const QString &query, int count, int offset)
+void VkService::SongSearch(RequestID id, const QString &query, int count, int offset)
 {
-    TRACE VAR(query) VAR(count) VAR(offset)
-
-    uint id = ++last_id_;
+    TRACE VAR(query) VAR(count) VAR(offset);
 
     auto reply = provider_->searchAudio(query,count,offset,false,Vreen::AudioProvider::SortByPopularity);
     NewClosure(reply, SIGNAL(resultReady(QVariant)), this,
-               SLOT(SongSearchRecived(int,Vreen::AudioItemListReply*)),
+               SLOT(SongSearchRecived(RequestID,Vreen::AudioItemListReply*)),
                id, reply);
-
-    return id;
 }
 
-void VkService::SongSearchRecived(int id, Vreen::AudioItemListReply *reply)
+void VkService::SongSearchRecived(RequestID id, Vreen::AudioItemListReply *reply)
 {
-    TRACE VAR(id) VAR(reply)
+    TRACE VAR(id.id()) VAR(reply)
 
     SongList songs = FromAudioList(reply->result());
     emit SongSearchResult(id, songs);
@@ -530,7 +529,7 @@ void VkService::SongSearchRecived(int id, Vreen::AudioItemListReply *reply)
 
 int VkService::GroupSearch(const QString &query, int count, int offset)
 {
-    return ++last_id_;
+    return 0;
 }
 
 void VkService::GroupSearchRecived(int id)

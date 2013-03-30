@@ -19,8 +19,8 @@ void VkSearchProvider::Init(VkService *service)
                          QIcon(":providers/vk.png"),
                          WantsDelayedQueries | CanShowConfig);
 
-    connect(service_, SIGNAL(SongSearchResult(int,SongList)),
-            this, SLOT(SongSearchResult(int,SongList)));
+    connect(service_, SIGNAL(SongSearchResult(RequestID,SongList)),
+            this, SLOT(SongSearchResult(RequestID,SongList)));
 
 }
 
@@ -33,8 +33,9 @@ void VkSearchProvider::SearchAsync(int id, const QString &query)
 
     int count = s.value("maxSearchResult",100).toInt();
 
-    const int service_id = service_->SongSearch(query,count,0);
-    pending_searches_[service_id] = PendingState(id, TokenizeQuery(query));
+    RequestID rid(VkService::GlobalSearch);
+    service_->SongSearch(rid, query,count,0);
+    pending_searches_[rid.id()] = PendingState(id, TokenizeQuery(query));
 }
 
 bool VkSearchProvider::IsLoggedIn()
@@ -47,13 +48,13 @@ void VkSearchProvider::ShowConfig()
     service_->ShowConfig();
 }
 
-void VkSearchProvider::SongSearchResult(int id, SongList songs)
+void VkSearchProvider::SongSearchResult(VkService::RequestID rid, SongList songs)
 {
-    TRACE VAR(id) VAR(&songs);
+    TRACE VAR(rid.id()) VAR(&songs);
 
     // Map back to the original id.
-    if (pending_searches_.contains(id)) {
-        const PendingState state = pending_searches_.take(id);
+    if (rid.type() == VkService::GlobalSearch) {
+        const PendingState state = pending_searches_.take(rid.id());
         const int global_search_id = state.orig_id_;
 
         ClearSimilarSongs(songs);

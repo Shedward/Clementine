@@ -55,8 +55,34 @@ public:
         Type_Friend,
         Type_Playlist,
         Type_Search
-    };    QStandardItem* loading_;
-    QStandardItem* more_recommendations;
+    };
+
+    enum RequestType {
+        GlobalSearch,
+        LocalSearch,
+        UserAudio,
+        UserRecomendations
+    };
+
+    struct RequestID {
+        RequestID(RequestType type, int id = 0)
+            : type_(type)
+        {
+            if (type == UserAudio or type == UserRecomendations) {
+                id_ = id;
+            } else {
+                id_= last_id_++;
+            }
+        }
+
+        int id() const { return id_; }
+        RequestType type() const { return type_; }
+
+    private:
+        static uint last_id_;
+        int id_;
+        RequestType type_;
+    };
 
     /* InternetService interface */
     QStandardItem* CreateRootItem();
@@ -76,7 +102,7 @@ public:
 
     /* Music */
     QUrl GetSongUrl(QString song_id);
-    int SongSearch(const QString &query, int count = 50, int offset = 0);
+    void SongSearch(RequestID id,const QString &query, int count = 50, int offset = 0);
     int GroupSearch(const QString &query, int count, int offset);
     void UpdateMyMusic();
     void UpdateRecommendations();
@@ -86,14 +112,14 @@ signals:
     void NameUpdated(QString name);
     void LoginSuccess(bool succ);
 
-    void SongListLoaded(int id, SongList songs);
+    void SongListLoaded(RequestID id, SongList songs);
 
-    void SongSearchResult(int id, const SongList &songs);
+    void SongSearchResult(RequestID id, const SongList &songs);
     void GroupSearchResult(int id, Vreen::GroupList groups);
     
 public slots:
     void ShowConfig();
-    void LoadSongList(int id, int count = 0); // zero means - load full list
+    void LoadSongList(uint uid, int count = 0); // zero means - load full list
     void Search(QString query);
 
 private slots:
@@ -105,14 +131,14 @@ private slots:
     void Error(Vreen::Client::Error error);
 
     /* Music */
-    void SongListRecived(int id, Vreen::AudioItemListReply *reply);
-    void CountRecived(int id, Vreen::IntReply* reply);
-    void SongSearchRecived(int id, Vreen::AudioItemListReply *reply);
+    void SongListRecived(RequestID rid, Vreen::AudioItemListReply *reply);
+    void CountRecived(RequestID rid, Vreen::IntReply* reply);
+    void SongSearchRecived(RequestID id, Vreen::AudioItemListReply *reply);
     void GroupSearchRecived(int id);
 
-    void MyMusicLoaded(int id, const SongList &songs);
-    void RecommendationsLoaded(int id, const SongList &songs);
-    void SearchLoaded(int id, const SongList &songs);
+    void MyMusicLoaded(RequestID rid, const SongList &songs);
+    void RecommendationsLoaded(RequestID id, const SongList &songs);
+    void SearchLoaded(RequestID id, const SongList &songs);
 
 private:
     /* Interface */
@@ -134,8 +160,7 @@ private:
 
     /* Music */
     Vreen::AudioProvider* provider_;
-    uint last_id_;
-    uint search_id_;
+    uint max_search_id_;
     SongList FromAudioList(const Vreen::AudioItemList &list);
     void AppendSongs(QStandardItem *parent, const SongList &songs);
 };

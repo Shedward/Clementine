@@ -6,8 +6,7 @@
 #include "searchprovider.h"
 
 typedef uint GroupID;
-
-class VkService;
+typedef VkService::RequestID RequestID;
 
 class VkSearchProvider : public SearchProvider
 {
@@ -21,7 +20,7 @@ public:
     InternetService* internet_service() { return service_; }
     
 public slots:
-    void SongSearchResult(int id, SongList songs);
+    void SongSearchResult(RequestID rid, SongList songs);
     void GroupSearchResult(int id, const QVector<GroupID>& groups);
     void GroupSongLoaded(GroupID id, SongList& songs);
 
@@ -33,3 +32,5 @@ private:
 };
 
 #endif // VKSEARCHPROVIDER_H
+
+
