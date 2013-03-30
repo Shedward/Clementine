@@ -423,30 +423,34 @@ void VkService::MoreSearch()
     SongSearch(rid,last_query_,50,search_->rowCount()-1);
 }
 
-void VkService::SearchLoaded(RequestID id, const SongList &songs)
+void VkService::SearchLoaded(RequestID rid, const SongList &songs)
 {
-    TRACE VAR(id.id()) VAR(last_search_id_);
+    TRACE VAR(rid.id()) VAR(last_search_id_);
+
+    //TODO: Simplify.
 
     if (!search_) {
         return; // Result received when search is over.
     }
 
-    if (id.id() >= last_search_id_){
+    if (rid.id() >= last_search_id_){
 
-        if (id.type() == LocalSearch) {
+        if (rid.type() == LocalSearch) {
             ClearStandartItem(search_);
-        } else if (id.type() == MoreLocalSearch) {
+        } else if (rid.type() == MoreLocalSearch) {
             RemoveLastRow(search_); // Remove only  "Loading..."
         } else {
             return; // Others request types ignored.
         }
 
-        last_search_id_= id.id();
+        last_search_id_= rid.id();
         AppendSongs(search_, songs);
         CreateAndAppendRow(search_, Type_More);
 
-        QModelIndex index = model()->merged_model()->mapFromSource(search_->index());
-        ScrollToIndex(index);
+        if (rid.type() == LocalSearch) {
+            QModelIndex index = model()->merged_model()->mapFromSource(search_->index());
+            ScrollToIndex(index);
+        }
     }
 }
 

@@ -146,7 +146,7 @@ private slots:
 
     void MyMusicLoaded(RequestID rid, const SongList &songs);
     void RecommendationsLoaded(RequestID id, const SongList &songs);
-    void SearchLoaded(RequestID id, const SongList &songs);
+    void SearchLoaded(RequestID rid, const SongList &songs);
 
 private:
     /* Interface */
