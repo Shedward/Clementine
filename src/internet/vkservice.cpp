@@ -444,8 +444,11 @@ void VkService::SearchLoaded(RequestID rid, const SongList &songs)
         }
 
         last_search_id_= rid.id();
-        AppendSongs(search_, songs);
-        CreateAndAppendRow(search_, Type_More);
+
+        if (songs.count() > 0) {
+            AppendSongs(search_, songs);
+            CreateAndAppendRow(search_, Type_More);
+        }
 
         if (rid.type() == LocalSearch) {
             QModelIndex index = model()->merged_model()->mapFromSource(search_->index());
