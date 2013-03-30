@@ -408,6 +408,7 @@ void VkService::Search(QString query)
             connect(this, SIGNAL(SongSearchResult(RequestID,SongList)),
                     SLOT(SearchLoaded(RequestID,SongList)));
         }
+        RemoveLastRow(search_); // Prevent multiple "Loading..." rows.
         CreateAndAppendRow(search_, Type_Loading);
         SongSearch(RequestID(LocalSearch), query);
     }
@@ -450,6 +451,7 @@ void VkService::SearchLoaded(RequestID rid, const SongList &songs)
             CreateAndAppendRow(search_, Type_More);
         }
 
+        // If new search, scroll to search results.
         if (rid.type() == LocalSearch) {
             QModelIndex index = model()->merged_model()->mapFromSource(search_->index());
             ScrollToIndex(index);
