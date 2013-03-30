@@ -102,11 +102,15 @@ public:
 
     /* Music */
     QUrl GetSongUrl(QString song_id);
+
     void SongSearch(RequestID id,const QString &query, int count = 50, int offset = 0);
     int GroupSearch(const QString &query, int count, int offset);
+
     void UpdateMyMusic();
     void UpdateRecommendations();
     void MoreRecommendations();
+    Q_SLOT void Search(QString query);
+    void MoreSearch();
 
 signals:
     void NameUpdated(QString name);
@@ -120,7 +124,6 @@ signals:
 public slots:
     void ShowConfig();
     void LoadSongList(uint uid, int count = 0); // zero means - load full list
-    void Search(QString query);
 
 private slots:
     /* Connection */
@@ -160,7 +163,7 @@ private:
 
     /* Music */
     Vreen::AudioProvider* provider_;
-    uint max_search_id_;
+    uint last_search_id_;
     SongList FromAudioList(const Vreen::AudioItemList &list);
     void AppendSongs(QStandardItem *parent, const SongList &songs);
 };

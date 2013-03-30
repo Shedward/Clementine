@@ -55,7 +55,7 @@ VkService::VkService(Application *app, InternetModel *parent) :
     hasAccount_(false),
     url_handler_(new VkUrlHandler(this, this)),
     provider_(nullptr),
-    max_search_id_(0)
+    last_search_id_(0)
 {
     QSettings s;
     s.beginGroup(kSettingGroup);
@@ -389,7 +389,7 @@ void VkService::Search(QString query)
     if (query.isEmpty()) {
         root_item_->removeRow(search_->row());
         search_ = nullptr;
-        max_search_id_ = 0;
+        last_search_id_ = 0;
     } else {
         if (!search_) {
             CreateAndAppendRow(root_item_,Type_Search);
@@ -400,12 +400,16 @@ void VkService::Search(QString query)
     }
 }
 
+void VkService::MoreSearch()
+{
+}
+
 void VkService::SearchLoaded(RequestID id, const SongList &songs)
 {
-    TRACE VAR(id.id()) VAR(max_search_id_);
+    TRACE VAR(id.id()) VAR(last_search_id_);
 
-    if (id.type() == LocalSearch and id.id() >= max_search_id_){
-        max_search_id_= id.id();
+    if (id.type() == LocalSearch and id.id() >= last_search_id_){
+        last_search_id_= id.id();
         if (search_) {
             ClearStandartItem(search_);
             if (songs.count() > 0) {
