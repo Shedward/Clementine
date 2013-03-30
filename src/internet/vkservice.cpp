@@ -140,8 +140,19 @@ void VkService::ItemDoubleClicked(QStandardItem *item)
         ShowConfig();
         break;
     case Type_More:
-        MoreRecommendations();
+        switch (item->parent()->data(InternetModel::Role_Type).toInt()) {
+        case Type_Recommendations:
+            MoreRecommendations();
+            break;
+        case Type_Search:
+            MoreSearch();
+            break;
+        default:
+            qLog(Warning) << "Wrong parent for More item with type:" << item->parent()->data(InternetModel::Role_Type);
+        }
         break;
+    default:
+        qLog(Warning) << "Wrong item for double click with type:" << item->data(InternetModel::Role_Type);
     }
 }
 
@@ -391,35 +402,51 @@ void VkService::Search(QString query)
         search_ = nullptr;
         last_search_id_ = 0;
     } else {
+        last_query_ = query;
         if (!search_) {
             CreateAndAppendRow(root_item_,Type_Search);
             connect(this, SIGNAL(SongSearchResult(RequestID,SongList)),
                     SLOT(SearchLoaded(RequestID,SongList)));
         }
+        CreateAndAppendRow(search_, Type_Loading);
         SongSearch(RequestID(LocalSearch), query);
     }
 }
 
 void VkService::MoreSearch()
 {
+    RemoveLastRow(search_); // Last row is "More"
+    CreateAndAppendRow(recommendations_,Type_Loading);
+
+    RequestID  rid(MoreLocalSearch);
+
+    SongSearch(rid,last_query_,50,search_->rowCount()-1);
 }
 
 void VkService::SearchLoaded(RequestID id, const SongList &songs)
 {
     TRACE VAR(id.id()) VAR(last_search_id_);
 
-    if (id.type() == LocalSearch and id.id() >= last_search_id_){
-        last_search_id_= id.id();
-        if (search_) {
+    if (!search_) {
+        return; // Result received when search is over.
+    }
+
+    if (id.id() >= last_search_id_){
+
+        if (id.type() == LocalSearch) {
             ClearStandartItem(search_);
-            if (songs.count() > 0) {
-                AppendSongs(search_, songs);
-            } else {
-                search_->appendRow(new QStandardItem("Nothing found"));
-            }
-            QModelIndex index = model()->merged_model()->mapFromSource(search_->index());
-            ScrollToIndex(index);
+        } else if (id.type() == MoreLocalSearch) {
+            RemoveLastRow(search_); // Remove only  "Loading..."
+        } else {
+            return; // Others request types ignored.
         }
+
+        last_search_id_= id.id();
+        AppendSongs(search_, songs);
+        CreateAndAppendRow(search_, Type_More);
+
+        QModelIndex index = model()->merged_model()->mapFromSource(search_->index());
+        ScrollToIndex(index);
     }
 }
 

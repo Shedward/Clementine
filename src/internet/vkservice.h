@@ -60,6 +60,7 @@ public:
     enum RequestType {
         GlobalSearch,
         LocalSearch,
+        MoreLocalSearch,
         UserAudio,
         UserRecomendations
     };
@@ -68,10 +69,14 @@ public:
         RequestID(RequestType type, int id = 0)
             : type_(type)
         {
-            if (type == UserAudio or type == UserRecomendations) {
+            switch (type) {
+            case UserAudio:
+            case UserRecomendations:
                 id_ = id;
-            } else {
+                break;
+            default:
                 id_= last_id_++;
+                break;
             }
         }
 
@@ -164,6 +169,7 @@ private:
     /* Music */
     Vreen::AudioProvider* provider_;
     uint last_search_id_;
+    QString last_query_;
     SongList FromAudioList(const Vreen::AudioItemList &list);
     void AppendSongs(QStandardItem *parent, const SongList &songs);
 };
