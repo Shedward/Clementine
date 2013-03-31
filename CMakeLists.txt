@@ -219,6 +219,8 @@ optional_component(BOX ON "Box support"
   DEPENDS "Taglib 1.8" "TAGLIB_VERSION VERSION_GREATER 1.7.999"
 )
 
+optional_component(VK ON "Vk.com support")
+
 optional_component(AUDIOCD ON "Devices: Audio CD support"
   DEPENDS "libcdio" CDIO_FOUND
 )
@@ -462,6 +464,10 @@ endif(HAVE_SPOTIFY_BLOB)
 if(HAVE_MOODBAR)
   add_subdirectory(gst/moodbar)
 endif()
+
+if (HAVE_VK)
+  add_subdirectory(3rdparty/vreen)
+endif(HAVE_VK)
 
 # Uninstall support
 configure_file(
