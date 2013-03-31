@@ -466,8 +466,9 @@ void VkService::SearchLoaded(RequestID rid, const SongList &songs)
 QUrl VkService::GetSongUrl(QString song_id)
 {
     auto audioList = provider_->getAudioByIds(song_id);
-    WaitForReply(audioList);
-    if (not audioList->result().isEmpty()) {
+    emit StopWaiting(); // Stop all previous requests
+    bool succ = WaitForReply(audioList);
+    if (succ and not audioList->result().isEmpty()) {
          Vreen::AudioItem song = audioList->result()[0];
          return song.url();
     } else {
@@ -660,6 +661,7 @@ void VkService::ClearStandartItem(QStandardItem * item)
 bool VkService::WaitForReply(Vreen::Reply* reply) {
     QEventLoop event_loop;
     QTimer timeout_timer;
+    connect(this, SIGNAL(StopWaiting()), &timeout_timer, SLOT(stop()));
     connect(&timeout_timer, SIGNAL(timeout()), &event_loop, SLOT(quit()));
     connect(reply, SIGNAL(resultReady(QVariant)), &event_loop, SLOT(quit()));
     timeout_timer.start(10000);

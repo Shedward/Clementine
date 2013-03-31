@@ -125,6 +125,8 @@ signals:
 
     void SongSearchResult(RequestID id, const SongList &songs);
     void GroupSearchResult(int id, Vreen::GroupList groups);
+
+    void StopWaiting();
     
 public slots:
     void ShowConfig();
