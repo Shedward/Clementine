@@ -1,9 +1,9 @@
 #include <math.h>
 
-#include <QMenu>
-#include <QSettings>
 #include <QByteArray>
 #include <QEventLoop>
+#include <QMenu>
+#include <QSettings>
 #include <QTimer>
 
 #include <boost/scoped_ptr.hpp>
@@ -16,13 +16,13 @@
 #include "core/timeconstants.h"
 #include "ui/iconloader.h"
 
+#include "globalsearch/globalsearch.h"
 #include "internetmodel.h"
 #include "internetplaylistitem.h"
-#include "globalsearch/globalsearch.h"
 #include "searchboxwidget.h"
 
-#include "vreen/auth/oauthconnection.h"
 #include "vreen/audio.h"
+#include "vreen/auth/oauthconnection.h"
 #include "vreen/contact.h"
 #include "vreen/roster.h"
 
@@ -87,13 +87,17 @@ VkService::VkService(Application *app, InternetModel *parent) :
     VkSearchProvider* search_provider = new VkSearchProvider(app_, this);
     search_provider->Init(this);
     app_->global_search()->AddProvider(search_provider);
+
     app_->player()->RegisterUrlHandler(url_handler_);
+
     connect(search_box_, SIGNAL(TextChanged(QString)), SLOT(Search(QString)));
 }
 
 VkService::~VkService()
 {
 }
+
+
 
 /***
  * Interface
@@ -148,7 +152,7 @@ void VkService::ItemDoubleClicked(QStandardItem *item)
             MoreSearch();
             break;
         default:
-            qLog(Warning) << "Wrong parent for More item with type:" << item->parent()->data(InternetModel::Role_Type);
+            qLog(Warning) << "Wrong parent for More item:" << item->parent()->text();
         }
         break;
     default:
@@ -175,12 +179,14 @@ void VkService::RefreshRootSubitems()
 
 QWidget *VkService::HeaderWidget() const
 {
-    if (hasAccount()) {
+    if (HasAccount()) {
         return search_box_;
     } else {
         return nullptr;
     }
 }
+
+
 
 /***
  * Connection
@@ -207,8 +213,6 @@ void VkService::Login()
     }
 
     if (hasAccount_) {
-        qLog(Debug) << "--- Have account";
-
         QSettings s;
         s.beginGroup(kSettingGroup);
         QByteArray token = s.value("token",QByteArray()).toByteArray();
@@ -262,7 +266,7 @@ void VkService::ChangeUid(int uid)
 
 void VkService::OnlineStateChanged(bool online)
 {
-    qLog(Debug) << "--- Online state changed to" << online;
+    qLog(Debug) << "Online state changed to" << online;
     if (online) {
         hasAccount_ = true;
         emit LoginSuccess(true);
@@ -316,6 +320,8 @@ void VkService::Error(Vreen::Client::Error error)
     qLog(Error) << "Client error: " << error << msg;
 }
 
+
+
 /***
  * My Music
  */
@@ -342,6 +348,8 @@ void VkService::MyMusicLoaded(RequestID rid, const SongList &songs)
         AppendSongs(my_music_,songs);
     }
 }
+
+
 
 /***
  * Recommendation
@@ -391,6 +399,8 @@ void VkService::RecommendationsLoaded(RequestID id, const SongList &songs)
     }
 }
 
+
+
 /***
  * Search
  */
@@ -406,7 +416,7 @@ void VkService::Search(QString query)
         if (!search_) {
             CreateAndAppendRow(root_item_,Type_Search);
             connect(this, SIGNAL(SongSearchResult(RequestID,SongList)),
-                    SLOT(SearchLoaded(RequestID,SongList)));
+                    SLOT(SearchResultLoaded(RequestID,SongList)));
         }
         RemoveLastRow(search_); // Prevent multiple "Loading..." rows.
         CreateAndAppendRow(search_, Type_Loading);
@@ -420,22 +430,20 @@ void VkService::MoreSearch()
     CreateAndAppendRow(recommendations_,Type_Loading);
 
     RequestID  rid(MoreLocalSearch);
-
     SongSearch(rid,last_query_,50,search_->rowCount()-1);
 }
 
-void VkService::SearchLoaded(RequestID rid, const SongList &songs)
+void VkService::SearchResultLoaded(RequestID rid, const SongList &songs)
 {
     TRACE VAR(rid.id()) VAR(last_search_id_);
 
     //TODO: Simplify.
 
     if (!search_) {
-        return; // Result received when search is over.
+        return; // Result received when search is already over.
     }
 
     if (rid.id() >= last_search_id_){
-
         if (rid.type() == LocalSearch) {
             ClearStandartItem(search_);
         } else if (rid.type() == MoreLocalSearch) {
@@ -459,23 +467,11 @@ void VkService::SearchLoaded(RequestID rid, const SongList &songs)
     }
 }
 
+
+
 /***
  * Load song list methods
  */
-
-QUrl VkService::GetSongUrl(QString song_id)
-{
-    auto audioList = provider_->getAudioByIds(song_id);
-    emit StopWaiting(); // Stop all previous requests
-    bool succ = WaitForReply(audioList);
-    if (succ and not audioList->result().isEmpty()) {
-         Vreen::AudioItem song = audioList->result()[0];
-         return song.url();
-    } else {
-        qLog(Info) << "Unresolved url by id" << song_id;
-        return QUrl();
-    }
-}
 
 void VkService::LoadSongList(uint uid, int count)
 {
@@ -516,7 +512,8 @@ void VkService::SongListRecived(RequestID rid, Vreen::AudioItemListReply* reply)
 
 
 static QString ClearString(QString str) {
-    /* Remove all unicode symbols */
+    // Remove all leading and trailing unicode symbols
+    // that some users love to add to title and artist.
     str = str.remove(QRegExp("^[^\\w]*"));
     str = str.remove(QRegExp("[^])\\w]*$"));
     return str;
@@ -546,6 +543,27 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList &list)
 }
 
 
+
+/***
+ * Url handling
+ */
+
+QUrl VkService::GetSongUrl(QString song_id)
+{
+    auto audioList = provider_->getAudioByIds(song_id);
+    emit StopWaiting(); // Stop all previous requests.
+    bool succ = WaitForReply(audioList);
+    if (succ and not audioList->result().isEmpty()) {
+         Vreen::AudioItem song = audioList->result()[0];
+         return song.url();
+    } else {
+        qLog(Info) << "Unresolved url by id" << song_id;
+        return QUrl();
+    }
+}
+
+
+
 /***
  * Search
  */
@@ -568,18 +586,12 @@ void VkService::SongSearchRecived(RequestID id, Vreen::AudioItemListReply *reply
     emit SongSearchResult(id, songs);
 }
 
-int VkService::GroupSearch(const QString &query, int count, int offset)
-{
-    return 0;
-}
 
-void VkService::GroupSearchRecived(int id)
-{
-}
 
 /***
  * Utils
  */
+
 QStandardItem* VkService::CreateAndAppendRow(QStandardItem *parent, VkService::ItemType type){
 
     QStandardItem* item;
@@ -656,6 +668,10 @@ void VkService::ClearStandartItem(QStandardItem * item)
     if (item->hasChildren()) {
         item->removeRows(0, item->rowCount());
     }
+}
+
+void VkService::EnsureMenuCreated()
+{
 }
 
 bool VkService::WaitForReply(Vreen::Reply* reply) {

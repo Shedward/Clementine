@@ -51,9 +51,6 @@ public:
         Type_Recommendations,
         Type_MyMusic,
 
-        Type_Group,
-        Type_Friend,
-        Type_Playlist,
         Type_Search
     };
 
@@ -65,6 +62,8 @@ public:
         UserRecomendations
     };
 
+    // The simple structure allows the handler to determine
+    // how to react to the received request or quickly skip unwanted.
     struct RequestID {
         RequestID(RequestType type, int id = 0)
             : type_(type)
@@ -72,10 +71,10 @@ public:
             switch (type) {
             case UserAudio:
             case UserRecomendations:
-                id_ = id;
+                id_ = id; // For User/Group actions id is uid or gid...
                 break;
             default:
-                id_= last_id_++;
+                id_= last_id_++; // otherwise is increasing unique number.
                 break;
             }
         }
@@ -102,14 +101,13 @@ public:
     /* Connection */
     void Login();
     void Logout();
-    bool hasAccount() const { return hasAccount_; }
+    bool HasAccount() const { return hasAccount_; }
     bool WaitForReply(Vreen::Reply *reply);
 
     /* Music */
     QUrl GetSongUrl(QString song_id);
 
     void SongSearch(RequestID id,const QString &query, int count = 50, int offset = 0);
-    int GroupSearch(const QString &query, int count, int offset);
 
     void UpdateMyMusic();
     void UpdateRecommendations();
@@ -120,12 +118,8 @@ public:
 signals:
     void NameUpdated(QString name);
     void LoginSuccess(bool succ);
-
     void SongListLoaded(RequestID id, SongList songs);
-
     void SongSearchResult(RequestID id, const SongList &songs);
-    void GroupSearchResult(int id, Vreen::GroupList groups);
-
     void StopWaiting();
     
 public slots:
@@ -144,16 +138,16 @@ private slots:
     void SongListRecived(RequestID rid, Vreen::AudioItemListReply *reply);
     void CountRecived(RequestID rid, Vreen::IntReply* reply);
     void SongSearchRecived(RequestID id, Vreen::AudioItemListReply *reply);
-    void GroupSearchRecived(int id);
 
     void MyMusicLoaded(RequestID rid, const SongList &songs);
     void RecommendationsLoaded(RequestID id, const SongList &songs);
-    void SearchLoaded(RequestID rid, const SongList &songs);
+    void SearchResultLoaded(RequestID rid, const SongList &songs);
 
 private:
     /* Interface */
     QStandardItem *CreateAndAppendRow(QStandardItem *parent, VkService::ItemType type);
     void ClearStandartItem(QStandardItem*item);
+    void EnsureMenuCreated();
     QStandardItem* root_item_;
     QStandardItem* recommendations_;
     QStandardItem* my_music_;
@@ -170,6 +164,8 @@ private:
 
     /* Music */
     Vreen::AudioProvider* provider_;
+    // Kept when more recent results recived.
+    // Using for prevent loading tardy result instead.
     uint last_search_id_;
     QString last_query_;
     SongList FromAudioList(const Vreen::AudioItemList &list);

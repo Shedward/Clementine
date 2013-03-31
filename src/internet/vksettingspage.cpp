@@ -28,7 +28,7 @@ void VkSettingsPage::Load()
 
     ui_->maxGlobalSearch->setValue(s.value("maxSearchResult",100).toInt());
 
-    if (service_->hasAccount()) {
+    if (service_->HasAccount()) {
         Login();
     } else {
         Logout();

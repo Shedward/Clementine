@@ -40,7 +40,7 @@ void VkSearchProvider::SearchAsync(int id, const QString &query)
 
 bool VkSearchProvider::IsLoggedIn()
 {
-    return (service_ && service_->hasAccount());
+    return (service_ && service_->HasAccount());
 }
 
 void VkSearchProvider::ShowConfig()
