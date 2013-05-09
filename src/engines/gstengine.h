@@ -105,6 +105,9 @@ class GstEngine : public Engine::Base, public BufferConsumer {
   /** Set equalizer preamp and gains, range -100..100. Gains are 10 values. */
   void SetEqualizerParameters(int preamp, const QList<int>& bandGains);
 
+  /** Set Stereo balance, range -1.0f..1.0f */
+  void SetStereoBalance(float value);
+
   void ReloadSettings();
 
   void AddBufferConsumer(BufferConsumer* consumer);
@@ -121,6 +124,7 @@ class GstEngine : public Engine::Base, public BufferConsumer {
   void ClearScopeBuffers();
   void AddBufferToScope(GstBuffer* buf, int pipeline_id);
   void FadeoutFinished();
+  void FadeoutPauseFinished();
   void SeekNow();
   void BackgroundStreamFinished();
   void BackgroundStreamPlayDone();
@@ -138,6 +142,7 @@ class GstEngine : public Engine::Base, public BufferConsumer {
   PluginDetailsList GetPluginList(const QString& classname) const;
 
   void StartFadeout();
+  void StartFadeoutPause();
 
   void StartTimers();
   void StopTimers();
@@ -170,6 +175,7 @@ class GstEngine : public Engine::Base, public BufferConsumer {
 
   boost::shared_ptr<GstEnginePipeline> current_pipeline_;
   boost::shared_ptr<GstEnginePipeline> fadeout_pipeline_;
+  boost::shared_ptr<GstEnginePipeline> fadeout_pause_pipeline_;
   QUrl preloaded_url_;
 
   QList<BufferConsumer*> buffer_consumers_;
@@ -181,6 +187,7 @@ class GstEngine : public Engine::Base, public BufferConsumer {
   bool equalizer_enabled_;
   int equalizer_preamp_;
   QList<int> equalizer_gains_;
+  float stereo_balance_;
 
   bool rg_enabled_;
   int rg_mode_;
@@ -203,6 +210,9 @@ class GstEngine : public Engine::Base, public BufferConsumer {
   int next_element_id_;
 
   QHash<int, boost::shared_ptr<GstEnginePipeline> > background_streams_;
+
+  bool is_fading_out_to_pause_;
+  bool has_faded_out_;
 };
 
 

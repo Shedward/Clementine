@@ -20,7 +20,12 @@ signals:
   void SendClementineInfo();
   void SendFirstData(bool send_playlist_songs);
   void SendAllPlaylists();
+  void SendAllActivePlaylists();
   void SendPlaylistSongs(int id);
+  void Open(int id);
+  void Close(int id);
+  void Love();
+  void Ban();
 
   void Play();
   void PlayPause();
@@ -34,6 +39,8 @@ signals:
   void ShuffleCurrent();
   void SetRepeatMode(PlaylistSequence::RepeatMode mode);
   void SetShuffleMode(PlaylistSequence::ShuffleMode mode);
+  void InsertUrls(const QList<QUrl>& urls, int pos, bool play_now, bool enqueue);
+  void RemoveSongs(const QList<int>& indices);
   void SeekTo(int seconds);
 
 private:
@@ -44,7 +51,12 @@ private:
   void ChangeSong(const pb::remote::Message& msg);
   void SetRepeatMode(const pb::remote::Repeat& repeat);
   void SetShuffleMode(const pb::remote::Shuffle& shuffle);
+  void InsertUrls(const pb::remote::Message& msg);
+  void RemoveSongs(const pb::remote::Message& msg);
   void ClientConnect(const pb::remote::Message& msg);
+  void SendPlaylists(const pb::remote::Message& msg);
+  void OpenPlaylist(const pb::remote::Message& msg);
+  void ClosePlaylist(const pb::remote::Message& msg);
 };
 
 #endif // INCOMINGDATAPARSER_H

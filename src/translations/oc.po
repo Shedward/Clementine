@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the Clementine package.
 # 
 # Translators:
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-03-10 08:25+0000\n"
+"PO-Revision-Date: 2013-04-27 05:44+0000\n"
 "Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,8 +32,9 @@ msgid " kbps"
 msgstr ""
 
 #: ../bin/src/ui_songinfosettingspage.h:186
-#: ../bin/src/ui_playbacksettingspage.h:272
-#: ../bin/src/ui_playbacksettingspage.h:292
+#: ../bin/src/ui_playbacksettingspage.h:305
+#: ../bin/src/ui_playbacksettingspage.h:308
+#: ../bin/src/ui_playbacksettingspage.h:328
 msgid " ms"
 msgstr " mseg"
 
@@ -55,12 +56,12 @@ msgstr ""
 msgid "%1 albums"
 msgstr ""
 
-#: core/utilities.cpp:106
+#: core/utilities.cpp:107
 #, qt-format
 msgid "%1 days"
 msgstr ""
 
-#: core/utilities.cpp:127
+#: core/utilities.cpp:128
 #, qt-format
 msgid "%1 days ago"
 msgstr ""
@@ -75,7 +76,7 @@ msgstr ""
 msgid "%1 playlists (%2)"
 msgstr ""
 
-#: playlist/playlistmanager.cpp:325
+#: playlist/playlistmanager.cpp:326
 #, qt-format
 msgid "%1 selected of"
 msgstr ""
@@ -100,7 +101,7 @@ msgstr ""
 msgid "%1 songs found (showing %2)"
 msgstr ""
 
-#: playlist/playlistmanager.cpp:331
+#: playlist/playlistmanager.cpp:332
 #, qt-format
 msgid "%1 tracks"
 msgstr ""
@@ -230,11 +231,11 @@ msgstr "0:00:00"
 msgid "0px"
 msgstr ""
 
-#: core/utilities.cpp:106
+#: core/utilities.cpp:107
 msgid "1 day"
 msgstr ""
 
-#: playlist/playlistmanager.cpp:331
+#: playlist/playlistmanager.cpp:332
 msgid "1 track"
 msgstr ""
 
@@ -251,7 +252,7 @@ msgstr ""
 msgid "40%"
 msgstr ""
 
-#: library/library.cpp:58
+#: library/library.cpp:60
 msgid "50 random tracks"
 msgstr ""
 
@@ -266,7 +267,7 @@ msgid ""
 " the Android App now!</a>"
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:171
+#: ../bin/src/ui_librarysettingspage.h:195
 msgid ""
 "<html><head/><body><p>If not checked, Clementine will  try to save your "
 "ratings and other statistics only in a separate database and don't modify "
@@ -274,6 +275,14 @@ msgid ""
 "directly into the file each time they changed.</p><p>Please note it might "
 "not work for every format and, as there is no standard for doing so, other "
 "music players might not be able to read them.</p></body></html>"
+msgstr ""
+
+#: ../bin/src/ui_librarysettingspage.h:199
+msgid ""
+"<html><head/><body><p>This will write songs' ratings and statistics into "
+"files tags for all your library's songs.</p><p>This is not needed if the "
+"&quot;Save ratings and statistics in file tags&quot; option has always been "
+"activated.</p></body></html>"
 msgstr ""
 
 #: ../bin/src/ui_organisedialog.h:199
@@ -395,11 +404,11 @@ msgstr ""
 msgid "Add another stream..."
 msgstr ""
 
-#: library/librarysettingspage.cpp:64
+#: library/librarysettingspage.cpp:68
 msgid "Add directory..."
 msgstr ""
 
-#: ui/mainwindow.cpp:1598
+#: ui/mainwindow.cpp:1601
 msgid "Add file"
 msgstr ""
 
@@ -411,7 +420,7 @@ msgstr "Seleccionar un fichièr vidèo..."
 msgid "Add files to transcode"
 msgstr ""
 
-#: ui/mainwindow.cpp:1626
+#: ui/mainwindow.cpp:1629
 msgid "Add folder"
 msgstr "Apondre un dorsièr"
 
@@ -419,7 +428,7 @@ msgstr "Apondre un dorsièr"
 msgid "Add folder..."
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:165
+#: ../bin/src/ui_librarysettingspage.h:188
 msgid "Add new folder..."
 msgstr ""
 
@@ -515,7 +524,7 @@ msgstr ""
 msgid "Add to Grooveshark playlists"
 msgstr ""
 
-#: ui/mainwindow.cpp:1423
+#: ui/mainwindow.cpp:1426
 msgid "Add to another playlist"
 msgstr ""
 
@@ -585,7 +594,7 @@ msgstr ""
 msgid "Album"
 msgstr "Album"
 
-#: ../bin/src/ui_playbacksettingspage.h:279
+#: ../bin/src/ui_playbacksettingspage.h:315
 msgid "Album (ideal loudness for all tracks)"
 msgstr ""
 
@@ -640,7 +649,7 @@ msgstr ""
 msgid "All the translators"
 msgstr ""
 
-#: library/library.cpp:82
+#: library/library.cpp:84
 msgid "All tracks"
 msgstr ""
 
@@ -719,11 +728,11 @@ msgstr ""
 msgid "Append to the playlist"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:282
+#: ../bin/src/ui_playbacksettingspage.h:318
 msgid "Apply compression to prevent clipping"
 msgstr ""
 
-#: ui/equalizer.cpp:191
+#: ui/equalizer.cpp:197
 #, qt-format
 msgid "Are you sure you want to delete the \"%1\" preset?"
 msgstr ""
@@ -734,6 +743,12 @@ msgstr ""
 
 #: ui/edittagdialog.cpp:769
 msgid "Are you sure you want to reset this song's statistics?"
+msgstr ""
+
+#: library/librarysettingspage.cpp:152
+msgid ""
+"Are you sure you want to write song's statistics into song's file for all "
+"the songs of your library?"
 msgstr ""
 
 #: playlist/playlist.cpp:1205 ui/organisedialog.cpp:56
@@ -784,11 +799,11 @@ msgstr "Autors"
 msgid "Auto"
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:167
+#: ../bin/src/ui_librarysettingspage.h:190
 msgid "Automatic updating"
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:180
+#: ../bin/src/ui_librarysettingspage.h:208
 msgid "Automatically open single categories in the library tree"
 msgstr ""
 
@@ -831,6 +846,10 @@ msgstr ""
 
 #: core/database.cpp:710
 msgid "Backing up database"
+msgstr ""
+
+#: ../bin/src/ui_equalizer.h:173
+msgid "Balance"
 msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:659
@@ -908,11 +927,11 @@ msgstr ""
 msgid "Browse..."
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:291
+#: ../bin/src/ui_playbacksettingspage.h:327
 msgid "Buffer duration"
 msgstr ""
 
-#: engines/gstengine.cpp:821
+#: engines/gstengine.cpp:900
 msgid "Buffering"
 msgstr ""
 
@@ -928,7 +947,7 @@ msgstr ""
 msgid "CDDA"
 msgstr ""
 
-#: library/library.cpp:98
+#: library/library.cpp:100
 msgid "CUE sheet support"
 msgstr ""
 
@@ -960,7 +979,7 @@ msgstr ""
 msgid "Change the language"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:294
+#: ../bin/src/ui_playbacksettingspage.h:330
 msgid ""
 "Changing mono playback preference will be effective for the next playing "
 "songs"
@@ -978,7 +997,7 @@ msgstr ""
 msgid "Choose a name for your smart playlist"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:287
+#: ../bin/src/ui_playbacksettingspage.h:323
 msgid "Choose automatically"
 msgstr "Causir automaticament"
 
@@ -1007,7 +1026,7 @@ msgid ""
 "Choose the websites you want Clementine to use when searching for lyrics."
 msgstr ""
 
-#: ui/equalizer.cpp:109
+#: ui/equalizer.cpp:115
 msgid "Classical"
 msgstr "Classic"
 
@@ -1136,7 +1155,7 @@ msgstr ""
 msgid "Closing this window will stop searching for album covers."
 msgstr ""
 
-#: ui/equalizer.cpp:110
+#: ui/equalizer.cpp:116
 msgid "Club"
 msgstr "Club"
 
@@ -1341,11 +1360,11 @@ msgstr ""
 msgid "Create a new Grooveshark playlist"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:269
+#: ../bin/src/ui_playbacksettingspage.h:302
 msgid "Cross-fade when changing tracks automatically"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:268
+#: ../bin/src/ui_playbacksettingspage.h:301
 msgid "Cross-fade when changing tracks manually"
 msgstr ""
 
@@ -1421,7 +1440,7 @@ msgstr "Ctrl+T"
 msgid "Ctrl+Up"
 msgstr "Ctrl+Up"
 
-#: ui/equalizer.cpp:108 ../bin/src/ui_lastfmstationdialog.h:98
+#: ui/equalizer.cpp:114 ../bin/src/ui_lastfmstationdialog.h:98
 msgid "Custom"
 msgstr ""
 
@@ -1445,7 +1464,7 @@ msgstr "Personalizat..."
 msgid "DBus path"
 msgstr ""
 
-#: ui/equalizer.cpp:111
+#: ui/equalizer.cpp:117
 msgid "Dance"
 msgstr "Dance"
 
@@ -1510,7 +1529,7 @@ msgid "Delete downloaded data"
 msgstr ""
 
 #: devices/deviceview.cpp:388 library/libraryview.cpp:608
-#: ui/mainwindow.cpp:1875 widgets/fileview.cpp:187
+#: ui/mainwindow.cpp:1878 widgets/fileview.cpp:187
 msgid "Delete files"
 msgstr ""
 
@@ -1531,7 +1550,7 @@ msgstr ""
 msgid "Delete playlists"
 msgstr ""
 
-#: ui/equalizer.cpp:190 ../bin/src/ui_equalizer.h:124
+#: ui/equalizer.cpp:196 ../bin/src/ui_equalizer.h:169
 msgid "Delete preset"
 msgstr "Escafar un prereglatge"
 
@@ -1547,11 +1566,11 @@ msgstr ""
 msgid "Deleting files"
 msgstr ""
 
-#: ui/mainwindow.cpp:1358
+#: ui/mainwindow.cpp:1361
 msgid "Dequeue selected tracks"
 msgstr ""
 
-#: ui/mainwindow.cpp:1356
+#: ui/mainwindow.cpp:1359
 msgid "Dequeue track"
 msgstr ""
 
@@ -1631,7 +1650,7 @@ msgid "Discontinuous transmission"
 msgstr ""
 
 #: internet/icecastfilterwidget.cpp:33 internet/searchboxwidget.cpp:30
-#: library/libraryfilterwidget.cpp:88 ../bin/src/ui_librarysettingspage.h:179
+#: library/libraryfilterwidget.cpp:88 ../bin/src/ui_librarysettingspage.h:207
 msgid "Display options"
 msgstr ""
 
@@ -1663,6 +1682,10 @@ msgstr ""
 msgid "Don't stop!"
 msgstr ""
 
+#: internet/somafmservice.cpp:103
+msgid "Donate"
+msgstr ""
+
 #: devices/deviceview.cpp:115
 msgid "Double click to open"
 msgstr ""
@@ -1671,7 +1694,7 @@ msgstr ""
 msgid "Double clicking a song will..."
 msgstr ""
 
-#: podcasts/podcastservice.cpp:345
+#: podcasts/podcastservice.cpp:350
 #, c-format
 msgid "Download %n episodes"
 msgstr ""
@@ -1704,7 +1727,7 @@ msgstr ""
 msgid "Download this album..."
 msgstr ""
 
-#: podcasts/podcastservice.cpp:347
+#: podcasts/podcastservice.cpp:352
 msgid "Download this episode"
 msgstr ""
 
@@ -1753,7 +1776,7 @@ msgstr ""
 msgid "Dynamic mode is on"
 msgstr ""
 
-#: internet/jamendoservice.cpp:113 library/library.cpp:91
+#: internet/jamendoservice.cpp:113 library/library.cpp:93
 msgid "Dynamic random mix"
 msgstr ""
 
@@ -1761,7 +1784,7 @@ msgstr ""
 msgid "Edit smart playlist..."
 msgstr ""
 
-#: ui/mainwindow.cpp:1391
+#: ui/mainwindow.cpp:1394
 #, qt-format
 msgid "Edit tag \"%1\"..."
 msgstr ""
@@ -1795,7 +1818,7 @@ msgstr ""
 msgid "Enable Wii Remote support"
 msgstr ""
 
-#: ../bin/src/ui_equalizer.h:126
+#: ../bin/src/ui_equalizer.h:171
 msgid "Enable equalizer"
 msgstr ""
 
@@ -1876,7 +1899,7 @@ msgstr ""
 msgid "Entire collection"
 msgstr ""
 
-#: ../bin/src/ui_equalizer.h:118 ../bin/src/ui_mainwindow.h:693
+#: ../bin/src/ui_equalizer.h:163 ../bin/src/ui_mainwindow.h:693
 msgid "Equalizer"
 msgstr "Egalizador"
 
@@ -1890,7 +1913,7 @@ msgstr ""
 
 #: internet/groovesharkservice.cpp:1015
 #: internet/magnatunedownloaddialog.cpp:225 library/libraryview.cpp:602
-#: ui/mainwindow.cpp:1827 ui/mainwindow.cpp:1943
+#: ui/mainwindow.cpp:1830 ui/mainwindow.cpp:1946
 msgid "Error"
 msgstr ""
 
@@ -1929,7 +1952,7 @@ msgstr ""
 msgid "Error while loading audio CD"
 msgstr ""
 
-#: library/library.cpp:61
+#: library/library.cpp:63
 msgid "Ever played"
 msgstr ""
 
@@ -1961,7 +1984,7 @@ msgstr ""
 msgid "Every hour"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:270
+#: ../bin/src/ui_playbacksettingspage.h:303
 msgid "Except between tracks on the same album or in the same CUE sheet"
 msgstr ""
 
@@ -2004,15 +2027,20 @@ msgstr ""
 msgid "FLAC"
 msgstr "FLAC"
 
-#: ../bin/src/ui_playbacksettingspage.h:267
+#: ../bin/src/ui_playbacksettingspage.h:306
+msgid "Fade out on pause / fade in on resume"
+msgstr ""
+
+#: ../bin/src/ui_playbacksettingspage.h:300
 msgid "Fade out when stopping a track"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:266
+#: ../bin/src/ui_playbacksettingspage.h:299
 msgid "Fading"
 msgstr "Fondut"
 
-#: ../bin/src/ui_playbacksettingspage.h:271
+#: ../bin/src/ui_playbacksettingspage.h:304
+#: ../bin/src/ui_playbacksettingspage.h:307
 msgid "Fading duration"
 msgstr ""
 
@@ -2043,7 +2071,7 @@ msgstr ""
 msgid "Favorites"
 msgstr ""
 
-#: library/library.cpp:75
+#: library/library.cpp:77
 msgid "Favourite tracks"
 msgstr ""
 
@@ -2204,23 +2232,23 @@ msgstr "Amics"
 msgid "Frozen"
 msgstr ""
 
-#: ui/equalizer.cpp:112
+#: ui/equalizer.cpp:118
 msgid "Full Bass"
 msgstr "Full Bass"
 
-#: ui/equalizer.cpp:114
+#: ui/equalizer.cpp:120
 msgid "Full Bass + Treble"
 msgstr ""
 
-#: ui/equalizer.cpp:113
+#: ui/equalizer.cpp:119
 msgid "Full Treble"
 msgstr "Full Treble"
 
-#: ../bin/src/ui_playbacksettingspage.h:283
+#: ../bin/src/ui_playbacksettingspage.h:319
 msgid "GStreamer audio engine"
 msgstr "Motor àudio GStreamer"
 
-#: ui/settingsdialog.cpp:132
+#: ui/settingsdialog.cpp:133
 msgid "General"
 msgstr ""
 
@@ -2246,7 +2274,7 @@ msgstr ""
 msgid "Getting Grooveshark popular songs"
 msgstr ""
 
-#: internet/somafmservice.cpp:100
+#: internet/somafmservice.cpp:114
 msgid "Getting channels"
 msgstr ""
 
@@ -2391,7 +2419,7 @@ msgstr ""
 msgid "Icon"
 msgstr ""
 
-#: widgets/fancytabwidget.cpp:655
+#: widgets/fancytabwidget.cpp:674
 msgid "Icons on top"
 msgstr ""
 
@@ -2421,12 +2449,12 @@ msgstr ""
 msgid "Images (*.png *.jpg *.jpeg *.bmp *.xpm *.pbm *.ppm *.xbm)"
 msgstr ""
 
-#: core/utilities.cpp:143
+#: core/utilities.cpp:144
 #, qt-format
 msgid "In %1 days"
 msgstr ""
 
-#: core/utilities.cpp:147
+#: core/utilities.cpp:148
 #, qt-format
 msgid "In %1 weeks"
 msgstr ""
@@ -2494,7 +2522,7 @@ msgstr ""
 msgid "Internet"
 msgstr "Sus Internet"
 
-#: ui/settingsdialog.cpp:154
+#: ui/settingsdialog.cpp:155
 msgid "Internet providers"
 msgstr ""
 
@@ -2586,11 +2614,11 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: ui/equalizer.cpp:115
+#: ui/equalizer.cpp:121
 msgid "Laptop/Headphones"
 msgstr ""
 
-#: ui/equalizer.cpp:116
+#: ui/equalizer.cpp:122
 msgid "Large Hall"
 msgstr "Large Hall"
 
@@ -2598,11 +2626,11 @@ msgstr "Large Hall"
 msgid "Large album cover"
 msgstr ""
 
-#: widgets/fancytabwidget.cpp:651
+#: widgets/fancytabwidget.cpp:670
 msgid "Large sidebar"
 msgstr ""
 
-#: library/library.cpp:69 playlist/playlist.cpp:1220
+#: library/library.cpp:71 playlist/playlist.cpp:1220
 #: ../bin/src/ui_edittagdialog.h:671
 msgid "Last played"
 msgstr ""
@@ -2673,12 +2701,16 @@ msgstr ""
 msgid "Last.fm wiki"
 msgstr ""
 
-#: library/library.cpp:85
+#: library/library.cpp:87
 msgid "Least favourite tracks"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:290
+#: ../bin/src/ui_playbacksettingspage.h:326
 msgid "Leave blank for the default.  Examples: \"/dev/dsp\", \"front\", etc."
+msgstr ""
+
+#: ../bin/src/ui_equalizer.h:172
+msgid "Left"
 msgstr ""
 
 #: playlist/playlist.cpp:1207 ui/organisedialog.cpp:68
@@ -2694,7 +2726,7 @@ msgstr "Bibliotèca"
 msgid "Library advanced grouping"
 msgstr ""
 
-#: ui/mainwindow.cpp:2060
+#: ui/mainwindow.cpp:2063
 msgid "Library rescan notice"
 msgstr ""
 
@@ -2711,7 +2743,7 @@ msgid ""
 "Listen to Grooveshark songs based on what you've listened to previously"
 msgstr ""
 
-#: ui/equalizer.cpp:117
+#: ui/equalizer.cpp:123
 msgid "Live"
 msgstr "Live"
 
@@ -2763,12 +2795,12 @@ msgstr ""
 msgid "Loading smart playlist"
 msgstr ""
 
-#: library/librarymodel.cpp:138
+#: library/librarymodel.cpp:139
 msgid "Loading songs"
 msgstr ""
 
 #: internet/digitallyimportedurlhandler.cpp:67
-#: internet/somafmurlhandler.cpp:49
+#: internet/somafmurlhandler.cpp:58
 msgid "Loading stream"
 msgstr "Cargament del flux"
 
@@ -2780,7 +2812,7 @@ msgstr ""
 msgid "Loading tracks info"
 msgstr ""
 
-#: library/librarymodel.cpp:133 podcasts/podcastdiscoverymodel.cpp:97
+#: library/librarymodel.cpp:134 podcasts/podcastdiscoverymodel.cpp:97
 #: widgets/prettyimage.cpp:168 widgets/widgetfadehelper.cpp:99
 #: ../bin/src/ui_addpodcastdialog.h:180 ../bin/src/ui_searchpreview.h:106
 msgid "Loading..."
@@ -2944,11 +2976,11 @@ msgstr ""
 msgid "Model"
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:169
+#: ../bin/src/ui_librarysettingspage.h:192
 msgid "Monitor the library for changes"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:296
+#: ../bin/src/ui_playbacksettingspage.h:332
 msgid "Mono playback"
 msgstr ""
 
@@ -2969,7 +3001,7 @@ msgstr ""
 msgid "Moodbars"
 msgstr ""
 
-#: library/library.cpp:72
+#: library/library.cpp:74
 msgid "Most played"
 msgstr ""
 
@@ -2995,11 +3027,11 @@ msgstr ""
 msgid "Move up"
 msgstr ""
 
-#: transcoder/transcodedialog.cpp:216 ui/mainwindow.cpp:1600
+#: transcoder/transcodedialog.cpp:216 ui/mainwindow.cpp:1603
 msgid "Music"
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:163
+#: ../bin/src/ui_librarysettingspage.h:186
 msgid "Music Library"
 msgstr "Discotèca"
 
@@ -3045,7 +3077,7 @@ msgid "My Recommendations"
 msgstr ""
 
 #: internet/groovesharkservice.cpp:1243 internet/groovesharkservice.cpp:1336
-#: ui/equalizer.cpp:172 ../bin/src/ui_deviceproperties.h:369
+#: ui/equalizer.cpp:178 ../bin/src/ui_deviceproperties.h:369
 #: ../bin/src/ui_magnatunedownloaddialog.h:135
 #: ../bin/src/ui_wizardfinishpage.h:84
 #: ../bin/src/ui_globalshortcutssettingspage.h:174
@@ -3080,7 +3112,7 @@ msgstr ""
 msgid "Never"
 msgstr ""
 
-#: library/library.cpp:65
+#: library/library.cpp:67
 msgid "Never played"
 msgstr ""
 
@@ -3095,7 +3127,7 @@ msgstr ""
 msgid "New folder"
 msgstr ""
 
-#: ui/mainwindow.cpp:1440 ../bin/src/ui_mainwindow.h:698
+#: ui/mainwindow.cpp:1443 ../bin/src/ui_mainwindow.h:698
 msgid "New playlist"
 msgstr ""
 
@@ -3111,7 +3143,7 @@ msgstr ""
 msgid "New tracks will be added automatically."
 msgstr ""
 
-#: library/library.cpp:78
+#: library/library.cpp:80
 msgid "Newest tracks"
 msgstr ""
 
@@ -3124,7 +3156,7 @@ msgstr ""
 msgid "Next track"
 msgstr "Pista seguenta"
 
-#: core/utilities.cpp:145
+#: core/utilities.cpp:146
 msgid "Next week"
 msgstr ""
 
@@ -3154,7 +3186,7 @@ msgstr ""
 msgid "None"
 msgstr "Pas cap"
 
-#: library/libraryview.cpp:603 ui/mainwindow.cpp:1828 ui/mainwindow.cpp:1944
+#: library/libraryview.cpp:603 ui/mainwindow.cpp:1831 ui/mainwindow.cpp:1947
 msgid "None of the selected songs were suitable for copying to a device"
 msgstr ""
 
@@ -3255,7 +3287,7 @@ msgstr ""
 #: internet/digitallyimportedservicebase.cpp:179
 #: internet/groovesharkservice.cpp:544 internet/icecastservice.cpp:296
 #: internet/jamendoservice.cpp:419 internet/magnatuneservice.cpp:278
-#: internet/somafmservice.cpp:91 internet/soundcloudservice.cpp:194
+#: internet/somafmservice.cpp:100 internet/soundcloudservice.cpp:194
 #, qt-format
 msgid "Open %1 in browser"
 msgstr ""
@@ -3335,17 +3367,17 @@ msgstr ""
 msgid "Other options"
 msgstr "Autras opcions"
 
-#: ../bin/src/ui_playbacksettingspage.h:289
+#: ../bin/src/ui_playbacksettingspage.h:325
 msgid "Output device"
-msgstr "Periferic de sortida"
+msgstr ""
 
 #: ../bin/src/ui_transcodedialog.h:209
 msgid "Output options"
 msgstr "Opcions de creacion"
 
-#: ../bin/src/ui_playbacksettingspage.h:284
+#: ../bin/src/ui_playbacksettingspage.h:320
 msgid "Output plugin"
-msgstr "Modul de sortida"
+msgstr ""
 
 #: ../bin/src/ui_organisedialog.h:207
 msgid "Overwrite existing files"
@@ -3359,7 +3391,7 @@ msgstr ""
 msgid "Parsing Jamendo catalogue"
 msgstr ""
 
-#: ui/equalizer.cpp:118
+#: ui/equalizer.cpp:124
 msgid "Party"
 msgstr "Fèsta"
 
@@ -3376,7 +3408,7 @@ msgstr ""
 msgid "Password Protected"
 msgstr ""
 
-#: core/globalshortcuts.cpp:46 ui/mainwindow.cpp:850 ui/mainwindow.cpp:1281
+#: core/globalshortcuts.cpp:46 ui/mainwindow.cpp:853 ui/mainwindow.cpp:1284
 #: ui/qtsystemtrayicon.cpp:178 wiimotedev/wiimotesettingspage.cpp:106
 msgid "Pause"
 msgstr "Pausa"
@@ -3394,12 +3426,12 @@ msgstr "En pausa"
 msgid "Performer"
 msgstr ""
 
-#: widgets/fancytabwidget.cpp:653
+#: widgets/fancytabwidget.cpp:672
 msgid "Plain sidebar"
 msgstr ""
 
-#: core/globalshortcuts.cpp:45 ui/mainwindow.cpp:489 ui/mainwindow.cpp:818
-#: ui/mainwindow.cpp:837 ui/mainwindow.cpp:1284 ui/qtsystemtrayicon.cpp:166
+#: core/globalshortcuts.cpp:45 ui/mainwindow.cpp:489 ui/mainwindow.cpp:821
+#: ui/mainwindow.cpp:840 ui/mainwindow.cpp:1287 ui/qtsystemtrayicon.cpp:166
 #: ui/qtsystemtrayicon.cpp:192 ../bin/src/ui_mainwindow.h:647
 #: wiimotedev/wiimotesettingspage.cpp:101
 msgid "Play"
@@ -3442,7 +3474,7 @@ msgstr ""
 msgid "Play/Pause"
 msgstr "Lectura / pausa"
 
-#: ../bin/src/ui_playbacksettingspage.h:264
+#: ../bin/src/ui_playbacksettingspage.h:297
 msgid "Playback"
 msgstr "Sortida"
 
@@ -3450,8 +3482,8 @@ msgstr "Sortida"
 msgid "Player options"
 msgstr "Opcions del lector"
 
-#: playlist/playlistcontainer.cpp:273 playlist/playlistmanager.cpp:78
-#: playlist/playlistmanager.cpp:396 playlist/playlisttabbar.cpp:290
+#: playlist/playlistcontainer.cpp:273 playlist/playlistmanager.cpp:79
+#: playlist/playlistmanager.cpp:397 playlist/playlisttabbar.cpp:290
 msgid "Playlist"
 msgstr "Lista de lectura"
 
@@ -3483,7 +3515,7 @@ msgstr ""
 msgid "Podcasts"
 msgstr ""
 
-#: ui/equalizer.cpp:119
+#: ui/equalizer.cpp:125
 msgid "Pop"
 msgstr "Pop"
 
@@ -3508,13 +3540,13 @@ msgstr ""
 msgid "Port"
 msgstr ""
 
-#: ui/equalizer.cpp:46 ../bin/src/ui_playbacksettingspage.h:281
+#: ui/equalizer.cpp:47 ../bin/src/ui_playbacksettingspage.h:317
 msgid "Pre-amp"
 msgstr "Pre-amp"
 
 #: ../bin/src/ui_digitallyimportedsettingspage.h:166
 #: ../bin/src/ui_magnatunesettingspage.h:166
-#: ../bin/src/ui_spotifysettingspage.h:217 ../bin/src/ui_settingsdialog.h:115
+#: ../bin/src/ui_spotifysettingspage.h:217 ../bin/src/ui_settingsdialog.h:116
 #: ../bin/src/ui_lastfmsettingspage.h:155
 msgid "Preferences"
 msgstr ""
@@ -3523,7 +3555,7 @@ msgstr ""
 msgid "Preferences..."
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:174
+#: ../bin/src/ui_librarysettingspage.h:202
 msgid "Preferred album art filenames (comma separated)"
 msgstr ""
 
@@ -3543,7 +3575,7 @@ msgstr ""
 msgid "Premium audio type"
 msgstr ""
 
-#: ../bin/src/ui_equalizer.h:119
+#: ../bin/src/ui_equalizer.h:164
 msgid "Preset:"
 msgstr "Prereglatge :"
 
@@ -3617,16 +3649,16 @@ msgstr ""
 msgid "Queue Manager"
 msgstr ""
 
-#: ui/mainwindow.cpp:1362
+#: ui/mainwindow.cpp:1365
 msgid "Queue selected tracks"
 msgstr ""
 
 #: globalsearch/globalsearchview.cpp:441 library/libraryview.cpp:375
-#: ui/mainwindow.cpp:1360
+#: ui/mainwindow.cpp:1363
 msgid "Queue track"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:278
+#: ../bin/src/ui_playbacksettingspage.h:314
 msgid "Radio (equal loudness for all tracks)"
 msgstr ""
 
@@ -3683,7 +3715,7 @@ msgstr ""
 msgid "Refresh catalogue"
 msgstr ""
 
-#: internet/somafmservice.cpp:92
+#: internet/somafmservice.cpp:106
 msgid "Refresh channels"
 msgstr ""
 
@@ -3699,7 +3731,7 @@ msgstr ""
 msgid "Refresh streams"
 msgstr ""
 
-#: ui/equalizer.cpp:120
+#: ui/equalizer.cpp:126
 msgid "Reggae"
 msgstr "Reggae"
 
@@ -3724,7 +3756,7 @@ msgstr ""
 msgid "Remove duplicates from playlist"
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:166
+#: ../bin/src/ui_librarysettingspage.h:189
 msgid "Remove folder"
 msgstr ""
 
@@ -3799,11 +3831,11 @@ msgstr ""
 msgid "Replaces spaces with underscores"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:273
+#: ../bin/src/ui_playbacksettingspage.h:309
 msgid "Replay Gain"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:275
+#: ../bin/src/ui_playbacksettingspage.h:311
 msgid "Replay Gain mode"
 msgstr ""
 
@@ -3843,7 +3875,11 @@ msgstr ""
 msgid "Return to Clementine"
 msgstr ""
 
-#: ui/equalizer.cpp:121
+#: ../bin/src/ui_equalizer.h:174
+msgid "Right"
+msgstr ""
+
+#: ui/equalizer.cpp:127
 msgid "Rock"
 msgstr "Rock"
 
@@ -3895,16 +3931,24 @@ msgstr ""
 msgid "Save playlist..."
 msgstr ""
 
-#: ui/equalizer.cpp:172 ../bin/src/ui_equalizer.h:121
+#: ui/equalizer.cpp:178 ../bin/src/ui_equalizer.h:166
 msgid "Save preset"
 msgstr "Enregistrar un prereglatge"
 
-#: ../bin/src/ui_librarysettingspage.h:173
-msgid "Save ratings and statistics in file tags when possible"
+#: ../bin/src/ui_librarysettingspage.h:193
+msgid "Save ratings in file tags when possible"
+msgstr ""
+
+#: ../bin/src/ui_librarysettingspage.h:197
+msgid "Save statistics in file tags when possible"
 msgstr ""
 
 #: ../bin/src/ui_addstreamdialog.h:115
 msgid "Save this stream in the Internet tab"
+msgstr ""
+
+#: library/library.cpp:164
+msgid "Saving songs statistics into songs files"
 msgstr ""
 
 #: ui/edittagdialog.cpp:670 ui/trackselectiondialog.cpp:256
@@ -4052,7 +4096,7 @@ msgstr ""
 msgid "Service offline"
 msgstr ""
 
-#: ui/mainwindow.cpp:1389
+#: ui/mainwindow.cpp:1392
 #, qt-format
 msgid "Set %1 to \"%2\"..."
 msgstr ""
@@ -4088,7 +4132,7 @@ msgstr "Afichar"
 msgid "Show OSD"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:265
+#: ../bin/src/ui_playbacksettingspage.h:298
 msgid "Show a glowing animation on the current track"
 msgstr ""
 
@@ -4128,11 +4172,11 @@ msgstr ""
 msgid "Show all the songs"
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:181
+#: ../bin/src/ui_librarysettingspage.h:209
 msgid "Show cover art in library"
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:182
+#: ../bin/src/ui_librarysettingspage.h:210
 msgid "Show dividers"
 msgstr ""
 
@@ -4221,7 +4265,7 @@ msgstr ""
 msgid "Similar artists"
 msgstr ""
 
-#: ui/equalizer.cpp:123
+#: ui/equalizer.cpp:129
 msgid "Ska"
 msgstr "Ska"
 
@@ -4241,7 +4285,7 @@ msgstr ""
 msgid "Small album cover"
 msgstr ""
 
-#: widgets/fancytabwidget.cpp:652
+#: widgets/fancytabwidget.cpp:671
 msgid "Small sidebar"
 msgstr ""
 
@@ -4249,15 +4293,15 @@ msgstr ""
 msgid "Smart playlist"
 msgstr ""
 
-#: library/librarymodel.cpp:1171
+#: library/librarymodel.cpp:1172
 msgid "Smart playlists"
 msgstr ""
 
-#: ui/equalizer.cpp:122
+#: ui/equalizer.cpp:128
 msgid "Soft"
 msgstr "Soft"
 
-#: ui/equalizer.cpp:124
+#: ui/equalizer.cpp:130
 msgid "Soft Rock"
 msgstr "Soft Rock"
 
@@ -4444,6 +4488,10 @@ msgstr ""
 msgid "Supported formats"
 msgstr ""
 
+#: ../bin/src/ui_librarysettingspage.h:201
+msgid "Synchronize statistics to files now"
+msgstr ""
+
 #: internet/spotifyservice.cpp:561
 msgid "Syncing Spotify inbox"
 msgstr ""
@@ -4460,7 +4508,7 @@ msgstr ""
 msgid "System colors"
 msgstr ""
 
-#: widgets/fancytabwidget.cpp:654
+#: widgets/fancytabwidget.cpp:673
 msgid "Tabs on top"
 msgstr ""
 
@@ -4480,7 +4528,7 @@ msgstr "Etiquetar la ràdio"
 msgid "Target bitrate"
 msgstr ""
 
-#: ui/equalizer.cpp:125
+#: ui/equalizer.cpp:131
 msgid "Techno"
 msgstr "Techno"
 
@@ -4506,7 +4554,7 @@ msgstr ""
 msgid "The directory %1 is not valid"
 msgstr ""
 
-#: playlist/playlistmanager.cpp:154 playlist/playlistmanager.cpp:172
+#: playlist/playlistmanager.cpp:155 playlist/playlistmanager.cpp:173
 #, qt-format
 msgid "The playlist '%1' was empty or could not be loaded."
 msgstr ""
@@ -4529,7 +4577,7 @@ msgid ""
 "license key. Visit subsonic.org for details."
 msgstr ""
 
-#: ui/mainwindow.cpp:2053
+#: ui/mainwindow.cpp:2056
 msgid ""
 "The version of Clementine you've just updated to requires a full library "
 "rescan because of the new features listed below:"
@@ -4564,7 +4612,7 @@ msgid ""
 "deleted:"
 msgstr ""
 
-#: library/libraryview.cpp:609 ui/mainwindow.cpp:1876 widgets/fileview.cpp:188
+#: library/libraryview.cpp:609 ui/mainwindow.cpp:1879 widgets/fileview.cpp:188
 msgid ""
 "These files will be deleted from disk, are you sure you want to continue?"
 msgstr ""
@@ -4575,7 +4623,7 @@ msgid ""
 "continue?"
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:164
+#: ../bin/src/ui_librarysettingspage.h:187
 msgid "These folders will be scanned for music to make up your library"
 msgstr ""
 
@@ -4657,7 +4705,7 @@ msgid ""
 "Grooveshark songs"
 msgstr ""
 
-#: core/utilities.cpp:123 core/utilities.cpp:139
+#: core/utilities.cpp:124 core/utilities.cpp:140
 msgid "Today"
 msgstr ""
 
@@ -4669,7 +4717,7 @@ msgstr ""
 msgid "Toggle fullscreen"
 msgstr ""
 
-#: ui/mainwindow.cpp:1364
+#: ui/mainwindow.cpp:1367
 msgid "Toggle queue status"
 msgstr ""
 
@@ -4681,7 +4729,7 @@ msgstr ""
 msgid "Toggle visibility for the pretty on-screen-display"
 msgstr ""
 
-#: core/utilities.cpp:141
+#: core/utilities.cpp:142
 msgid "Tomorrow"
 msgstr ""
 
@@ -4760,9 +4808,9 @@ msgstr ""
 msgid "Unable to download %1 (%2)"
 msgstr ""
 
-#: core/song.cpp:350 library/librarymodel.cpp:307 library/librarymodel.cpp:312
-#: library/librarymodel.cpp:969 playlist/playlistdelegates.cpp:309
-#: playlist/playlistmanager.cpp:404 playlist/playlistmanager.cpp:407
+#: core/song.cpp:350 library/librarymodel.cpp:308 library/librarymodel.cpp:313
+#: library/librarymodel.cpp:970 playlist/playlistdelegates.cpp:309
+#: playlist/playlistmanager.cpp:405 playlist/playlistmanager.cpp:408
 #: ui/albumcoverchoicecontroller.cpp:110 ui/edittagdialog.cpp:424
 #: ui/edittagdialog.cpp:465
 msgid "Unknown"
@@ -4800,7 +4848,7 @@ msgstr ""
 msgid "Update changed library folders"
 msgstr ""
 
-#: ../bin/src/ui_librarysettingspage.h:168
+#: ../bin/src/ui_librarysettingspage.h:191
 msgid "Update the library when Clementine starts"
 msgstr ""
 
@@ -4842,7 +4890,7 @@ msgstr ""
 msgid "Use Remotecontrol"
 msgstr ""
 
-#: ../bin/src/ui_playbacksettingspage.h:274
+#: ../bin/src/ui_playbacksettingspage.h:310
 msgid "Use Replay Gain metadata if it is available"
 msgstr ""
 
@@ -4907,7 +4955,7 @@ msgstr ""
 msgid "User %1 doesn't have a Grooveshark Anywhere account"
 msgstr ""
 
-#: ui/settingsdialog.cpp:146
+#: ui/settingsdialog.cpp:147
 msgid "User interface"
 msgstr ""
 
@@ -4933,8 +4981,8 @@ msgstr ""
 msgid "Variable bit rate"
 msgstr ""
 
-#: globalsearch/globalsearchmodel.cpp:104 library/librarymodel.cpp:240
-#: playlist/playlistmanager.cpp:419 ui/albumcovermanager.cpp:247
+#: globalsearch/globalsearchmodel.cpp:104 library/librarymodel.cpp:241
+#: playlist/playlistmanager.cpp:420 ui/albumcovermanager.cpp:247
 msgid "Various artists"
 msgstr ""
 
@@ -5001,7 +5049,7 @@ msgstr ""
 msgid "When Clementine starts"
 msgstr "Quand Clementine avia"
 
-#: ../bin/src/ui_librarysettingspage.h:176
+#: ../bin/src/ui_librarysettingspage.h:204
 msgid ""
 "When looking for album art Clementine will first look for picture files that contain one of these words.\n"
 "If there are no matches then it will use the largest image in the directory."
@@ -5079,8 +5127,12 @@ msgid ""
 "well?"
 msgstr ""
 
-#: ui/mainwindow.cpp:2058
+#: ui/mainwindow.cpp:2061
 msgid "Would you like to run a full rescan right now?"
+msgstr ""
+
+#: library/librarysettingspage.cpp:151
+msgid "Write all songs statistics into songs' files"
 msgstr ""
 
 #: internet/subsonicsettingspage.cpp:83
@@ -5103,7 +5155,7 @@ msgstr "Annada - Album"
 msgid "Years"
 msgstr ""
 
-#: core/utilities.cpp:125
+#: core/utilities.cpp:126
 msgid "Yesterday"
 msgstr ""
 
@@ -5244,7 +5296,7 @@ msgstr ""
 msgid "Z-A"
 msgstr ""
 
-#: ui/equalizer.cpp:126
+#: ui/equalizer.cpp:132
 msgid "Zero"
 msgstr "Zèro"
 

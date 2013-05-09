@@ -82,6 +82,7 @@
 #  include "internet/vksettingspage.h"
 #endif
 
+#include <QAbstractButton>
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QPushButton>
@@ -261,12 +262,14 @@ void SettingsDialog::AddPage(Page id, SettingsPage* page, QTreeWidgetItem* paren
   pages_[id] = data;
 }
 
-void SettingsDialog::accept() {
-  // Save settings
+void SettingsDialog::Save() {
   foreach (const PageData& data, pages_.values()) {
     data.page_->Save();
   }
+}
 
+void SettingsDialog::accept() {
+  Save();
   QDialog::accept();
 }
 
@@ -277,6 +280,13 @@ void SettingsDialog::reject() {
   }
 
   QDialog::reject();
+}
+
+void SettingsDialog::DialogButtonClicked(QAbstractButton* button) {
+  // While we only connect Apply at the moment, this might change in the future
+  if (ui_->buttonBox->button(QDialogButtonBox::Apply) == button) {
+    Save();
+  }
 }
 
 void SettingsDialog::showEvent(QShowEvent* e) {

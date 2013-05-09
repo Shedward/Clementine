@@ -184,7 +184,7 @@ class Playlist : public QAbstractListModel {
   const QModelIndex current_index() const;
 
   bool stop_after_current() const;
-  bool is_dynamic() const { return dynamic_playlist_; }
+  bool is_dynamic() const { return static_cast<bool>(dynamic_playlist_); }
   int dynamic_history_length() const;
 
   QString special_type() const { return special_type_; }
@@ -222,11 +222,8 @@ class Playlist : public QAbstractListModel {
   void InsertSongs              (const SongList& items,             int pos = -1, bool play_now = false, bool enqueue = false);
   void InsertSongsOrLibraryItems(const SongList& items,             int pos = -1, bool play_now = false, bool enqueue = false);
   void InsertSmartPlaylist      (smart_playlists::GeneratorPtr gen, int pos = -1, bool play_now = false, bool enqueue = false);
-  void InsertUrls               (const QList<QUrl>& urls,           int pos = -1, bool play_now = false, bool enqueue = false);
   void InsertInternetItems      (InternetService* service,
                                  const SongList& songs,             int pos = -1, bool play_now = false, bool enqueue = false);
-  // Removes items with given indices from the playlist. This operation is not undoable.
-  void RemoveItemsWithoutUndo   (const QList<int>& indices);
   void ReshuffleIndices();
   
   // If this playlist contains the current item, this method will apply the "valid" flag on it.
@@ -295,6 +292,10 @@ class Playlist : public QAbstractListModel {
   void TurnOffDynamicPlaylist();
 
   void SetColumnAlignment(const ColumnAlignmentMap& alignment);
+
+  void InsertUrls(const QList<QUrl>& urls, int pos = -1, bool play_now = false, bool enqueue = false);
+  // Removes items with given indices from the playlist. This operation is not undoable.
+  void RemoveItemsWithoutUndo(const QList<int>& indices);
 
  signals:
   void RestoreFinished();

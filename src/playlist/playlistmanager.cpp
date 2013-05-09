@@ -68,6 +68,7 @@ void PlaylistManager::Init(LibraryBackend* library_backend,
 
   connect(library_backend_, SIGNAL(SongsDiscovered(SongList)), SLOT(SongsDiscovered(SongList)));
   connect(library_backend_, SIGNAL(SongsStatisticsChanged(SongList)), SLOT(SongsDiscovered(SongList)));
+  connect(library_backend_, SIGNAL(SongsRatingChanged(SongList)), SLOT(SongsDiscovered(SongList)));
 
   foreach (const PlaylistBackend::Playlist& p, playlist_backend->GetAllOpenPlaylists()) {
     AddPlaylist(p.id, p.name, p.special_type, p.ui_path);
@@ -444,4 +445,8 @@ void PlaylistManager::Open(int id) {
 void PlaylistManager::SetCurrentOrOpen(int id) {
   Open(id);
   SetCurrentPlaylist(id);
+}
+
+bool PlaylistManager::IsPlaylistOpen(int id) {
+  return playlists_.contains(id);
 }
