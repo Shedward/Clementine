@@ -122,9 +122,11 @@ public:
 
         explicit MusicOwner(const QUrl &group_url);
         Song toOwnerRadio() const;
+
         QString name() const { return name_; }
         int id() const { return id_; }
         static QList<MusicOwner> parseMusicOwnerList(const QVariant &request_result);
+
     private:
         friend QDataStream &operator <<(QDataStream &stream, const VkService::MusicOwner &val);
         friend QDataStream &operator >>(QDataStream &stream, VkService::MusicOwner &val);
@@ -273,6 +275,7 @@ private:
     QString last_query_;
     Song selected_song_; // Store for context menu actions.
     Song current_song_; // Store for actions with now playing song.
+    // Store current group url for actions with it.
     QUrl current_group_url_;
 
     /* Settings */

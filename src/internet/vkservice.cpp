@@ -119,7 +119,6 @@ static Song SongFromUrl(QUrl url) {
  * MusicOwner
  *
  *******************************************************************************/
-
 VkService::MusicOwner::MusicOwner(const QUrl &group_url) {
     QStringList tokens = group_url.toString().remove("vk://").split('/');
     id_ = -tokens[1].toInt();
@@ -414,7 +413,6 @@ void VkService::ItemDoubleClicked(QStandardItem *item)
 
 QList<QAction *> VkService::playlistitem_actions(const Song &song)
 {
-    // TODO(Vk): Extract action check alghorithm.
     QList<QAction *> actions;
     QString url = song.url().toString();
 
@@ -972,6 +970,62 @@ void VkService::CopyShareUrl()
 
 
 /***
+ * Bookmarks
+ */
+
+void VkService::AddToBookmarks()
+{
+    TRACE;
+    AppendBookmarkFromRadio(root_item_, selected_song_);
+    SaveBookmarks();
+}
+
+void VkService::RemoveFromBookmark()
+{
+    TRACE;
+    QModelIndex current(model()->current_index());
+    root_item_->removeRow(current.row());
+    SaveBookmarks();
+}
+
+void VkService::SaveBookmarks()
+{
+    TRACE;
+    QSettings s;
+    s.beginGroup(kSettingGroup);
+
+    s.beginWriteArray("bookmarks");
+    int index = 0;
+    for (int i = 0; i < root_item_->rowCount(); ++i){
+        auto item = root_item_->child(i);
+        if (item->data(InternetModel::Role_Type).toInt() == Type_Bookmark){
+            Song song = item->data(InternetModel::Role_SongMetadata).value<Song>();
+            s.setArrayIndex(index);
+            MusicOwner owner(song);
+            qLog(Info) << "Save" << index << ":" << owner;
+            s.setValue("owner", QVariant::fromValue(owner));
+            ++index;
+        }
+    }
+    s.endArray();
+}
+
+void VkService::LoadBookmarks()
+{
+    QSettings s;
+    s.beginGroup(kSettingGroup);
+
+    int max = s.beginReadArray("bookmarks");
+    for (int i = 0; i < max; ++i){
+        s.setArrayIndex(i);
+        MusicOwner owner = s.value("owner").value<MusicOwner>();
+        qLog(Info) << "Load" << i << ":" << owner;
+        AppendBookmarkFromRadio(root_item_, owner.toOwnerRadio());
+    }
+    s.endArray();
+}
+
+/***
  * Search
  */
 
@@ -1263,6 +1317,21 @@ void VkService::AppendSongs(QStandardItem *parent, const SongList &songs)
     foreach (auto song, songs) {
         parent->appendRow(CreateSongItem(song));
     }
+}
+
+QStandardItem* VkService::AppendBookmarkFromRadio(QStandardItem *parent, const Song &owner_radio)
+{
+    QStandardItem *item = new QStandardItem(
+                QIcon(":vk/group.png"),
+                owner_radio.comment());
+
+    item->setData(QVariant::fromValue(owner_radio) ,InternetModel::Role_SongMetadata);
+    item->setData(Type_Bookmark, InternetModel::Role_Type);
+    item->setData(true, InternetModel::Role_CanLazyLoad);
+    item->setData(InternetModel::PlayBehaviour_SingleItem,
+                       InternetModel::Role_PlayBehaviour);
+    parent->appendRow(item);
+    return item;
 }
 
 void VkService::UpdateSettings()

@@ -81,6 +81,11 @@ void RegisterMetaTypes() {
   qRegisterMetaTypeStreamOperators<VkService::MusicOwner>("VkService::MusicOwner");
 #endif
 
+#ifdef HAVE_VK
+  qRegisterMetaType<VkService::MusicOwner>("VkService::MusicOwner");
+  qRegisterMetaTypeStreamOperators<VkService::MusicOwner>("VkService::MusicOwner");
+#endif
+
 #ifdef HAVE_DBUS
   qDBusRegisterMetaType<QImage>();
   qDBusRegisterMetaType<TrackMetadata>();
