@@ -22,13 +22,14 @@
 #include <QItemSelection>
 #include <QMap>
 #include <QObject>
+#include <QSettings>
 
 #include "core/song.h"
+#include "playlist.h"
 #include "smartplaylists/generator_fwd.h"
 
 class Application;
 class LibraryBackend;
-class Playlist;
 class PlaylistBackend;
 class PlaylistContainer;
 class PlaylistParser;
@@ -108,10 +109,11 @@ public slots:
 signals:
   void PlaylistManagerInitialized();
 
-  void PlaylistAdded(int id, const QString& name);
+  void PlaylistAdded(int id, const QString& name, bool favorite);
   void PlaylistDeleted(int id);
   void PlaylistClosed(int id);
   void PlaylistRenamed(int id, const QString& new_name);
+  void PlaylistFavorited(int id, bool favorite);
   void CurrentChanged(Playlist* new_playlist);
   void ActiveChanged(Playlist* new_playlist);
 
@@ -160,6 +162,7 @@ public:
   QItemSelection active_selection() const { return selection(active_id()); }
 
   QString GetPlaylistName(int index) const { return playlists_[index].name; }
+  bool IsPlaylistFavorite(int index) const { return playlists_[index].p->is_favorite(); }
 
   void Init(LibraryBackend* library_backend, PlaylistBackend* playlist_backend,
             PlaylistSequence* sequence, PlaylistContainer* playlist_container);
@@ -175,7 +178,10 @@ public slots:
            const QString& special_type = QString());
   void Load(const QString& filename);
   void Save(int id, const QString& filename);
+  // Display a file dialog to let user choose a file before saving the file
+  void SaveWithUI(int id, const QString& suggested_filename);
   void Rename(int id, const QString& new_name);
+  void Favorite(int id, bool favorite);
   void Delete(int id);
   bool Close(int id);
   void Open(int id);
@@ -205,6 +211,10 @@ public slots:
 
   void SongChangeRequestProcessed(const QUrl& url, bool valid);
 
+  void InsertUrls(int id, const QList<QUrl>& urls, int pos = -1, bool play_now = false, bool enqueue = false);
+  // Removes items with given indices from the playlist. This operation is not undoable.
+  void RemoveItemsWithoutUndo(int id, const QList<int>& indices);
+
 private slots:
   void SetActivePlaying();
   void SetActivePaused();
@@ -214,10 +224,11 @@ private slots:
   void UpdateSummaryText();
   void SongsDiscovered(const SongList& songs);
   void LoadFinished(bool success);
+  void ItemsLoadedForSavePlaylist(QFutureWatcher<Song>* watcher, const QString& filename);
 
 private:
   Playlist* AddPlaylist(int id, const QString& name, const QString& special_type,
-                        const QString& ui_path);
+                        const QString& ui_path, bool favorite);
 
 private:
   struct Data {
@@ -233,6 +244,8 @@ private:
   PlaylistSequence* sequence_;
   PlaylistParser* parser_;
   PlaylistContainer* playlist_container_;
+
+  QSettings settings_;
 
   // key = id
   QMap<int, Data> playlists_;

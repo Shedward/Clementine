@@ -121,7 +121,6 @@ class GstEngine : public Engine::Base, public BufferConsumer {
   void EndOfStreamReached(int pipeline_id, bool has_next_track);
   void HandlePipelineError(int pipeline_id, const QString& message, int domain, int error_code);
   void NewMetaData(int pipeline_id, const Engine::SimpleMetaBundle& bundle);
-  void ClearScopeBuffers();
   void AddBufferToScope(GstBuffer* buf, int pipeline_id);
   void FadeoutFinished();
   void FadeoutPauseFinished();
@@ -151,16 +150,15 @@ class GstEngine : public Engine::Base, public BufferConsumer {
   boost::shared_ptr<GstEnginePipeline> CreatePipeline(const QUrl& url, qint64 end_nanosec);
 
   void UpdateScope();
-  qint64 PruneScope();
 
   int AddBackgroundStream(boost::shared_ptr<GstEnginePipeline> pipeline);
 
   static QUrl FixupUrl(const QUrl& url);
 
  private:
-  static const int kTimerIntervalNanosec = 1000 * kNsecPerMsec; // 1s
-  static const int kPreloadGapNanosec = 1000 * kNsecPerMsec; // 1s
-  static const int kSeekDelayNanosec = 100 * kNsecPerMsec; // 100msec
+  static const qint64 kTimerIntervalNanosec = 1000 * kNsecPerMsec; // 1s
+  static const qint64 kPreloadGapNanosec = 2000 * kNsecPerMsec; // 2s
+  static const qint64 kSeekDelayNanosec = 100 * kNsecPerMsec; // 100msec
 
   static const char* kHypnotoadPipeline;
   static const char* kEnterprisePipeline;
@@ -180,9 +178,7 @@ class GstEngine : public Engine::Base, public BufferConsumer {
 
   QList<BufferConsumer*> buffer_consumers_;
 
-  GQueue* delayq_;
-  float current_scope_[kScopeSize];
-  int current_sample_;
+  GstBuffer* latest_buffer_;
 
   bool equalizer_enabled_;
   int equalizer_preamp_;

@@ -22,10 +22,10 @@
 #include "networkremote/zeroconf.h"
 #include "playlist/playlistmanager.h"
 
-
 #include <QDataStream>
 #include <QSettings>
 #include <QHostInfo>
+#include <QNetworkProxy>
 
 const char* NetworkRemote::kSettingsGroup = "NetworkRemote";
 const quint16 NetworkRemote::kDefaultServerPort = 5500;
@@ -86,6 +86,9 @@ void NetworkRemote::StartServer() {
 
   qLog(Info) << "Starting network remote";
 
+  server_->setProxy(QNetworkProxy::NoProxy);
+  server_ipv6_->setProxy(QNetworkProxy::NoProxy);
+
   server_->listen(QHostAddress::Any, port_);
   server_ipv6_->listen(QHostAddress::AnyIPv6, port_);
 
@@ -133,8 +136,8 @@ void NetworkRemote::AcceptConnection() {
             outgoing_data_creator_.get(), SLOT(ActiveChanged(Playlist*)));
     connect(app_->playlist_manager(), SIGNAL(PlaylistChanged(Playlist*)),
             outgoing_data_creator_.get(), SLOT(PlaylistChanged(Playlist*)));
-    connect(app_->playlist_manager(), SIGNAL(PlaylistAdded(int,QString)),
-            outgoing_data_creator_.get(), SLOT(PlaylistAdded(int,QString)));
+    connect(app_->playlist_manager(), SIGNAL(PlaylistAdded(int,QString,bool)),
+            outgoing_data_creator_.get(), SLOT(PlaylistAdded(int,QString,bool)));
     connect(app_->playlist_manager(), SIGNAL(PlaylistRenamed(int,QString)),
             outgoing_data_creator_.get(), SLOT(PlaylistRenamed(int,QString)));
     connect(app_->playlist_manager(), SIGNAL(PlaylistClosed(int)),
@@ -155,6 +158,23 @@ void NetworkRemote::AcceptConnection() {
             SIGNAL(ShuffleModeChanged(PlaylistSequence::ShuffleMode)),
             outgoing_data_creator_.get(),
             SLOT(SendShuffleMode(PlaylistSequence::ShuffleMode)));
+
+    connect(incoming_data_parser_.get(), SIGNAL(GetLyrics()),
+            outgoing_data_creator_.get(), SLOT(GetLyrics()));
+
+    connect(incoming_data_parser_.get(),
+            SIGNAL(SendSongs(pb::remote::RequestDownloadSongs,RemoteClient*)),
+            outgoing_data_creator_.get(),
+            SLOT(SendSongs(pb::remote::RequestDownloadSongs,RemoteClient*)));
+    connect(incoming_data_parser_.get(),
+            SIGNAL(ResponseSongOffer(RemoteClient*, bool)),
+            outgoing_data_creator_.get(),
+            SLOT(ResponseSongOffer(RemoteClient*, bool)));
+
+    connect(incoming_data_parser_.get(),
+            SIGNAL(SendLibrary(RemoteClient*)),
+            outgoing_data_creator_.get(),
+            SLOT(SendLibrary(RemoteClient*)));
   }
 
   QTcpServer* server = qobject_cast<QTcpServer*>(sender());
@@ -171,8 +191,10 @@ void NetworkRemote::AcceptConnection() {
 
 bool NetworkRemote::IpIsPrivate(const QHostAddress& address) {
   return
+      // Localhost v4
+      address.isInSubnet(QHostAddress::parseSubnet("127.0.0.0/8")) ||
       // Link Local v4
-      address.isInSubnet(QHostAddress::parseSubnet("127.0.0.1/8")) ||
+      address.isInSubnet(QHostAddress::parseSubnet("169.254.1.0/16")) ||
       // Link Local v6
       address.isInSubnet(QHostAddress::parseSubnet("::1/128")) ||
       address.isInSubnet(QHostAddress::parseSubnet("fe80::/10")) ||
@@ -184,7 +206,7 @@ bool NetworkRemote::IpIsPrivate(const QHostAddress& address) {
       address.isInSubnet(QHostAddress::parseSubnet("fc00::/7"));
 }
 
-void NetworkRemote::CreateRemoteClient(QTcpSocket *client_socket) {
+void NetworkRemote::CreateRemoteClient(QTcpSocket* client_socket) {
   if (client_socket) {
     // Add the client to the list
     RemoteClient* client = new RemoteClient(app_, client_socket);

@@ -4,6 +4,7 @@
 #include "core/player.h"
 #include "core/application.h"
 #include "remotecontrolmessages.pb.h"
+#include "remoteclient.h"
 
 class IncomingDataParser : public QObject {
   Q_OBJECT
@@ -24,6 +25,7 @@ signals:
   void SendPlaylistSongs(int id);
   void Open(int id);
   void Close(int id);
+  void GetLyrics();
   void Love();
   void Ban();
 
@@ -31,6 +33,7 @@ signals:
   void PlayPause();
   void Pause();
   void Stop();
+  void StopAfterCurrent();
   void Next();
   void Previous();
   void SetVolume(int volume);
@@ -39,9 +42,12 @@ signals:
   void ShuffleCurrent();
   void SetRepeatMode(PlaylistSequence::RepeatMode mode);
   void SetShuffleMode(PlaylistSequence::ShuffleMode mode);
-  void InsertUrls(const QList<QUrl>& urls, int pos, bool play_now, bool enqueue);
-  void RemoveSongs(const QList<int>& indices);
+  void InsertUrls(int id, const QList<QUrl>& urls, int pos, bool play_now, bool enqueue);
+  void RemoveSongs(int id, const QList<int>& indices);
   void SeekTo(int seconds);
+  void SendSongs(const pb::remote::RequestDownloadSongs& request, RemoteClient* client);
+  void ResponseSongOffer(RemoteClient* client, bool accepted);
+  void SendLibrary(RemoteClient* client);
 
 private:
   Application* app_;

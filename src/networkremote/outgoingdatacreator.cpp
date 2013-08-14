@@ -22,18 +22,24 @@
 #include "networkremote.h"
 #include "core/logging.h"
 #include "core/timeconstants.h"
+#include "core/utilities.h"
+#include "library/librarybackend.h"
+
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include "core/database.h"
+
+const quint32 OutgoingDataCreator::kFileChunkSize = 100000; // in Bytes
 
 OutgoingDataCreator::OutgoingDataCreator(Application* app)
-  : app_(app)
+  : app_(app),
+    ultimate_reader_(new UltimateLyricsReader(this)),
+    fetcher_(new SongInfoFetcher(this))
 {
   // Create Keep Alive Timer
   keep_alive_timer_ = new QTimer(this);
   connect(keep_alive_timer_, SIGNAL(timeout()), this, SLOT(SendKeepAlive()));
   keep_alive_timeout_ = 10000;
-
-  // Create the song position timer
-  track_position_timer_ = new QTimer(this);
-  connect(track_position_timer_, SIGNAL(timeout()), this, SLOT(UpdateTrackPosition()));
 }
 
 OutgoingDataCreator::~OutgoingDataCreator() {
@@ -44,6 +50,83 @@ void OutgoingDataCreator::SetClients(QList<RemoteClient*>* clients) {
   // After we got some clients, start the keep alive timer
   // Default: every 10 seconds
   keep_alive_timer_->start(keep_alive_timeout_);
+
+  // Create the song position timer
+  track_position_timer_ = new QTimer(this);
+  connect(track_position_timer_, SIGNAL(timeout()), this, SLOT(UpdateTrackPosition()));
+
+  // Parse the ultimate lyrics xml file
+  ultimate_reader_->SetThread(this->thread());
+  provider_list_ = ultimate_reader_->Parse(":lyrics/ultimate_providers.xml");
+
+  // Set up the lyrics parser
+  connect(fetcher_, SIGNAL(ResultReady(int,SongInfoFetcher::Result)),
+          SLOT(SendLyrics(int,SongInfoFetcher::Result)));
+
+  foreach (SongInfoProvider* provider, provider_list_) {
+    fetcher_->AddProvider(provider);
+  }
+
+  CheckEnabledProviders();
+}
+
+void OutgoingDataCreator::CheckEnabledProviders() {
+  QSettings s;
+  s.beginGroup(SongInfoView::kSettingsGroup);
+
+  // Put the providers in the right order
+  QList<SongInfoProvider*> ordered_providers;
+
+  QVariantList default_order;
+  default_order << "lyrics.wikia.com"
+                << "lyricstime.com"
+                << "lyricsreg.com"
+                << "lyricsmania.com"
+                << "metrolyrics.com"
+                << "azlyrics.com"
+                << "songlyrics.com"
+                << "elyrics.net"
+                << "lyricsdownload.com"
+                << "lyrics.com"
+                << "lyricsbay.com"
+                << "directlyrics.com"
+                << "loudson.gs"
+                << "teksty.org"
+                << "tekstowo.pl (Polish translations)"
+                << "vagalume.uol.com.br"
+                << "vagalume.uol.com.br (Portuguese translations)"
+                << "darklyrics.com";
+
+  QVariant saved_order = s.value("search_order", default_order);
+  foreach (const QVariant& name, saved_order.toList()) {
+    SongInfoProvider* provider = ProviderByName(name.toString());
+    if (provider)
+      ordered_providers << provider;
+  }
+
+  // Enable all the providers in the list and rank them
+  int relevance = 100;
+  foreach (SongInfoProvider* provider, ordered_providers) {
+    provider->set_enabled(true);
+    qobject_cast<UltimateLyricsProvider*>(provider)->set_relevance(relevance--);
+  }
+
+  // Any lyric providers we don't have in ordered_providers are considered disabled
+  foreach (SongInfoProvider* provider, fetcher_->providers()) {
+    if (qobject_cast<UltimateLyricsProvider*>(provider) && !ordered_providers.contains(provider)) {
+      provider->set_enabled(false);
+    }
+  }
+}
+
+SongInfoProvider* OutgoingDataCreator::ProviderByName(const QString& name) const {
+  foreach (SongInfoProvider* provider, fetcher_->providers()) {
+    if (UltimateLyricsProvider* lyrics = qobject_cast<UltimateLyricsProvider*>(provider)) {
+      if (lyrics->name() == name)
+        return provider;
+    }
+  }
+  return NULL;
 }
 
 void OutgoingDataCreator::SendDataToClients(pb::remote::Message* msg) {
@@ -52,11 +135,18 @@ void OutgoingDataCreator::SendDataToClients(pb::remote::Message* msg) {
     return;
   }
 
-  // Send the default version
-  msg->set_version(msg->default_instance().version());
-
   RemoteClient* client;
   foreach(client, *clients_) {
+    // Do not send data to downloaders
+    if (client->isDownloader()) {
+      if (client->State() != QTcpSocket::ConnectedState) {
+        clients_->removeAt(clients_->indexOf(client));
+        download_queue_.remove(client);
+        delete client;
+      }
+      continue;
+    }
+
     // Check if the client is still active
     if (client->State() == QTcpSocket::ConnectedState) {
       client->SendData(msg);
@@ -166,7 +256,7 @@ void OutgoingDataCreator::ActiveChanged(Playlist* playlist) {
   SendDataToClients(&msg);
 }
 
-void OutgoingDataCreator::PlaylistAdded(int id, const QString& name) {
+void OutgoingDataCreator::PlaylistAdded(int id, const QString& name, bool favorite) {
   SendAllActivePlaylists();
 }
 
@@ -193,6 +283,12 @@ void OutgoingDataCreator::SendFirstData(bool send_playlist_songs) {
 
   // then the current volume
   VolumeChanged(app_->player()->GetVolume());
+
+  // Check if we need to start the track position timer
+  if (!track_position_timer_->isActive() &&
+      app_->player()->engine()->state() == Engine::Playing) {
+    track_position_timer_->start(1000);
+  }
 
   // And the current track position
   UpdateTrackPosition();
@@ -254,12 +350,15 @@ void OutgoingDataCreator::CreateSong(
     song_metadata->set_track(song.track());
     song_metadata->set_disc(song.disc());
     song_metadata->set_playcount(song.playcount());
+    song_metadata->set_is_local(song.url().scheme() == "file");
+    song_metadata->set_filename(DataCommaSizeFromQString(song.basefilename()));
+    song_metadata->set_file_size(song.filesize());
 
     // Append coverart
     if (!art.isNull()) {
       QImage small;
       // Check if we resize the image
-      if (art.width() > 1000) {
+      if (art.width() > 1000 || art.height() > 1000) {
         small = art.scaled(1000, 1000, Qt::KeepAspectRatio);
       } else {
         small = art;
@@ -422,4 +521,250 @@ void OutgoingDataCreator::DisconnectAllClients() {
   msg.set_type(pb::remote::DISCONNECT);
   msg.mutable_response_disconnect()->set_reason_disconnect(pb::remote::Server_Shutdown);
   SendDataToClients(&msg);
+}
+
+void OutgoingDataCreator::GetLyrics() {
+  fetcher_->FetchInfo(current_song_);
+}
+
+void OutgoingDataCreator::SendLyrics(int id, const SongInfoFetcher::Result& result) {
+  pb::remote::Message msg;
+  msg.set_type(pb::remote::LYRICS);
+  pb::remote::ResponseLyrics* response = msg.mutable_response_lyrics();
+
+  foreach (const CollapsibleInfoPane::Data& data, result.info_) {
+    // If the size is zero, do not send the provider
+    SongInfoTextView* editor = qobject_cast<SongInfoTextView*>(data.contents_);
+    if (editor->toPlainText().length() == 0)
+      continue;
+
+    pb::remote::Lyric* lyric = response->mutable_lyrics()->Add();
+
+    lyric->set_id(DataCommaSizeFromQString(data.id_));
+    lyric->set_title(DataCommaSizeFromQString(data.title_));
+    lyric->set_content(DataCommaSizeFromQString(editor->toPlainText()));
+  }
+  SendDataToClients(&msg);
+
+  results_.take(id);
+}
+
+void OutgoingDataCreator::SendSongs(const pb::remote::RequestDownloadSongs &request,
+                                    RemoteClient* client) {
+
+  if (!download_queue_.contains(client)) {
+    download_queue_.insert(client, QQueue<DownloadItem>() );
+  }
+
+  switch (request.download_item()) {
+  case pb::remote::CurrentItem: {
+    DownloadItem item(current_song_, 1 , 1);
+    download_queue_[client].append(item);
+    break;
+  }
+  case pb::remote::ItemAlbum:
+    SendAlbum(client, current_song_);
+    break;
+  case pb::remote::APlaylist:
+    SendPlaylist(client, request.playlist_id());
+    break;
+  default:
+    break;
+  }
+
+  // Send first file
+  OfferNextSong(client);
+}
+
+void OutgoingDataCreator::OfferNextSong(RemoteClient *client) {
+  if (!download_queue_.contains(client))
+    return;
+
+  pb::remote::Message msg;
+
+  if (download_queue_.value(client).isEmpty()) {
+    // We sent all songs, tell the client the queue is empty
+    msg.set_type(pb::remote::DOWNLOAD_QUEUE_EMPTY);
+  } else {
+    // Get the item and send the single song
+    DownloadItem item = download_queue_[client].head();
+
+    msg.set_type(pb::remote::SONG_FILE_CHUNK);
+    pb::remote::ResponseSongFileChunk* chunk = msg.mutable_response_song_file_chunk();
+
+    // Song offer is chunk no 0
+    chunk->set_chunk_count(0);
+    chunk->set_chunk_number(0);
+    chunk->set_file_count(item.song_count_);
+    chunk->set_file_number(item.song_no_);
+
+    CreateSong(item.song_, QImage() , -1,
+               chunk->mutable_song_metadata());
+  }
+
+  client->SendData(&msg);
+}
+
+void OutgoingDataCreator::ResponseSongOffer(RemoteClient *client, bool accepted) {
+  if (!download_queue_.contains(client))
+    return;
+
+  if (download_queue_.value(client).isEmpty())
+    return;
+
+  // Get the item and send the single song
+  DownloadItem item = download_queue_[client].dequeue();
+  if (accepted)
+    SendSingleSong(client, item.song_, item.song_no_, item.song_count_);
+
+  // And offer the next song
+  OfferNextSong(client);
+}
+
+void OutgoingDataCreator::SendSingleSong(RemoteClient* client, const Song &song,
+                                         int song_no, int song_count) {
+  // Only local files!!!
+  if (!(song.url().scheme() == "file"))
+    return;
+
+  // Calculate the number of chunks
+  int chunk_count  = qRound((song.filesize() / kFileChunkSize) + 0.5);
+  int chunk_number = 1;
+
+  // Open the file
+  QFile file(song.url().toLocalFile());
+  file.open(QIODevice::ReadOnly);
+
+  QByteArray data;
+  pb::remote::Message msg;
+  pb::remote::ResponseSongFileChunk* chunk = msg.mutable_response_song_file_chunk();
+  msg.set_type(pb::remote::SONG_FILE_CHUNK);
+
+  QImage null_image;
+
+  while (!file.atEnd()) {
+    // Read file chunk
+    data = file.read(kFileChunkSize);
+
+    // Set chunk data
+    chunk->set_chunk_count(chunk_count);
+    chunk->set_chunk_number(chunk_number);
+    chunk->set_file_count(song_count);
+    chunk->set_file_number(song_no);
+    chunk->set_size(file.size());
+    chunk->set_data(data.data(), data.size());
+
+    // On the first chunk send the metadata, so the client knows
+    // what file it receives.
+    if (chunk_number == 1) {
+      int i = app_->playlist_manager()->active()->current_row();
+      CreateSong(
+        song, null_image, i,
+        msg.mutable_response_song_file_chunk()->mutable_song_metadata());
+    }
+
+    // Send data directly to the client
+    client->SendData(&msg);
+
+    // Clear working data
+    chunk->Clear();
+    data.clear();
+
+    chunk_number++;
+  }
+
+  file.close();
+}
+
+void OutgoingDataCreator::SendAlbum(RemoteClient *client, const Song &song) {
+  // No streams!
+  if (song.url().scheme() != "file")
+    return;
+
+  SongList album = app_->library_backend()->GetSongsByAlbum(song.album());
+
+  foreach (Song s, album) {
+    DownloadItem item(s, album.indexOf(s)+1, album.size());
+    download_queue_[client].append(item);
+  }
+}
+
+void OutgoingDataCreator::SendPlaylist(RemoteClient *client, int playlist_id) {
+  Playlist* playlist = app_->playlist_manager()->playlist(playlist_id);
+  if(!playlist) {
+    qLog(Info) << "Could not find playlist with id = " << playlist_id;
+    return;
+  }
+  SongList song_list = playlist->GetAllSongs();
+
+  // Count the local songs
+  int count = 0;
+  foreach (Song s, song_list) {
+    if (s.url().scheme() == "file") {
+      count++;
+    }
+  }
+
+  foreach (Song s, song_list) {
+    // Only local files!
+    if (s.url().scheme() == "file") {
+      DownloadItem item(s, song_list.indexOf(s)+1, count);
+      download_queue_[client].append(item);
+    }
+  }
+}
+
+void OutgoingDataCreator::SendLibrary(RemoteClient *client) {
+  // Get a temporary file name
+  QString temp_file_name = Utilities::GetTemporaryFileName();
+
+  // Attach this file to the database
+  Database::AttachedDatabase adb(temp_file_name, "", true);
+  app_->database()->AttachDatabase("songs_export", adb);
+  QSqlDatabase db(app_->database()->Connect());
+
+  // Copy the content of the song table to this temporary database
+  QSqlQuery q(QString("create table songs_export.songs as SELECT * FROM songs;"), db);
+  q.exec();
+
+  if (app_->database()->CheckErrors(q)) return;
+
+  // Detach the database
+  app_->database()->DetachDatabase("songs_export");
+
+  // Open the file
+  QFile file(temp_file_name);
+  file.open(QIODevice::ReadOnly);
+
+  QByteArray data;
+  pb::remote::Message msg;
+  pb::remote::ResponseLibraryChunk* chunk = msg.mutable_response_library_chunk();
+  msg.set_type(pb::remote::LIBRARY_CHUNK);
+
+  // Calculate the number of chunks
+  int chunk_count  = qRound((file.size() / kFileChunkSize) + 0.5);
+  int chunk_number = 1;
+
+  while (!file.atEnd()) {
+    // Read file chunk
+    data = file.read(kFileChunkSize);
+
+    // Set chunk data
+    chunk->set_chunk_count(chunk_count);
+    chunk->set_chunk_number(chunk_number);
+    chunk->set_size(file.size());
+    chunk->set_data(data.data(), data.size());
+
+    // Send data directly to the client
+    client->SendData(&msg);
+
+    // Clear working data
+    chunk->Clear();
+    data.clear();
+
+    chunk_number++;
+  }
+
+  // Remove temporary file
+  file.remove();
 }

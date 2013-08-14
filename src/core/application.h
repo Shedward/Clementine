@@ -55,6 +55,11 @@ public:
   Application(QObject* parent = NULL);
   ~Application();
 
+  const QString& language_name() const { return language_name_; }
+  // Same as language_name, but remove the region code at the end if there is one
+  QString language_without_region() const;
+  void set_language_name(const QString& name) { language_name_ = name; }
+
   TagReaderClient* tag_reader_client() const { return tag_reader_client_; }
   Database* database() const { return database_; }
   AlbumCoverLoader* album_cover_loader() const { return album_cover_loader_; }
@@ -95,6 +100,8 @@ signals:
   void SettingsDialogRequested(SettingsDialog::Page page);
 
 private:
+  QString language_name_;
+
   TagReaderClient* tag_reader_client_;
   Database* database_;
   AlbumCoverLoader* album_cover_loader_;

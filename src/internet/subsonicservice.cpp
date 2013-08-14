@@ -33,6 +33,8 @@ const char* SubsonicService::kApiClientName = "Clementine";
 const char* SubsonicService::kSongsTable = "subsonic_songs";
 const char* SubsonicService::kFtsTable = "subsonic_songs_fts";
 
+const int SubsonicService::kMaxRedirects = 10;
+
 SubsonicService::SubsonicService(Application* app, InternetModel* parent)
   : InternetService(kServiceName, app, parent, parent),
     network_(new QNetworkAccessManager(this)),
@@ -46,7 +48,8 @@ SubsonicService::SubsonicService(Application* app, InternetModel* parent)
     library_filter_(NULL),
     library_sort_model_(new QSortFilterProxyModel(this)),
     total_song_count_(0),
-    login_state_(LoginState_OtherError) {
+    login_state_(LoginState_OtherError),
+    redirect_count_(0) {
   app_->player()->RegisterUrlHandler(url_handler_);
 
   connect(scanner_, SIGNAL(ScanFinished()),
@@ -148,21 +151,24 @@ void SubsonicService::ReloadSettings() {
   QSettings s;
   s.beginGroup(kSettingsGroup);
 
-  server_ = s.value("server").toString();
+  UpdateServer(s.value("server").toString());
   username_ = s.value("username").toString();
   password_ = s.value("password").toString();
+  usesslv3_ = s.value("usesslv3").toBool();
 
   Login();
 }
 
 bool SubsonicService::IsConfigured() const {
-  return !server_.isEmpty() &&
+  return !configured_server_.isEmpty() &&
          !username_.isEmpty() &&
          !password_.isEmpty();
 }
 
 void SubsonicService::Login() {
-  // Forget session ID
+  // Recreate fresh network state, otherwise old HTTPS settings seem to get reused
+  network_->deleteLater();
+  network_ = new QNetworkAccessManager(this);
   network_->setCookieJar(new QNetworkCookieJar(network_));
   // Forget login state whilst waiting
   login_state_ = LoginState_Unknown;
@@ -170,14 +176,18 @@ void SubsonicService::Login() {
   if (IsConfigured()) {
     // Ping is enough to check credentials
     Ping();
+  } else {
+    login_state_ = LoginState_IncompleteCredentials;
+    emit LoginStateChanged(login_state_);
   }
 }
 
 void SubsonicService::Login(
-    const QString& server, const QString& username, const QString& password) {
-  server_ = server;
+    const QString& server, const QString& username, const QString& password, const bool& usesslv3) {
+  UpdateServer(server);
   username_ = username;
   password_ = password;
+  usesslv3_ = usesslv3;
   Login();
 }
 
@@ -189,12 +199,22 @@ void SubsonicService::Ping() {
 }
 
 QUrl SubsonicService::BuildRequestUrl(const QString& view) const {
-  QUrl url(server_ + "/rest/" + view + ".view");
+  QUrl url(working_server_ + "/rest/" + view + ".view");
   url.addQueryItem("v", kApiVersion);
   url.addQueryItem("c", kApiClientName);
   url.addQueryItem("u", username_);
   url.addQueryItem("p", password_);
   return url;
+}
+
+QUrl SubsonicService::ScrubUrl(const QUrl& url) {
+  QUrl return_url(url);
+  QString path = url.path();
+  int rest_location = path.lastIndexOf("/rest", -1, Qt::CaseInsensitive);
+  if (rest_location >= 0) {
+    return_url.setPath(path.left(rest_location));
+  }
+  return return_url;
 }
 
 QNetworkReply* SubsonicService::Send(const QUrl& url) {
@@ -203,6 +223,9 @@ QNetworkReply* SubsonicService::Send(const QUrl& url) {
   // certainly be self-signed.
   QSslConfiguration sslconfig = QSslConfiguration::defaultConfiguration();
   sslconfig.setPeerVerifyMode(QSslSocket::VerifyNone);
+  if (usesslv3_) {
+    sslconfig.setProtocol(QSsl::SslV3);
+  }
   request.setSslConfiguration(sslconfig);
   QNetworkReply *reply = network_->get(request);
   return reply;
@@ -237,7 +260,23 @@ void SubsonicService::OnPingFinished(QNetworkReply* reply) {
   reply->deleteLater();
 
   if (reply->error() != QNetworkReply::NoError) {
-    login_state_ = LoginState_BadServer;
+    switch(reply->error()) {
+      case QNetworkReply::ConnectionRefusedError:
+        login_state_ = LoginState_ConnectionRefused;
+        break;
+      case QNetworkReply::HostNotFoundError:
+        login_state_ = LoginState_HostNotFound;
+        break;
+      case QNetworkReply::TimeoutError:
+        login_state_ = LoginState_Timeout;
+        break;
+      case QNetworkReply::SslHandshakeFailedError:
+        login_state_ = LoginState_SslError;
+        break;
+      default: //Treat uncaught error types here as generic
+        login_state_ = LoginState_BadServer;
+        break;
+    }
     qLog(Error) << "Failed to connect ("
                 << Utilities::EnumToString(QNetworkReply::staticMetaObject, "NetworkError", reply->error())
                 << "):" << reply->errorString();
@@ -245,8 +284,32 @@ void SubsonicService::OnPingFinished(QNetworkReply* reply) {
     QXmlStreamReader reader(reply);
     reader.readNextStartElement();
     QStringRef status = reader.attributes().value("status");
+    int http_status_code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (status == "ok") {
       login_state_ = LoginState_Loggedin;
+    } else if (http_status_code >= 300 && http_status_code <= 399) {
+      // Received a redirect status code, follow up on it.
+      QUrl redirect_url =
+          reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+      if (redirect_url.isEmpty()) {
+        qLog(Debug) << "Received HTTP code " << http_status_code << ", but no URL";
+        login_state_ = LoginState_RedirectNoUrl;
+      } else {
+        redirect_count_++;
+        qLog(Debug) << "Redirect receieved to "
+                    << redirect_url.toString(QUrl::RemoveQuery)
+                    << ", current redirect count is "
+                    << redirect_count_;
+        if (redirect_count_ <= kMaxRedirects) {
+          working_server_ = ScrubUrl(redirect_url).toString(QUrl::RemoveQuery);
+          Ping();
+          // To avoid the LoginStateChanged, as it will come from the recursive request.
+          return;
+        } else {
+          // Redirect limit exceeded
+          login_state_ = LoginState_RedirectLimitExceeded;
+        }
+      }
     } else {
       reader.readNextStartElement();
       int error = reader.attributes().value("code").toString().toInt();
@@ -281,6 +344,12 @@ void SubsonicService::OnPingFinished(QNetworkReply* reply) {
 
 void SubsonicService::ShowConfig() {
   app_->OpenSettingsDialogAtPage(SettingsDialog::Page_Subsonic);
+}
+
+void SubsonicService::UpdateServer(const QString& server) {
+  configured_server_ = server;
+  working_server_ = server;
+  redirect_count_ = 0;
 }
 
 
@@ -371,6 +440,7 @@ void SubsonicLibraryScanner::OnGetAlbumFinished(QNetworkReply* reply) {
     song.set_title(reader.attributes().value("title").toString());
     song.set_album(reader.attributes().value("album").toString());
     song.set_track(reader.attributes().value("track").toString().toInt());
+    song.set_disc(reader.attributes().value("discNumber").toString().toInt());
     song.set_artist(reader.attributes().value("artist").toString());
     song.set_albumartist(album_artist);
     song.set_bitrate(reader.attributes().value("bitRate").toString().toInt());

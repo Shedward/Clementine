@@ -361,6 +361,7 @@ MainWindow::MainWindow(Application* app,
   connect(ui_->action_update_library, SIGNAL(triggered()), app_->library(), SLOT(IncrementalScan()));
   connect(ui_->action_full_library_scan, SIGNAL(triggered()), app_->library(), SLOT(FullScan()));
   connect(ui_->action_queue_manager, SIGNAL(triggered()), SLOT(ShowQueueManager()));
+  connect(ui_->action_add_files_to_transcoder, SIGNAL(triggered()), SLOT(AddFilesToTranscoder()));
 
   background_streams_->AddAction("Rain", ui_->action_rain);
   background_streams_->AddAction("Hypnotoad", ui_->action_hypnotoad);
@@ -391,9 +392,6 @@ MainWindow::MainWindow(Application* app,
                             ui_->action_save_playlist,
                             ui_->action_next_playlist,    /* These two actions aren't associated */
                             ui_->action_previous_playlist /* to a button but to the main window */ );
-  playlist_list_->SetActions(ui_->action_new_playlist,
-                             ui_->action_load_playlist,
-                             ui_->action_save_playlist);
 
 
 #ifdef ENABLE_VISUALISATIONS
@@ -508,6 +506,7 @@ MainWindow::MainWindow(Application* app,
   playlist_menu_->addAction(ui_->action_renumber_tracks);
   playlist_menu_->addAction(ui_->action_selection_set_value);
   playlist_menu_->addAction(ui_->action_auto_complete_tags);
+  playlist_menu_->addAction(ui_->action_add_files_to_transcoder);
   playlist_menu_->addSeparator();
   playlist_copy_to_library_ = playlist_menu_->addAction(IconLoader::Load("edit-copy"), tr("Copy to library..."), this, SLOT(PlaylistCopyToLibrary()));
   playlist_move_to_library_ = playlist_menu_->addAction(IconLoader::Load("go-jump"), tr("Move to library..."), this, SLOT(PlaylistMoveToLibrary()));
@@ -643,6 +642,7 @@ MainWindow::MainWindow(Application* app,
   // Analyzer
   ui_->analyzer->SetEngine(app_->player()->engine());
   ui_->analyzer->SetActions(ui_->action_visualisations);
+  connect(ui_->analyzer, SIGNAL(WheelEvent(int)), SLOT(VolumeWheelEvent(int)));
 
   // Equalizer
   qLog(Debug) << "Creating equalizer";
@@ -893,6 +893,7 @@ void MainWindow::VolumeChanged(int volume) {
 
 void MainWindow::SongChanged(const Song& song) {
   setWindowTitle(song.PrettyTitleWithArtist());
+  tray_icon_->SetProgress(0);
 
 #ifdef HAVE_LIBLASTFM
   if (ui_->action_toggle_scrobbling->isVisible())
@@ -1719,6 +1720,9 @@ void MainWindow::CommandlineOptionsReceived(const CommandlineOptions &options) {
     case CommandlineOptions::Player_Next:
       app_->player()->Next();
       break;
+    case CommandlineOptions::Player_RestartOrPrevious:
+      app_->player()->RestartOrPrevious();
+      break;
 
     case CommandlineOptions::Player_None:
       break;
@@ -1789,6 +1793,28 @@ void MainWindow::CheckForUpdates() {
 void MainWindow::PlaylistUndoRedoChanged(QAction *undo, QAction *redo) {
   playlist_menu_->insertAction(playlist_undoredo_, undo);
   playlist_menu_->insertAction(playlist_undoredo_, redo);
+}
+
+void MainWindow::AddFilesToTranscoder() {
+  if (!transcode_dialog_) {
+    transcode_dialog_.reset(new TranscodeDialog);
+  }
+
+  QStringList filenames;
+
+  foreach (const QModelIndex& index,
+           ui_->playlist->view()->selectionModel()->selection().indexes()) {
+    if (index.column() != 0)
+      continue;
+    int row = app_->playlist_manager()->current()->proxy()->mapToSource(index).row();
+    PlaylistItemPtr item(app_->playlist_manager()->current()->item_at(row));
+    Song song = item->Metadata();
+    filenames << song.url().toLocalFile();
+  }
+
+  transcode_dialog_->SetFilenames(filenames);
+
+  ShowTranscodeDialog();
 }
 
 void MainWindow::ShowLibraryConfig() {
@@ -1883,8 +1909,8 @@ void MainWindow::PlaylistOrganiseSelected(bool copy) {
 void MainWindow::PlaylistDelete() {
   // Note: copied from LibraryView::Delete
 
-  if (QMessageBox::question(this, tr("Delete files"),
-        tr("These files will be deleted from disk, are you sure you want to continue?"),
+  if (QMessageBox::warning(this, tr("Delete files"),
+        tr("These files will be permanently deleted from disk, are you sure you want to continue?"),
         QMessageBox::Yes, QMessageBox::Cancel) != QMessageBox::Yes)
     return;
 
@@ -2331,4 +2357,19 @@ void MainWindow::DoGlobalSearch(const QString& query) {
 void MainWindow::ShowConsole() {
   Console* console = new Console(app_, this);
   console->show();
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* event) {
+  if(event->key() == Qt::Key_Space) {
+    app_->player()->PlayPause();
+    event->accept();
+  } else if(event->key() == Qt::Key_Left) {
+    ui_->track_slider->Seek(-1);
+    event->accept();
+  } else if(event->key() == Qt::Key_Right) {
+    ui_->track_slider->Seek(1);
+    event->accept();
+  } else {
+    QMainWindow::keyPressEvent(event);
+  }
 }

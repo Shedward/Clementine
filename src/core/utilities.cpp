@@ -46,6 +46,7 @@
 #  include <sys/statvfs.h>
 #elif defined(Q_OS_WIN32)
 #  include <windows.h>
+#  include <QProcess>
 #endif
 
 #ifdef Q_OS_LINUX
@@ -211,6 +212,17 @@ QString MakeTempDir(const QString template_name) {
   return path;
 }
 
+QString GetTemporaryFileName() {
+  QString file;
+  {
+    QTemporaryFile tempfile;
+    tempfile.open();
+    file = tempfile.fileName();
+  }
+
+  return file;
+}
+
 void RemoveRecursive(const QString& path) {
   QDir dir(path);
   foreach (const QString& child, dir.entryList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Hidden))
@@ -350,6 +362,13 @@ void RevealFileInFinder(QString const& path) {
 }
 #endif  // Q_OS_DARWIN
 
+#ifdef Q_OS_WIN
+void ShowFileInExplorer(QString const& path) {
+  QProcess::execute("explorer.exe", QStringList() << "/select,"
+                                                  << QDir::toNativeSeparators(path));
+}
+#endif
+
 void OpenInFileBrowser(const QList<QUrl>& urls) {
   QSet<QString> dirs;
 
@@ -366,10 +385,13 @@ void OpenInFileBrowser(const QList<QUrl>& urls) {
     if (dirs.contains(directory))
       continue;
     dirs.insert(directory);
+    qLog(Debug) << path;
 #ifdef Q_OS_DARWIN
     // revealing multiple files in the finder only opens one window,
     // so it also makes sense to reveal at most one per directory
     RevealFileInFinder(path);
+#elif defined(Q_OS_WIN32)
+    ShowFileInExplorer(path);
 #else
     QDesktopServices::openUrl(QUrl::fromLocalFile(directory));
 #endif
@@ -575,6 +597,20 @@ bool IsLaptop() {
 #else
   return false;
 #endif
+}
+
+QString SystemLanguageName() {
+#if QT_VERSION >= 0x040800
+  QString system_language = QLocale::system().uiLanguages().empty() ?
+      QLocale::system().name() : QLocale::system().uiLanguages().first();
+  // uiLanguages returns strings with "-" as separators for language/region;
+  // however QTranslator needs "_" separators
+  system_language.replace("-", "_");
+#else
+  QString system_language = QLocale::system().name();
+#endif
+
+  return system_language;
 }
 
 }  // namespace Utilities

@@ -121,6 +121,7 @@ class MainWindow : public QMainWindow, public PlatformInterface {
   void CommandlineOptionsReceived(const CommandlineOptions& options);
 
  protected:
+  void keyPressEvent(QKeyEvent* event);
   void resizeEvent(QResizeEvent* event);
   void closeEvent(QCloseEvent* event);
 
@@ -157,6 +158,7 @@ class MainWindow : public QMainWindow, public PlatformInterface {
   void AutoCompleteTags();
   void AutoCompleteTagsAccepted();
   void PlaylistUndoRedoChanged(QAction* undo, QAction* redo);
+  void AddFilesToTranscoder();
 
   void PlaylistCopyToLibrary();
   void PlaylistMoveToLibrary();
