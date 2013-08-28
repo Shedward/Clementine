@@ -292,6 +292,12 @@ if (HAVE_DBUS)
   find_package(Qt4 REQUIRED QtDbus)
 endif ()
 
+if (HAVE_VK)
+  add_subdirectory(3rdparty/vreen)
+  include_directories(${VREEN_INCLUDE_DIRS})
+  include_directories(${VREENOAUTH_INCLUDE_DIRS})
+endif(HAVE_VK)
+
 # We can include the Qt definitions now
 include(${QT_USE_FILE})
 
@@ -456,10 +462,6 @@ endif(HAVE_SPOTIFY_BLOB)
 if(HAVE_MOODBAR)
   add_subdirectory(gst/moodbar)
 endif()
-
-if (HAVE_VK)
-  add_subdirectory(3rdparty/vreen)
-endif(HAVE_VK)
 
 # Uninstall support
 configure_file(
