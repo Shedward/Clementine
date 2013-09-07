@@ -146,11 +146,11 @@ QDataStream &operator <<(QDataStream &stream, const VkService::MusicOwner &val) 
   return stream;
 }
 
-QDataStream &operator >>(QDataStream &stream, VkService::MusicOwner &val) {
-  stream >> val.id_;
-  stream >> val.name_;
-  stream >> val.songs_count_;
-  stream >> val.screen_name_;
+QDataStream &operator >>(QDataStream &stream, VkService::MusicOwner &var) {
+  stream >> var.id_;
+  stream >> var.name_;
+  stream >> var.songs_count_;
+  stream >> var.screen_name_;
   return stream;
 }
 

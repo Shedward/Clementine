@@ -285,8 +285,8 @@ private:
 
 Q_DECLARE_METATYPE(VkService::MusicOwner)
 
-QDataStream& operator<<(QDataStream & stream, const VkService::MusicOwner & pen);
-QDataStream& operator>>(QDataStream & stream, VkService::MusicOwner & pen);
+QDataStream& operator<<(QDataStream & stream, const VkService::MusicOwner & val);
+QDataStream& operator>>(QDataStream & stream, VkService::MusicOwner & var);
 QDebug operator<< (QDebug d, const VkService::MusicOwner &owner);
 
 #endif // VKSERVICE_H
