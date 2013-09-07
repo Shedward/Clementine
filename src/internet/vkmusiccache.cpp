@@ -30,6 +30,7 @@ VkMusicCache::VkMusicCache(VkService *service, QObject *parent)
     current_cashing_index(0),
     is_downloading(false),
     is_aborted(false),
+    task_id(0),
     file_(nullptr),
     network_manager_(new QNetworkAccessManager),
     reply_(nullptr)
