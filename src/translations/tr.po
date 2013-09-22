@@ -185,11 +185,11 @@ msgstr "&Ortala"
 msgid "&Custom"
 msgstr "&Özel"
 
-#: ../bin/src/ui_mainwindow.h:731
+#: ../bin/src/ui_mainwindow.h:730
 msgid "&Extras"
 msgstr "Ekler"
 
-#: ../bin/src/ui_mainwindow.h:730
+#: ../bin/src/ui_mainwindow.h:729
 msgid "&Help"
 msgstr "&Yardım"
 
@@ -206,7 +206,7 @@ msgstr "&Gizle..."
 msgid "&Left"
 msgstr "&Sol"
 
-#: ../bin/src/ui_mainwindow.h:728
+#: ../bin/src/ui_mainwindow.h:727
 msgid "&Music"
 msgstr "Müzik"
 
@@ -214,15 +214,15 @@ msgstr "Müzik"
 msgid "&None"
 msgstr "&Hiçbiri"
 
-#: ../bin/src/ui_mainwindow.h:729
+#: ../bin/src/ui_mainwindow.h:728
 msgid "&Playlist"
 msgstr "Çalma Listesi"
 
-#: ../bin/src/ui_mainwindow.h:657
+#: ../bin/src/ui_mainwindow.h:656
 msgid "&Quit"
 msgstr "&Çık"
 
-#: ../bin/src/ui_mainwindow.h:695
+#: ../bin/src/ui_mainwindow.h:694
 msgid "&Repeat mode"
 msgstr "Tekrar kipi"
 
@@ -230,7 +230,7 @@ msgstr "Tekrar kipi"
 msgid "&Right"
 msgstr "&Sağ"
 
-#: ../bin/src/ui_mainwindow.h:694
+#: ../bin/src/ui_mainwindow.h:693
 msgid "&Shuffle mode"
 msgstr "Rastgele kipi"
 
@@ -238,7 +238,7 @@ msgstr "Rastgele kipi"
 msgid "&Stretch columns to fit window"
 msgstr "&Sütunları pencereye sığacak şekilde ayarla"
 
-#: ../bin/src/ui_mainwindow.h:732
+#: ../bin/src/ui_mainwindow.h:731
 msgid "&Tools"
 msgstr "&Araçlar"
 
@@ -383,11 +383,11 @@ msgstr "İptal"
 msgid "About %1"
 msgstr "%1 Hakkında"
 
-#: ../bin/src/ui_mainwindow.h:678
+#: ../bin/src/ui_mainwindow.h:677
 msgid "About Clementine..."
 msgstr "Clementine Hakkında..."
 
-#: ../bin/src/ui_mainwindow.h:713
+#: ../bin/src/ui_mainwindow.h:712
 msgid "About Qt..."
 msgstr "Qt Hakkında..."
 
@@ -435,19 +435,19 @@ msgstr "Başka bir yayın ekle..."
 msgid "Add directory..."
 msgstr "Dizin ekle..."
 
-#: ui/mainwindow.cpp:1602
+#: ui/mainwindow.cpp:1603
 msgid "Add file"
 msgstr "Dosya ekle"
 
-#: ../bin/src/ui_mainwindow.h:724
+#: ../bin/src/ui_mainwindow.h:723
 msgid "Add file to transcoder"
 msgstr "Dosyayı dönüştürücüye ekle"
 
-#: ../bin/src/ui_mainwindow.h:722
+#: ../bin/src/ui_mainwindow.h:721
 msgid "Add file(s) to transcoder"
 msgstr "Dosyayı/dosyaları dönüştürücüye ekle"
 
-#: ../bin/src/ui_mainwindow.h:682
+#: ../bin/src/ui_mainwindow.h:681
 msgid "Add file..."
 msgstr "Dosya ekle..."
 
@@ -455,11 +455,11 @@ msgstr "Dosya ekle..."
 msgid "Add files to transcode"
 msgstr "Dönüştürülecek dosyaları ekle"
 
-#: ui/mainwindow.cpp:1630
+#: ui/mainwindow.cpp:1631
 msgid "Add folder"
 msgstr "Klasör ekle"
 
-#: ../bin/src/ui_mainwindow.h:699
+#: ../bin/src/ui_mainwindow.h:698
 msgid "Add folder..."
 msgstr "Klasör ekle..."
 
@@ -471,7 +471,7 @@ msgstr "Yeni klasör ekle..."
 msgid "Add podcast"
 msgstr "Podcast ekle"
 
-#: podcasts/podcastservice.cpp:257 ../bin/src/ui_mainwindow.h:720
+#: podcasts/podcastservice.cpp:257 ../bin/src/ui_mainwindow.h:719
 msgid "Add podcast..."
 msgstr "Podcast ekle..."
 
@@ -547,19 +547,19 @@ msgstr "Şarkıya parça etiketi ekle"
 msgid "Add song year tag"
 msgstr "Yıl etiketi ekle"
 
-#: ../bin/src/ui_mainwindow.h:684
+#: ../bin/src/ui_mainwindow.h:683
 msgid "Add stream..."
 msgstr "Yayın ekle..."
 
-#: internet/groovesharkservice.cpp:1085
+#: internet/groovesharkservice.cpp:1087
 msgid "Add to Grooveshark favorites"
 msgstr "Grooveshark'i favorilere ekle"
 
-#: internet/groovesharkservice.cpp:1097
+#: internet/groovesharkservice.cpp:1099
 msgid "Add to Grooveshark playlists"
 msgstr "Grooveshark'i müzik listelerine ekle"
 
-#: ui/mainwindow.cpp:1427
+#: ui/mainwindow.cpp:1428
 msgid "Add to another playlist"
 msgstr "Başka bir çalma listesine ekle"
 
@@ -600,11 +600,11 @@ msgstr "Bugün eklenenler"
 msgid "Added within three months"
 msgstr "Son üç ay içinde eklenenler"
 
-#: internet/groovesharkservice.cpp:1392
+#: internet/groovesharkservice.cpp:1394
 msgid "Adding song to My Music"
 msgstr "Parçayı müziklerime ekliyor"
 
-#: internet/groovesharkservice.cpp:1369
+#: internet/groovesharkservice.cpp:1371
 msgid "Adding song to favorites"
 msgstr "Şarkı favorilere ekleniyor"
 
@@ -659,7 +659,7 @@ msgstr "Kapak resmi olmayan albümler"
 msgid "All Files (*)"
 msgstr "Tüm Dosyalar (*)"
 
-#: ../bin/src/ui_mainwindow.h:690
+#: ../bin/src/ui_mainwindow.h:689
 msgid "All Glory to the Hypnotoad!"
 msgstr "All Glory to the Hypnotoad!"
 
@@ -772,7 +772,7 @@ msgstr "Kesintiyi engellemek için sıkıştırma uygula"
 msgid "Are you sure you want to delete the \"%1\" preset?"
 msgstr "\"%1\" ayarını silmek istediğinizden emin misiniz?"
 
-#: internet/groovesharkservice.cpp:1290
+#: internet/groovesharkservice.cpp:1292
 msgid "Are you sure you want to delete this playlist?"
 msgstr "Bu çalan listeyi silmek istediğinizden emin misiniz?"
 
@@ -887,7 +887,7 @@ msgstr "Veritabanını yedekliyor"
 msgid "Balance"
 msgstr "Denge"
 
-#: ../bin/src/ui_mainwindow.h:663
+#: ../bin/src/ui_mainwindow.h:662
 msgid "Ban"
 msgstr "Yasakla"
 
@@ -1070,11 +1070,11 @@ msgstr "Temizliyor"
 msgid "Clear"
 msgstr "Temizle"
 
-#: ../bin/src/ui_mainwindow.h:665 ../bin/src/ui_mainwindow.h:667
+#: ../bin/src/ui_mainwindow.h:664 ../bin/src/ui_mainwindow.h:666
 msgid "Clear playlist"
 msgstr "Çalma listesini temizle"
 
-#: smartplaylists/searchtermwidget.cpp:329 ../bin/src/ui_mainwindow.h:648
+#: smartplaylists/searchtermwidget.cpp:329 ../bin/src/ui_mainwindow.h:647
 #: visualisations/visualisationcontainer.cpp:211
 #: ../bin/src/ui_visualisationoverlay.h:183
 msgid "Clementine"
@@ -1155,7 +1155,7 @@ msgstr "Clementine müzikleri şurada bulacak:"
 msgid "Click here to add some music"
 msgstr "Parça eklemek için buraya tıklayın"
 
-#: playlist/playlisttabbar.cpp:292
+#: playlist/playlisttabbar.cpp:293
 msgid ""
 "Click here to favorite this playlist so it will be saved and remain "
 "accessible through the \"Playlists\" panel on the left side bar"
@@ -1213,7 +1213,7 @@ msgstr "Yorum"
 msgid "Complete tags automatically"
 msgstr "Etiketleri otomatik tamamla"
 
-#: ../bin/src/ui_mainwindow.h:717
+#: ../bin/src/ui_mainwindow.h:716
 msgid "Complete tags automatically..."
 msgstr "Etiketleri otomatik tamamla..."
 
@@ -1228,7 +1228,7 @@ msgstr "Besteci"
 msgid "Configure %1..."
 msgstr "Düzenle %1..."
 
-#: internet/groovesharkservice.cpp:550
+#: internet/groovesharkservice.cpp:552
 msgid "Configure Grooveshark..."
 msgstr "Grooveshark'i ayarla"
 
@@ -1293,7 +1293,7 @@ msgid ""
 "Connection timed out, check server URL. Example: http://localhost:4040/"
 msgstr "Bağlantı zaman aşımına uğradı, sunucu adresini denetleyin. Örnek: http://localhost:4040/"
 
-#: ../bin/src/ui_console.h:80 ../bin/src/ui_mainwindow.h:693
+#: ../bin/src/ui_console.h:80 ../bin/src/ui_mainwindow.h:692
 msgid "Console"
 msgstr "Konsol"
 
@@ -1309,7 +1309,7 @@ msgstr "Tüm müzikleri dönüştür"
 msgid "Convert any music that the device can't play"
 msgstr "Aygıtın çalamadığı müzikleri dönüştür"
 
-#: internet/groovesharkservice.cpp:1170
+#: internet/groovesharkservice.cpp:1172
 msgid "Copy to clipboard"
 msgstr "Panoya kopyala"
 
@@ -1364,7 +1364,7 @@ msgid "Couldn't open output file %1"
 msgstr "%1 çıktı dosyası açılamadı"
 
 #: internet/cloudfileservice.cpp:88 ../bin/src/ui_albumcovermanager.h:215
-#: ../bin/src/ui_albumcoversearcher.h:105 ../bin/src/ui_mainwindow.h:688
+#: ../bin/src/ui_albumcoversearcher.h:105 ../bin/src/ui_mainwindow.h:687
 #: internet/googledriveservice.cpp:189
 msgid "Cover Manager"
 msgstr "Kapak Yöneticisi"
@@ -1396,7 +1396,7 @@ msgstr "Kapak resmi %1 adresinden ayarlandı"
 msgid "Covers from %1"
 msgstr "%1 adresindeki kapak resimleri"
 
-#: internet/groovesharkservice.cpp:518 internet/groovesharkservice.cpp:1242
+#: internet/groovesharkservice.cpp:520 internet/groovesharkservice.cpp:1244
 msgid "Create a new Grooveshark playlist"
 msgstr "Yeni bir Grooveshark müzik listesi oluşturun"
 
@@ -1408,11 +1408,11 @@ msgstr "Parça değiştirirken otomatik olarak çapraz geçiş yap"
 msgid "Cross-fade when changing tracks manually"
 msgstr "Parça değiştirirken elle çapraz geçiş yap"
 
-#: ../bin/src/ui_mainwindow.h:660
+#: ../bin/src/ui_mainwindow.h:659
 msgid "Ctrl+Alt+V"
 msgstr "Ctrl+Alt+V"
 
-#: ../bin/src/ui_mainwindow.h:664
+#: ../bin/src/ui_mainwindow.h:663
 msgid "Ctrl+B"
 msgstr "Ctrl+B"
 
@@ -1420,63 +1420,63 @@ msgstr "Ctrl+B"
 msgid "Ctrl+Down"
 msgstr "Ctrl+Down"
 
-#: ../bin/src/ui_mainwindow.h:671
+#: ../bin/src/ui_mainwindow.h:670
 msgid "Ctrl+E"
 msgstr "Ctrl+E"
 
-#: ../bin/src/ui_mainwindow.h:681
+#: ../bin/src/ui_mainwindow.h:680
 msgid "Ctrl+H"
 msgstr "Ctrl+H"
 
-#: ../bin/src/ui_mainwindow.h:701
+#: ../bin/src/ui_mainwindow.h:700
 msgid "Ctrl+J"
 msgstr "Ctrl+J"
 
-#: ../bin/src/ui_queuemanager.h:141 ../bin/src/ui_mainwindow.h:669
+#: ../bin/src/ui_queuemanager.h:141 ../bin/src/ui_mainwindow.h:668
 msgid "Ctrl+K"
 msgstr "Ctrl+K"
 
-#: ../bin/src/ui_mainwindow.h:662
+#: ../bin/src/ui_mainwindow.h:661
 msgid "Ctrl+L"
 msgstr "Ctrl+L"
 
-#: ../bin/src/ui_mainwindow.h:715
+#: ../bin/src/ui_mainwindow.h:714
 msgid "Ctrl+M"
 msgstr "Ctrl+M"
 
-#: ../bin/src/ui_mainwindow.h:703
+#: ../bin/src/ui_mainwindow.h:702
 msgid "Ctrl+N"
 msgstr "Ctrl+N"
 
-#: ../bin/src/ui_mainwindow.h:685
+#: ../bin/src/ui_mainwindow.h:684
 msgid "Ctrl+O"
 msgstr "Ctrl+O"
 
-#: ../bin/src/ui_mainwindow.h:677
+#: ../bin/src/ui_mainwindow.h:676
 msgid "Ctrl+P"
 msgstr "Ctrl+P"
 
-#: ../bin/src/ui_mainwindow.h:658
+#: ../bin/src/ui_mainwindow.h:657
 msgid "Ctrl+Q"
 msgstr "Ctrl+Q"
 
-#: ../bin/src/ui_mainwindow.h:705
+#: ../bin/src/ui_mainwindow.h:704
 msgid "Ctrl+S"
 msgstr "Ctrl+S"
 
-#: ../bin/src/ui_mainwindow.h:683
+#: ../bin/src/ui_mainwindow.h:682
 msgid "Ctrl+Shift+A"
 msgstr "Ctrl+Shift+A"
 
-#: ../bin/src/ui_mainwindow.h:707
+#: ../bin/src/ui_mainwindow.h:706
 msgid "Ctrl+Shift+O"
 msgstr "Ctrl+Shift+O"
 
-#: ../bin/src/ui_mainwindow.h:726
+#: ../bin/src/ui_mainwindow.h:725
 msgid "Ctrl+Shift+T"
 msgstr "Ctrl+Shift+T"
 
-#: ../bin/src/ui_mainwindow.h:718
+#: ../bin/src/ui_mainwindow.h:717
 msgid "Ctrl+T"
 msgstr "Ctrl+T"
 
@@ -1564,7 +1564,7 @@ msgstr "Görselleştirmeler arasındaki gecikme"
 msgid "Delete"
 msgstr "Sil"
 
-#: internet/groovesharkservice.cpp:521 internet/groovesharkservice.cpp:1289
+#: internet/groovesharkservice.cpp:523 internet/groovesharkservice.cpp:1291
 msgid "Delete Grooveshark playlist"
 msgstr "Grooveshark müzik listesini sil"
 
@@ -1573,7 +1573,7 @@ msgid "Delete downloaded data"
 msgstr "İndirilmiş veriyi sil"
 
 #: devices/deviceview.cpp:388 library/libraryview.cpp:608
-#: ui/mainwindow.cpp:1904 widgets/fileview.cpp:187
+#: ui/mainwindow.cpp:1905 widgets/fileview.cpp:187
 msgid "Delete files"
 msgstr "Dosyaları sil"
 
@@ -1606,11 +1606,11 @@ msgstr "Orijinal dosyaları sil"
 msgid "Deleting files"
 msgstr "Dosyalar siliniyor"
 
-#: ui/mainwindow.cpp:1362
+#: ui/mainwindow.cpp:1363
 msgid "Dequeue selected tracks"
 msgstr "Seçili parçaları kuyruktan çıkar"
 
-#: ui/mainwindow.cpp:1360
+#: ui/mainwindow.cpp:1361
 msgid "Dequeue track"
 msgstr "Parçayı kuyruktan çıkar"
 
@@ -1698,7 +1698,7 @@ msgstr "Gösterim seçenekleri"
 msgid "Display the on-screen-display"
 msgstr "Ekran görselini göster"
 
-#: ../bin/src/ui_mainwindow.h:716
+#: ../bin/src/ui_mainwindow.h:715
 msgid "Do a full library rescan"
 msgstr "Tüm kütüphaneyi yeniden tara"
 
@@ -1828,12 +1828,12 @@ msgstr "Dinamik rastgele karışım"
 msgid "Edit smart playlist..."
 msgstr "Akıllı çalma listesini düzenleyin"
 
-#: ui/mainwindow.cpp:1395
+#: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
 msgstr "\"%1\" etiketini düzenle..."
 
-#: ../bin/src/ui_mainwindow.h:674
+#: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
 msgstr "Etiketi düzenle..."
 
@@ -1846,7 +1846,7 @@ msgid "Edit track information"
 msgstr "Parça bilgisini düzenle"
 
 #: library/libraryview.cpp:395 widgets/fileviewlist.cpp:50
-#: ../bin/src/ui_mainwindow.h:670
+#: ../bin/src/ui_mainwindow.h:669
 msgid "Edit track information..."
 msgstr "Parça bilgisini düzenle..."
 
@@ -1947,7 +1947,7 @@ msgstr "App Clementine için bağlanmak için IP girin."
 msgid "Entire collection"
 msgstr "Tüm koleksiyon"
 
-#: ../bin/src/ui_equalizer.h:163 ../bin/src/ui_mainwindow.h:697
+#: ../bin/src/ui_equalizer.h:163 ../bin/src/ui_mainwindow.h:696
 msgid "Equalizer"
 msgstr "Ekolayzır"
 
@@ -1959,9 +1959,9 @@ msgstr "--log-levels *:1'e eşdeğer"
 msgid "Equivalent to --log-levels *:3"
 msgstr "--log-levels *:3'e eşdeğer"
 
-#: internet/groovesharkservice.cpp:1015
+#: internet/groovesharkservice.cpp:1017
 #: internet/magnatunedownloaddialog.cpp:225 library/libraryview.cpp:602
-#: ui/mainwindow.cpp:1856 ui/mainwindow.cpp:1972
+#: ui/mainwindow.cpp:1857 ui/mainwindow.cpp:1973
 msgid "Error"
 msgstr "Hata"
 
@@ -2074,27 +2074,27 @@ msgstr "Biteni aktar"
 msgid "Exported %1 covers out of %2 (%3 skipped)"
 msgstr "%2 kapağın %1 tanesi aktarıldı (%3 atlandı)"
 
-#: ../bin/src/ui_mainwindow.h:679
+#: ../bin/src/ui_mainwindow.h:678
 msgid "F1"
 msgstr "F1"
 
-#: ../bin/src/ui_mainwindow.h:675
+#: ../bin/src/ui_mainwindow.h:674
 msgid "F2"
 msgstr "F2"
 
-#: ../bin/src/ui_mainwindow.h:650
+#: ../bin/src/ui_mainwindow.h:649
 msgid "F5"
 msgstr "F5"
 
-#: ../bin/src/ui_mainwindow.h:652
+#: ../bin/src/ui_mainwindow.h:651
 msgid "F6"
 msgstr "F6"
 
-#: ../bin/src/ui_mainwindow.h:654
+#: ../bin/src/ui_mainwindow.h:653
 msgid "F7"
 msgstr "F7"
 
-#: ../bin/src/ui_mainwindow.h:656
+#: ../bin/src/ui_mainwindow.h:655
 msgid "F8"
 msgstr "F8"
 
@@ -2144,7 +2144,7 @@ msgstr "Bu RSS beslemesinin XML çözümlemesi başarısız oldu"
 msgid "Fast"
 msgstr "Hızlı"
 
-#: internet/groovesharkservice.cpp:615
+#: internet/groovesharkservice.cpp:617
 msgid "Favorites"
 msgstr "Favoriler"
 
@@ -2327,15 +2327,15 @@ msgstr "Genel ayarlar"
 msgid "Genre"
 msgstr "Tür"
 
-#: internet/groovesharkservice.cpp:540
+#: internet/groovesharkservice.cpp:542
 msgid "Get a URL to share this Grooveshark playlist"
 msgstr "Bu Grooveshark çalma listesini paylaşmak için bir URL al"
 
-#: internet/groovesharkservice.cpp:537 internet/groovesharkservice.cpp:1108
+#: internet/groovesharkservice.cpp:539 internet/groovesharkservice.cpp:1110
 msgid "Get a URL to share this Grooveshark song"
 msgstr "Bu Grooveshark şarkısını paylaşmak için bir URL al"
 
-#: internet/groovesharkservice.cpp:788
+#: internet/groovesharkservice.cpp:790
 msgid "Getting Grooveshark popular songs"
 msgstr "Grooveshark popüler şarkılar alınıyor"
 
@@ -2355,11 +2355,11 @@ msgstr "Bir isim verin:"
 msgid "Go"
 msgstr "Git"
 
-#: ../bin/src/ui_mainwindow.h:708
+#: ../bin/src/ui_mainwindow.h:707
 msgid "Go to next playlist tab"
 msgstr "Sıradaki listeye git"
 
-#: ../bin/src/ui_mainwindow.h:709
+#: ../bin/src/ui_mainwindow.h:708
 msgid "Go to previous playlist tab"
 msgstr "Önceki listeye git"
 
@@ -2381,19 +2381,19 @@ msgstr "Çalma listemde olmayan şarkıları gri göster"
 msgid "Grooveshark"
 msgstr "Grooveshark"
 
-#: internet/groovesharkservice.cpp:406
+#: internet/groovesharkservice.cpp:408
 msgid "Grooveshark login error"
 msgstr "Grooveshark giriş hatası"
 
-#: internet/groovesharkservice.cpp:1160
+#: internet/groovesharkservice.cpp:1162
 msgid "Grooveshark playlist's URL"
 msgstr "Grooveshark çalma listesinin URL adresi"
 
-#: internet/groovesharkservice.cpp:601
+#: internet/groovesharkservice.cpp:603
 msgid "Grooveshark radio"
 msgstr "Grooveshark radyo"
 
-#: internet/groovesharkservice.cpp:1138
+#: internet/groovesharkservice.cpp:1140
 msgid "Grooveshark song's URL"
 msgstr "Grooveshark şarkısının adresi"
 
@@ -2632,7 +2632,7 @@ msgstr "Geçersiz servis"
 msgid "Invalid session key"
 msgstr "Geçersiz oturum anahtarı"
 
-#: internet/groovesharkservice.cpp:399
+#: internet/groovesharkservice.cpp:401
 msgid "Invalid username and/or password"
 msgstr "Geçersiz kullanici adi yada şifre"
 
@@ -2660,7 +2660,7 @@ msgstr "Jamendo Haftanın Zirvedeki Parçaları"
 msgid "Jamendo database"
 msgstr "Jamendo veritabanı"
 
-#: ../bin/src/ui_mainwindow.h:700
+#: ../bin/src/ui_mainwindow.h:699
 msgid "Jump to the currently playing track"
 msgstr "Şu anda çalınan parçaya atla"
 
@@ -2684,7 +2684,7 @@ msgstr "Pencere kapandığında arkaplanda çalışmaya devam et"
 msgid "Keep the original files"
 msgstr "Orijinal dosyaları sakla"
 
-#: ../bin/src/ui_mainwindow.h:692
+#: ../bin/src/ui_mainwindow.h:691
 msgid "Kittens"
 msgstr "Kedicikler"
 
@@ -2804,7 +2804,7 @@ msgstr "Kütüphane"
 msgid "Library advanced grouping"
 msgstr "Kütüphane gelişmiş gruplama"
 
-#: ui/mainwindow.cpp:2089
+#: ui/mainwindow.cpp:2090
 msgid "Library rescan notice"
 msgstr "Kütüphane yeniden tarama bildirisi"
 
@@ -2816,7 +2816,7 @@ msgstr "Kütüphane araması"
 msgid "Limits"
 msgstr "Limitler"
 
-#: internet/groovesharkservice.cpp:602
+#: internet/groovesharkservice.cpp:604
 msgid ""
 "Listen to Grooveshark songs based on what you've listened to previously"
 msgstr "Daha önceden dinlediğiniz şarkılar temel alınarak Grooveshark şarkıları dinleyin"
@@ -2849,7 +2849,7 @@ msgstr "Albüm kapağını diskten yükle..."
 msgid "Load playlist"
 msgstr "Çalma listesini yükle"
 
-#: ../bin/src/ui_mainwindow.h:706
+#: ../bin/src/ui_mainwindow.h:705
 msgid "Load playlist..."
 msgstr "Çalma listesi yükle..."
 
@@ -2916,7 +2916,7 @@ msgstr "Giriş başarısız oldu."
 msgid "Long term prediction profile (LTP)"
 msgstr "Long term prediction profile (LTP)"
 
-#: ../bin/src/ui_mainwindow.h:661
+#: ../bin/src/ui_mainwindow.h:660
 msgid "Love"
 msgstr "Beğen"
 
@@ -2979,7 +2979,7 @@ msgstr "Magnatune indirme bitti"
 msgid "Main profile (MAIN)"
 msgstr "Ana profil (MAIN)"
 
-#: core/backgroundstreams.cpp:36 ../bin/src/ui_mainwindow.h:691
+#: core/backgroundstreams.cpp:36 ../bin/src/ui_mainwindow.h:690
 msgid "Make it so!"
 msgstr "Make it so!"
 
@@ -3101,7 +3101,7 @@ msgstr "Kütüphaneye taşı..."
 msgid "Move up"
 msgstr "Yukarı taşı"
 
-#: transcoder/transcodedialog.cpp:216 ui/mainwindow.cpp:1604
+#: transcoder/transcodedialog.cpp:216 ui/mainwindow.cpp:1605
 msgid "Music"
 msgstr "Müzik"
 
@@ -3109,7 +3109,7 @@ msgstr "Müzik"
 msgid "Music Library"
 msgstr "Müzik Kütüphanesi"
 
-#: core/globalshortcuts.cpp:54 ../bin/src/ui_mainwindow.h:714
+#: core/globalshortcuts.cpp:54 ../bin/src/ui_mainwindow.h:713
 #: wiimotedev/wiimotesettingspage.cpp:105
 msgid "Mute"
 msgstr "Sessiz"
@@ -3134,7 +3134,7 @@ msgstr "Last.fm Önerilen Radyom"
 msgid "My Mix Radio"
 msgstr "Karışık Radyom"
 
-#: internet/groovesharkservice.cpp:606
+#: internet/groovesharkservice.cpp:608
 msgid "My Music"
 msgstr "Müziğim"
 
@@ -3150,7 +3150,7 @@ msgstr "Radyom"
 msgid "My Recommendations"
 msgstr "Önerdiklerim"
 
-#: internet/groovesharkservice.cpp:1243 internet/groovesharkservice.cpp:1336
+#: internet/groovesharkservice.cpp:1245 internet/groovesharkservice.cpp:1338
 #: ui/equalizer.cpp:178 ../bin/src/ui_deviceproperties.h:369
 #: ../bin/src/ui_magnatunedownloaddialog.h:135
 #: ../bin/src/ui_wizardfinishpage.h:84
@@ -3201,7 +3201,7 @@ msgstr "Asla çalarak başlama"
 msgid "New folder"
 msgstr "Yeni klasör"
 
-#: ui/mainwindow.cpp:1444 ../bin/src/ui_mainwindow.h:702
+#: ui/mainwindow.cpp:1445 ../bin/src/ui_mainwindow.h:701
 msgid "New playlist"
 msgstr "Yeni çalma listesi"
 
@@ -3225,7 +3225,7 @@ msgstr "En yeni parçalar"
 msgid "Next"
 msgstr "İleri"
 
-#: core/globalshortcuts.cpp:50 ../bin/src/ui_mainwindow.h:655
+#: core/globalshortcuts.cpp:50 ../bin/src/ui_mainwindow.h:654
 #: wiimotedev/wiimotesettingspage.cpp:99
 msgid "Next track"
 msgstr "Sonraki parça"
@@ -3264,7 +3264,7 @@ msgstr "Kısa blok yok"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: library/libraryview.cpp:603 ui/mainwindow.cpp:1857 ui/mainwindow.cpp:1973
+#: library/libraryview.cpp:603 ui/mainwindow.cpp:1858 ui/mainwindow.cpp:1974
 msgid "None of the selected songs were suitable for copying to a device"
 msgstr "Seçili şarkıların hiçbiri aygıta yüklemeye uygun değil"
 
@@ -3367,14 +3367,14 @@ msgid "Opacity"
 msgstr "Opaklık"
 
 #: internet/digitallyimportedservicebase.cpp:179
-#: internet/groovesharkservice.cpp:544 internet/icecastservice.cpp:296
+#: internet/groovesharkservice.cpp:546 internet/icecastservice.cpp:296
 #: internet/jamendoservice.cpp:419 internet/magnatuneservice.cpp:278
 #: internet/somafmservice.cpp:100 internet/soundcloudservice.cpp:194
 #, qt-format
 msgid "Open %1 in browser"
 msgstr "Tarayıcıda aç: %1"
 
-#: ../bin/src/ui_mainwindow.h:687
+#: ../bin/src/ui_mainwindow.h:686
 msgid "Open &audio CD..."
 msgstr "&Ses CD'si aç..."
 
@@ -3390,7 +3390,7 @@ msgstr "OPML dosyasını aç..."
 msgid "Open device"
 msgstr "Aygıtı aç"
 
-#: ../bin/src/ui_mainwindow.h:686
+#: ../bin/src/ui_mainwindow.h:685
 msgid "Open file..."
 msgstr "Dosya aç..."
 
@@ -3498,7 +3498,7 @@ msgstr "Parti"
 msgid "Password"
 msgstr "Parola"
 
-#: core/globalshortcuts.cpp:46 ui/mainwindow.cpp:853 ui/mainwindow.cpp:1285
+#: core/globalshortcuts.cpp:46 ui/mainwindow.cpp:854 ui/mainwindow.cpp:1286
 #: ui/qtsystemtrayicon.cpp:178 wiimotedev/wiimotesettingspage.cpp:106
 msgid "Pause"
 msgstr "Duraklat"
@@ -3524,9 +3524,9 @@ msgstr "Piksel"
 msgid "Plain sidebar"
 msgstr "Düz kenar çubuğu"
 
-#: core/globalshortcuts.cpp:45 ui/mainwindow.cpp:487 ui/mainwindow.cpp:821
-#: ui/mainwindow.cpp:840 ui/mainwindow.cpp:1288 ui/qtsystemtrayicon.cpp:166
-#: ui/qtsystemtrayicon.cpp:192 ../bin/src/ui_mainwindow.h:651
+#: core/globalshortcuts.cpp:45 ui/mainwindow.cpp:487 ui/mainwindow.cpp:822
+#: ui/mainwindow.cpp:841 ui/mainwindow.cpp:1289 ui/qtsystemtrayicon.cpp:166
+#: ui/qtsystemtrayicon.cpp:192 ../bin/src/ui_mainwindow.h:650
 #: wiimotedev/wiimotesettingspage.cpp:101
 msgid "Play"
 msgstr "Çal"
@@ -3578,7 +3578,7 @@ msgstr "Oynatıcı seçenekleri"
 
 #: playlist/playlistcontainer.cpp:280 playlist/playlistlistcontainer.cpp:227
 #: playlist/playlistmanager.cpp:84 playlist/playlistmanager.cpp:152
-#: playlist/playlistmanager.cpp:497 playlist/playlisttabbar.cpp:356
+#: playlist/playlistmanager.cpp:497 playlist/playlisttabbar.cpp:357
 msgid "Playlist"
 msgstr "Çalma Listesi"
 
@@ -3594,7 +3594,7 @@ msgstr "Çalma listesi seçenekleri"
 msgid "Playlist type"
 msgstr "Çalma listesi türü"
 
-#: internet/groovesharkservice.cpp:624 ui/mainwindow.cpp:237
+#: internet/groovesharkservice.cpp:626 ui/mainwindow.cpp:237
 msgid "Playlists"
 msgstr "Çalma listeleri"
 
@@ -3614,15 +3614,15 @@ msgstr "Podcastlar"
 msgid "Pop"
 msgstr "Pop"
 
-#: internet/groovesharkservice.cpp:575
+#: internet/groovesharkservice.cpp:577
 msgid "Popular songs"
 msgstr "Popüler şarkılar"
 
-#: internet/groovesharkservice.cpp:578
+#: internet/groovesharkservice.cpp:580
 msgid "Popular songs of the Month"
 msgstr "Bu ayın popüler şarkıları"
 
-#: internet/groovesharkservice.cpp:585
+#: internet/groovesharkservice.cpp:587
 msgid "Popular songs today"
 msgstr "Bugünün popüler şarkıları"
 
@@ -3646,7 +3646,7 @@ msgstr "Ön yükseltici"
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: ../bin/src/ui_mainwindow.h:676
+#: ../bin/src/ui_mainwindow.h:675
 msgid "Preferences..."
 msgstr "Tercihler..."
 
@@ -3701,7 +3701,7 @@ msgstr "Önizleme"
 msgid "Previous"
 msgstr "Önceki"
 
-#: core/globalshortcuts.cpp:51 ../bin/src/ui_mainwindow.h:649
+#: core/globalshortcuts.cpp:51 ../bin/src/ui_mainwindow.h:648
 #: wiimotedev/wiimotesettingspage.cpp:100
 msgid "Previous track"
 msgstr "Önceki parça"
@@ -3740,16 +3740,16 @@ msgstr "Kalite"
 msgid "Querying device..."
 msgstr "Aygıt sorgulanıyor..."
 
-#: ../bin/src/ui_queuemanager.h:125 ../bin/src/ui_mainwindow.h:712
+#: ../bin/src/ui_queuemanager.h:125 ../bin/src/ui_mainwindow.h:711
 msgid "Queue Manager"
 msgstr "Kuyruk Yöneticisi"
 
-#: ui/mainwindow.cpp:1366
+#: ui/mainwindow.cpp:1367
 msgid "Queue selected tracks"
 msgstr "Seçili parçaları kuyruğa ekle"
 
 #: globalsearch/globalsearchview.cpp:441 library/libraryview.cpp:375
-#: ui/mainwindow.cpp:1364
+#: ui/mainwindow.cpp:1365
 msgid "Queue track"
 msgstr "Parçayı kuyruğa ekle"
 
@@ -3757,11 +3757,11 @@ msgstr "Parçayı kuyruğa ekle"
 msgid "Radio (equal loudness for all tracks)"
 msgstr "Radyo (tüm parçalar için eşit ses seviyesi)"
 
-#: internet/groovesharkservice.cpp:593
+#: internet/groovesharkservice.cpp:595
 msgid "Radios"
 msgstr "Radyolar"
 
-#: core/backgroundstreams.cpp:31 ../bin/src/ui_mainwindow.h:689
+#: core/backgroundstreams.cpp:31 ../bin/src/ui_mainwindow.h:688
 msgid "Rain"
 msgstr "Yağmur"
 
@@ -3805,7 +3805,7 @@ msgstr "Gerçekten iptal edeyim mi?"
 msgid "Redirect limit exceeded, verify server configuration."
 msgstr "Yönlendirme limiti aşıldı, sunucu yapılandırmasını doğrulayın."
 
-#: internet/groovesharkservice.cpp:547
+#: internet/groovesharkservice.cpp:549
 msgid "Refresh"
 msgstr "Yenile"
 
@@ -3851,7 +3851,7 @@ msgstr "Kaldır"
 msgid "Remove action"
 msgstr "Eylemi kaldır"
 
-#: ../bin/src/ui_mainwindow.h:721
+#: ../bin/src/ui_mainwindow.h:720
 msgid "Remove duplicates from playlist"
 msgstr "Şarkı listesindeki çiftleri birleştir"
 
@@ -3859,19 +3859,19 @@ msgstr "Şarkı listesindeki çiftleri birleştir"
 msgid "Remove folder"
 msgstr "Klasörü kaldır..."
 
-#: internet/groovesharkservice.cpp:534
+#: internet/groovesharkservice.cpp:536
 msgid "Remove from My Music"
 msgstr "Müziklerimden sil"
 
-#: internet/groovesharkservice.cpp:531
+#: internet/groovesharkservice.cpp:533
 msgid "Remove from favorites"
 msgstr "Favorilerden kaldır"
 
-#: internet/groovesharkservice.cpp:528 ../bin/src/ui_mainwindow.h:696
+#: internet/groovesharkservice.cpp:530 ../bin/src/ui_mainwindow.h:695
 msgid "Remove from playlist"
 msgstr "Çalma listesinden kaldır"
 
-#: playlist/playlisttabbar.cpp:173
+#: playlist/playlisttabbar.cpp:174
 msgid "Remove playlist"
 msgstr "Çalma listesini kaldır"
 
@@ -3879,20 +3879,20 @@ msgstr "Çalma listesini kaldır"
 msgid "Remove playlists"
 msgstr "Çalma listesini kaldır"
 
-#: internet/groovesharkservice.cpp:1537
+#: internet/groovesharkservice.cpp:1539
 msgid "Removing songs from My Music"
 msgstr "Parçalar müziklerimden siliniyor"
 
-#: internet/groovesharkservice.cpp:1487
+#: internet/groovesharkservice.cpp:1489
 msgid "Removing songs from favorites"
 msgstr "Parçalar favorilerimden siliniyor"
 
-#: internet/groovesharkservice.cpp:1335
+#: internet/groovesharkservice.cpp:1337
 #, qt-format
 msgid "Rename \"%1\" playlist"
 msgstr "\"%1\" çalma listesini yeniden adlandır"
 
-#: internet/groovesharkservice.cpp:524
+#: internet/groovesharkservice.cpp:526
 msgid "Rename Grooveshark playlist"
 msgstr "Grooveshark çalma listesini yeniden adlandır"
 
@@ -3904,7 +3904,7 @@ msgstr "Çalma listesini yeniden adlandır"
 msgid "Rename playlist..."
 msgstr "Çalma listesini yeniden adlandır..."
 
-#: ../bin/src/ui_mainwindow.h:672
+#: ../bin/src/ui_mainwindow.h:671
 msgid "Renumber tracks in this order..."
 msgstr "Parçaları bu sırada hatırla..."
 
@@ -3975,15 +3975,15 @@ msgstr "ASCII karakterler olarak kısıtla"
 msgid "Resume playback on start"
 msgstr "Başlarken çalmaya devam et"
 
-#: internet/groovesharkservice.cpp:756
+#: internet/groovesharkservice.cpp:758
 msgid "Retrieving Grooveshark My Music songs"
 msgstr "Grooveshark'tan My Music şakıları çekiliyor"
 
-#: internet/groovesharkservice.cpp:724
+#: internet/groovesharkservice.cpp:726
 msgid "Retrieving Grooveshark favorites songs"
 msgstr "Grooveşark favori şarkılar alınıyor"
 
-#: internet/groovesharkservice.cpp:661
+#: internet/groovesharkservice.cpp:663
 msgid "Retrieving Grooveshark playlists"
 msgstr "Grooveshark çalma listeleri alınıyor"
 
@@ -4049,7 +4049,7 @@ msgstr "Görüntüyü kaydet"
 msgid "Save playlist"
 msgstr "Çalma listesini kaydet"
 
-#: playlist/playlisttabbar.cpp:56 ../bin/src/ui_mainwindow.h:704
+#: playlist/playlisttabbar.cpp:56 ../bin/src/ui_mainwindow.h:703
 msgid "Save playlist..."
 msgstr "Çalma listesini kaydet..."
 
@@ -4140,7 +4140,7 @@ msgstr "Arama kipi"
 msgid "Search options"
 msgstr "Arama seçenekleri"
 
-#: internet/groovesharkservice.cpp:567 internet/soundcloudservice.cpp:104
+#: internet/groovesharkservice.cpp:569 internet/soundcloudservice.cpp:104
 #: internet/spotifyservice.cpp:347
 msgid "Search results"
 msgstr "Arama sonuçları"
@@ -4150,7 +4150,7 @@ msgstr "Arama sonuçları"
 msgid "Search terms"
 msgstr "Arama terimleri"
 
-#: internet/groovesharkservice.cpp:268
+#: internet/groovesharkservice.cpp:270
 msgid "Searching on Grooveshark"
 msgstr "Grooveshark'da Ara"
 
@@ -4222,7 +4222,7 @@ msgstr "Sunucu ayrıntıları"
 msgid "Service offline"
 msgstr "Hizmet çevrim dışı"
 
-#: ui/mainwindow.cpp:1393
+#: ui/mainwindow.cpp:1394
 #, qt-format
 msgid "Set %1 to \"%2\"..."
 msgstr "%1'i \"%2\" olarak ayarla"
@@ -4231,7 +4231,7 @@ msgstr "%1'i \"%2\" olarak ayarla"
 msgid "Set the volume to <value> percent"
 msgstr "Ses seviyesini yüzde <value> yap"
 
-#: ../bin/src/ui_mainwindow.h:673
+#: ../bin/src/ui_mainwindow.h:672
 msgid "Set value for all selected tracks..."
 msgstr "Seçili tüm parçalar için değeri ayarla..."
 
@@ -4371,7 +4371,7 @@ msgstr "Albümleri karıştır"
 msgid "Shuffle all"
 msgstr "Hepsini karıştır"
 
-#: ../bin/src/ui_mainwindow.h:680
+#: ../bin/src/ui_mainwindow.h:679
 msgid "Shuffle playlist"
 msgstr "Çalma listesini karıştır"
 
@@ -4523,7 +4523,7 @@ msgstr "Çalma listesini mevcut çalınanla başlat"
 msgid "Start transcoding"
 msgstr "Dönüştürmeye başla"
 
-#: internet/groovesharkservice.cpp:568 internet/soundcloudservice.cpp:105
+#: internet/groovesharkservice.cpp:570 internet/soundcloudservice.cpp:105
 #: internet/spotifyservice.cpp:348
 msgid ""
 "Start typing something on the search box above to fill this search results "
@@ -4539,11 +4539,11 @@ msgstr "%1 Başlatılıyor"
 msgid "Starting..."
 msgstr "Başlatılıyor..."
 
-#: internet/groovesharkservice.cpp:596
+#: internet/groovesharkservice.cpp:598
 msgid "Stations"
 msgstr "İstasyonlar"
 
-#: core/globalshortcuts.cpp:48 ../bin/src/ui_mainwindow.h:653
+#: core/globalshortcuts.cpp:48 ../bin/src/ui_mainwindow.h:652
 #: wiimotedev/wiimotesettingspage.cpp:102
 msgid "Stop"
 msgstr "Durdur"
@@ -4552,7 +4552,7 @@ msgstr "Durdur"
 msgid "Stop after"
 msgstr "Şundan sonra durdur"
 
-#: ui/mainwindow.cpp:489 ../bin/src/ui_mainwindow.h:659
+#: ui/mainwindow.cpp:489 ../bin/src/ui_mainwindow.h:658
 msgid "Stop after this track"
 msgstr "Bu parçadan sonra durdur"
 
@@ -4582,7 +4582,7 @@ msgstr "Bir Subsonik sunucudan Stream 30 günlük deneme süresinden sonra geçe
 msgid "Streaming membership"
 msgstr "Yayın akış üyeliği"
 
-#: internet/groovesharkservice.cpp:627
+#: internet/groovesharkservice.cpp:629
 msgid "Subscribed playlists"
 msgstr "Abone olunan çalma listeleri"
 
@@ -4715,7 +4715,7 @@ msgid ""
 "license key. Visit subsonic.org for details."
 msgstr "Subsonic sunucusunun deneme süresi bitti. Lisans anahtarı almak için lütfen bağış yapın. Ayrıntılar için subsonic.org'u ziyaret edin."
 
-#: ui/mainwindow.cpp:2082
+#: ui/mainwindow.cpp:2083
 msgid ""
 "The version of Clementine you've just updated to requires a full library "
 "rescan because of the new features listed below:"
@@ -4756,7 +4756,7 @@ msgid ""
 "continue?"
 msgstr "Bu dosyalar aygıttan silinecek, devam etmek istiyor musunuz?"
 
-#: library/libraryview.cpp:609 ui/mainwindow.cpp:1905 widgets/fileview.cpp:188
+#: library/libraryview.cpp:609 ui/mainwindow.cpp:1906 widgets/fileview.cpp:188
 msgid ""
 "These files will be permanently deleted from disk, are you sure you want to "
 "continue?"
@@ -4815,7 +4815,7 @@ msgid ""
 "scan the device to find music files - this may take some time."
 msgstr "Bu aygıtı ilk defa bağlıyorsunuz.  Clementine müzik dosyalarını bulmak için aygıtı tarayacak - bu işlem biraz zaman alabilir."
 
-#: playlist/playlisttabbar.cpp:185
+#: playlist/playlisttabbar.cpp:186
 msgid "This option can be changed in the \"Behavior\" preferences"
 msgstr "Bu seçenek \"Davranış\" tercihlerinden değiştirilebilir"
 
@@ -4838,7 +4838,7 @@ msgstr "Zaman Aşımı"
 msgid "Title"
 msgstr "Başlık"
 
-#: internet/groovesharkservice.cpp:1016
+#: internet/groovesharkservice.cpp:1018
 msgid ""
 "To start Grooveshark radio, you should first listen to a few other "
 "Grooveshark songs"
@@ -4856,11 +4856,11 @@ msgstr "Şirin OSD'yi Aç/Kapa"
 msgid "Toggle fullscreen"
 msgstr "Tam ekran göster/gizle"
 
-#: ui/mainwindow.cpp:1368
+#: ui/mainwindow.cpp:1369
 msgid "Toggle queue status"
 msgstr "Kuyruk durumunu göster/gizle"
 
-#: ../bin/src/ui_mainwindow.h:719
+#: ../bin/src/ui_mainwindow.h:718
 msgid "Toggle scrobbling"
 msgstr "Skroplamayı aç/kapa"
 
@@ -4897,7 +4897,7 @@ msgstr "Yapılmış toplam ağ istemi"
 msgid "Track"
 msgstr "Parça"
 
-#: ../bin/src/ui_transcodedialog.h:202 ../bin/src/ui_mainwindow.h:698
+#: ../bin/src/ui_transcodedialog.h:202 ../bin/src/ui_mainwindow.h:697
 msgid "Transcode Music"
 msgstr "Müzik Dönüştür"
 
@@ -4987,7 +4987,7 @@ msgstr "Abonelikten çık"
 msgid "Upcoming Concerts"
 msgstr "Yaklaşan Konserler"
 
-#: internet/groovesharkservice.cpp:1198
+#: internet/groovesharkservice.cpp:1200
 msgid "Update Grooveshark playlist"
 msgstr "Grooveshark çalma listesini güncelle"
 
@@ -4995,7 +4995,7 @@ msgstr "Grooveshark çalma listesini güncelle"
 msgid "Update all podcasts"
 msgstr "Bütün podcastları güncelle"
 
-#: ../bin/src/ui_mainwindow.h:710
+#: ../bin/src/ui_mainwindow.h:709
 msgid "Update changed library folders"
 msgstr "Değişen kütüphane klasörlerini güncelle"
 
@@ -5101,7 +5101,7 @@ msgstr "Ses normalleştirme kullan"
 msgid "Used"
 msgstr "Kullanılan"
 
-#: internet/groovesharkservice.cpp:402
+#: internet/groovesharkservice.cpp:404
 #, qt-format
 msgid "User %1 doesn't have a Grooveshark Anywhere account"
 msgstr "%1 Kullanicinin Grooveshark Anywhere hasabi yok"
@@ -5150,7 +5150,7 @@ msgstr "Görünüm"
 msgid "Visualization mode"
 msgstr "Görüntüleme kipi"
 
-#: ../bin/src/ui_mainwindow.h:711 ui/dbusscreensaver.cpp:35
+#: ../bin/src/ui_mainwindow.h:710 ui/dbusscreensaver.cpp:35
 msgid "Visualizations"
 msgstr "Görseller"
 
@@ -5180,7 +5180,7 @@ msgstr "WAV"
 msgid "WMA"
 msgstr "WMA"
 
-#: playlist/playlisttabbar.cpp:181 ../bin/src/ui_behavioursettingspage.h:194
+#: playlist/playlisttabbar.cpp:182 ../bin/src/ui_behavioursettingspage.h:194
 msgid "Warn me when closing a playlist tab"
 msgstr "Bir çalma listesi sekmesini kapatırken beni uyar"
 
@@ -5278,7 +5278,7 @@ msgid ""
 "well?"
 msgstr "Bu albümdeki diğer şarkıları da Çeşitli Sanatçılar'a taşımak ister misiniz?"
 
-#: ui/mainwindow.cpp:2087
+#: ui/mainwindow.cpp:2088
 msgid "Would you like to run a full rescan right now?"
 msgstr "Şu anda tam bir yeniden tarama çalıştırmak ister misiniz?"
 
@@ -5320,7 +5320,7 @@ msgid ""
 "You are about to remove %1 playlists from your favorites, are you sure?"
 msgstr "Beğenilenlerinizden %1 oynatma listesini kaldırmak üzeresiniz. Emin misiniz?"
 
-#: playlist/playlisttabbar.cpp:176
+#: playlist/playlisttabbar.cpp:177
 msgid ""
 "You are about to remove a playlist which is not part of your favorite playlists: the playlist will be deleted (this action cannot be undone). \n"
 "Are you sure you want to continue?"

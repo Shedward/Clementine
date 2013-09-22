@@ -256,24 +256,9 @@ optional_component(DEVICEKIT ON "Devices: DeviceKit backend"
   DEPENDS "D-Bus support" HAVE_DBUS
 )
 
-optional_component(SPOTIFY ON "Spotify support: core code"
-  DEPENDS "protobuf" PROTOBUF_FOUND PROTOBUF_PROTOC_EXECUTABLE
-)
-
 optional_component(SPOTIFY_BLOB ON "Spotify support: non-GPL binary helper"
   DEPENDS "protobuf" PROTOBUF_FOUND PROTOBUF_PROTOC_EXECUTABLE
   DEPENDS "libspotify" SPOTIFY_FOUND
-  DEPENDS "Spotify support: core code" HAVE_SPOTIFY
-)
-
-set(NEED_SPOTIFY_DOWNLOADER OFF)
-if(HAVE_SPOTIFY AND NOT HAVE_SPOTIFY_BLOB)
-  set(NEED_SPOTIFY_DOWNLOADER ON)
-endif()
-
-optional_component(SPOTIFY_DOWNLOADER
-  ${NEED_SPOTIFY_DOWNLOADER} "Spotify support: blob downloader"
-  DEPENDS "qca2" QCA_FOUND
 )
 
 optional_component(MOODBAR ON "Moodbar support"
@@ -287,6 +272,12 @@ optional_component(SPARKLE ON "Sparkle integration"
 
 optional_component(VISUALISATIONS ON "Visualisations")
 
+if(NOT HAVE_SPOTIFY_BLOB AND NOT QCA_FOUND)
+  message(FATAL_ERROR "Either QCA must be available or the non-GPL Spotify "
+          "code must be compiled in")
+elif(QCA_FOUND)
+  set(HAVE_SPOTIFY_DOWNLOADER ON)
+endif()
 
 # Find DBus if it's enabled
 if (HAVE_DBUS)
@@ -330,6 +321,21 @@ if(STATIC_SQLITE)
   message(STATUS "Building static qsqlite plugin")
   add_subdirectory(3rdparty/qsqlite)
   include_directories("3rdparty/qsqlite")
+else()
+  if (NOT I_HATE_MY_USERS)
+    message(FATAL_ERROR "No, really, Clementine needs sqlite to be linked "
+        "statically.  If it's not, Clementine won't be able to resolve the "
+        "functions it needs to register full text search support.  Search will "
+        "be really slow and users will be unhappy.  If you're packaging "
+        "Clementine for a distribution and you really hate your users and want "
+        "them to have a bad time please rerun cmake with -DI_HATE_MY_USERS=ON")
+  else()
+    if (NOT MY_USERS_WILL_SUFFER_BECAUSE_OF_ME)
+      message(FATAL_ERROR "So you really hate your users and you want to "
+          "create a crippled package that doesn't work properly?  Please send "
+          "an email to the devs and help us understand why.")
+    endif()
+  endif()
 endif(STATIC_SQLITE)
 
 # When/if upstream accepts our patches then these options can be used to link
@@ -442,6 +448,7 @@ add_subdirectory(ext/libclementine-common)
 add_subdirectory(ext/libclementine-tagreader)
 add_subdirectory(ext/clementine-tagreader)
 add_subdirectory(ext/libclementine-remote)
+add_subdirectory(ext/libclementine-spotifyblob)
 
 option(WITH_DEBIAN OFF)
 if(WITH_DEBIAN)
@@ -451,10 +458,6 @@ endif(WITH_DEBIAN)
 if(HAVE_BREAKPAD)
   add_subdirectory(3rdparty/google-breakpad)
 endif(HAVE_BREAKPAD)
-
-if(HAVE_SPOTIFY)
-  add_subdirectory(ext/libclementine-spotifyblob)
-endif(HAVE_SPOTIFY)
 
 if(HAVE_SPOTIFY_BLOB)
   add_subdirectory(ext/clementine-spotifyblob)
