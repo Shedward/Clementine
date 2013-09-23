@@ -47,7 +47,7 @@ void VkSearchProvider::Init(VkService *service) {
 void VkSearchProvider::SearchAsync(int id, const QString &query) {
   int count = service_->maxGlobalSearch();
 
-  RequestID rid(VkService::GlobalSearch);
+  RequestID rid(RequestID::GlobalSearch);
   songs_recived = false;
   groups_recived = false;
   pending_searches_[rid.id()] = PendingState(id, TokenizeQuery(query));
@@ -65,8 +65,8 @@ void VkSearchProvider::ShowConfig() {
   service_->ShowConfig();
 }
 
-void VkSearchProvider::SongSearchResult(VkService::RequestID rid, SongList songs) {
-  if (rid.type() == VkService::GlobalSearch) {
+void VkSearchProvider::SongSearchResult(RequestID rid, SongList songs) {
+  if (rid.type() == RequestID::GlobalSearch) {
     ClearSimilarSongs(songs);
     ResultList ret;
     foreach (const Song& song, songs) {
@@ -82,10 +82,10 @@ void VkSearchProvider::SongSearchResult(VkService::RequestID rid, SongList songs
   }
 }
 
-void VkSearchProvider::GroupSearchResult(RequestID rid, const VkService::MusicOwnerList &groups) {
-  if (rid.type() == VkService::GlobalSearch) {
+void VkSearchProvider::GroupSearchResult(RequestID rid, const MusicOwnerList &groups) {
+  if (rid.type() == RequestID::GlobalSearch) {
     ResultList ret;
-    foreach (const VkService::MusicOwner &group, groups) {
+    foreach (const MusicOwner &group, groups) {
       Result result(this);
       result.metadata_ = group.toOwnerRadio();
       ret << result;

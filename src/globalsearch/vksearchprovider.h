@@ -24,7 +24,6 @@
 #include "searchprovider.h"
 
 typedef uint GroupID;
-typedef VkService::RequestID RequestID;
 
 class VkSearchProvider : public SearchProvider {
   Q_OBJECT
@@ -38,7 +37,7 @@ public:
 
 public slots:
   void SongSearchResult(RequestID rid, SongList songs);
-  void GroupSearchResult(RequestID rid, const VkService::MusicOwnerList &groups);
+  void GroupSearchResult(RequestID rid, const MusicOwnerList &groups);
 
 private:
   bool songs_recived;

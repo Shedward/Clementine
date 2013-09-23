@@ -77,8 +77,8 @@ void RegisterMetaTypes() {
   qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
 
 #ifdef HAVE_VK
-  qRegisterMetaType<VkService::MusicOwner>("VkService::MusicOwner");
-  qRegisterMetaTypeStreamOperators<VkService::MusicOwner>("VkService::MusicOwner");
+  qRegisterMetaType<MusicOwner>("MusicOwner");
+  qRegisterMetaTypeStreamOperators<MusicOwner>("MusicOwner");
 #endif
 
 #ifdef HAVE_DBUS

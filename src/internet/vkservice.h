@@ -60,6 +60,88 @@ class Buddy;
 class SearchBoxWidget;
 class VkMusicCache;
 
+
+/***
+ * Store information about user or group
+ * using in bookmarks.
+ */
+class MusicOwner {
+public:
+  MusicOwner() :
+    songs_count_(0),
+    id_(0)
+  {}
+
+  explicit MusicOwner(const QUrl &group_url);
+  Song toOwnerRadio() const;
+
+  QString name() const { return name_; }
+  int id() const { return id_; }
+  static QList<MusicOwner> parseMusicOwnerList(const QVariant &request_result);
+
+private:
+  friend QDataStream &operator <<(QDataStream &stream, const MusicOwner &val);
+  friend QDataStream &operator >>(QDataStream &stream, MusicOwner &val);
+  friend QDebug operator<< (QDebug d, const MusicOwner &owner);
+
+  int songs_count_;
+  int id_; // if id > 0 is user otherwise id group
+  QString name_;
+  //name used in url http://vk.com/<screen_name> for example: http://vk.com/shedward
+  QString screen_name_;
+  QUrl photo_;
+};
+
+typedef QList<MusicOwner> MusicOwnerList;
+
+Q_DECLARE_METATYPE(MusicOwner)
+
+QDataStream& operator<<(QDataStream & stream, const MusicOwner & val);
+QDataStream& operator>>(QDataStream & stream, MusicOwner & var);
+QDebug operator<< (QDebug d, const MusicOwner &owner);
+
+
+
+/***
+ * The simple structure allows the handler to determine
+ * how to react to the received request or quickly skip unwanted.
+ */
+struct RequestID {
+
+  enum Type {
+    GlobalSearch,
+    LocalSearch,
+    MoreLocalSearch,
+    UserAudio,
+    MoreUserAudio,
+    UserRecomendations
+  };
+
+  RequestID(Type type, int id = 0)
+    : type_(type) {
+    switch (type) {
+    case UserAudio:
+    case UserRecomendations:
+      id_ = id; // For User/Group actions id is uid or gid...
+      break;
+    default:
+      id_= last_id_++; // otherwise is increasing unique number.
+      break;
+    }
+  }
+  int id() const { return id_; }
+  Type type() const { return type_; }
+private:
+  static uint last_id_;
+  int id_;
+  Type type_;
+};
+
+
+
+/***
+ * VkService
+ */
 class VkService : public InternetService {
   Q_OBJECT
 public:
@@ -92,69 +174,6 @@ public:
   };
 
   enum Role { Role_MusicOwnerMetadata = InternetModel::RoleCount };
-
-  enum RequestType {
-    GlobalSearch,
-    LocalSearch,
-    MoreLocalSearch,
-    UserAudio,
-    MoreUserAudio,
-    UserRecomendations
-  };
-
-  // The simple structure allows the handler to determine
-  // how to react to the received request or quickly skip unwanted.
-  struct RequestID {
-    RequestID(RequestType type, int id = 0)
-      : type_(type) {
-      switch (type) {
-      case UserAudio:
-      case UserRecomendations:
-        id_ = id; // For User/Group actions id is uid or gid...
-        break;
-      default:
-        id_= last_id_++; // otherwise is increasing unique number.
-        break;
-      }
-    }
-    int id() const { return id_; }
-    RequestType type() const { return type_; }
-  private:
-    static uint last_id_;
-    int id_;
-    RequestType type_;
-  };
-
-  // Store information about user or group
-  // using in bookmarks.
-  class MusicOwner {
-  public:
-    MusicOwner() :
-      songs_count_(0),
-      id_(0)
-    {}
-
-    explicit MusicOwner(const QUrl &group_url);
-    Song toOwnerRadio() const;
-
-    QString name() const { return name_; }
-    int id() const { return id_; }
-    static QList<MusicOwner> parseMusicOwnerList(const QVariant &request_result);
-
-  private:
-    friend QDataStream &operator <<(QDataStream &stream, const VkService::MusicOwner &val);
-    friend QDataStream &operator >>(QDataStream &stream, VkService::MusicOwner &val);
-    friend QDebug operator<< (QDebug d, const MusicOwner &owner);
-
-    int songs_count_;
-    int id_; // if id > 0 is user otherwise id group
-    QString name_;
-    //name used in url http://vk.com/<screen_name> for example: http://vk.com/shedward
-    QString screen_name_;
-    QUrl photo_;
-  };
-
-  typedef QList<MusicOwner> MusicOwnerList;
 
   /* InternetService interface */
   QStandardItem* CreateRootItem();
@@ -198,7 +217,7 @@ signals:
   void LoginSuccess(bool succ);
   void SongListLoaded(RequestID id, SongList songs);
   void SongSearchResult(RequestID id, const SongList &songs);
-  void GroupSearchResult(RequestID id, const VkService::MusicOwnerList &groups);
+  void GroupSearchResult(RequestID id, const MusicOwnerList &groups);
   void StopWaiting();
 
 public slots:
@@ -299,11 +318,5 @@ private:
   QString cacheDir_;
   QString cacheFilename_;
 };
-
-Q_DECLARE_METATYPE(VkService::MusicOwner)
-
-QDataStream& operator<<(QDataStream & stream, const VkService::MusicOwner & val);
-QDataStream& operator>>(QDataStream & stream, VkService::MusicOwner & var);
-QDebug operator<< (QDebug d, const VkService::MusicOwner &owner);
 
 #endif // VKSERVICE_H
