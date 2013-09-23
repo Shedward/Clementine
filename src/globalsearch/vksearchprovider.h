@@ -23,8 +23,6 @@
 
 #include "searchprovider.h"
 
-typedef uint GroupID;
-
 class VkSearchProvider : public SearchProvider {
   Q_OBJECT
 public:
