@@ -267,6 +267,12 @@ VkService::VkService(Application *app, InternetModel *parent) :
 }
 
 VkService::~VkService() {
+  delete cache_;
+  cache_ = nullptr;
+  delete audio_provider_;
+  audio_provider_ = nullptr;
+  delete client_;
+  client_ = nullptr;
 }
 
 

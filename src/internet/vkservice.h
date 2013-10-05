@@ -287,8 +287,11 @@ private:
   SearchBoxWidget* search_box_;
 
   /* Connection */
-  Vreen::Client *client_; Vreen::OAuthConnection
-  *connection_; bool hasAccount_; int my_id_; VkUrlHandler* url_handler_;
+  Vreen::Client *client_;
+  Vreen::OAuthConnection  *connection_;
+  bool hasAccount_;
+  int my_id_;
+  VkUrlHandler* url_handler_;
 
   /* Music */
   Song FromAudioItem(const Vreen::AudioItem &item);
