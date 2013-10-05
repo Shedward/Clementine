@@ -259,7 +259,7 @@ VkService::VkService(Application *app, InternetModel *parent) :
   VkSearchProvider* search_provider = new VkSearchProvider(app_, this);
   search_provider->Init(this);
   app_->global_search()->AddProvider(search_provider);
-  connect(search_box_, SIGNAL(TextChanged(QString)), SLOT(SearchSongs(QString)));
+  connect(search_box_, SIGNAL(TextChanged(QString)), SLOT(FindSongs(QString)));
 
   app_->player()->RegisterUrlHandler(url_handler_);
 
@@ -412,7 +412,7 @@ void VkService::ItemDoubleClicked(QStandardItem *item) {
       MoreRecommendations();
       break;
     case Type_Search:
-      MoreSearch();
+      FindMore();
       break;
     default:
       qLog(Warning) << "Wrong parent for More item:" << item->parent()->text();
@@ -953,7 +953,7 @@ void VkService::CopyShareUrl() {
  * Search
  */
 
-void VkService::SearchSongs(QString query) {
+void VkService::FindSongs(QString query) {
   if (query.isEmpty()) {
     root_item_->removeRow(search_->row());
     search_ = nullptr;
@@ -971,7 +971,7 @@ void VkService::SearchSongs(QString query) {
   }
 }
 
-void VkService::MoreSearch() {
+void VkService::FindMore() {
   RemoveLastRow(search_); // Last row is "More"
   CreateAndAppendRow(recommendations_,Type_Loading);
 
