@@ -39,8 +39,8 @@ void VkSearchProvider::Init(VkService *service) {
 
   connect(service_, SIGNAL(SongSearchResult(RequestID,SongList)),
           this, SLOT(SongSearchResult(RequestID,SongList)));
-  connect(service_, SIGNAL(GroupSearchResult(RequestID,VkService::MusicOwnerList)),
-          this, SLOT(GroupSearchResult(RequestID,VkService::MusicOwnerList)));
+  connect(service_, SIGNAL(GroupSearchResult(RequestID, MusicOwnerList)),
+          this, SLOT(GroupSearchResult(RequestID, MusicOwnerList)));
 
 }
 
