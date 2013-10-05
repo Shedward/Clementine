@@ -201,7 +201,7 @@ public:
   UrlHandler::LoadResult GetGroupNextSongUrl(const QUrl& url);
 
   void SongSearch(RequestID id,const QString &query, int count = 50, int offset = 0);
-  void GroupSearch(RequestID id, const QString &query, int count = 20, int offset = 0);
+  void GroupSearch(RequestID id, const QString &query);
 
   /* Settings */
   void UpdateSettings();

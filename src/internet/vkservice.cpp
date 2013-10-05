@@ -1171,7 +1171,7 @@ void VkService::SongSearchRecived(RequestID id, Vreen::AudioItemListReply *reply
   emit SongSearchResult(id, songs);
 }
 
-void VkService::GroupSearch(RequestID id, const QString &query, int count, int offset) {
+void VkService::GroupSearch(RequestID id, const QString &query) {
   QVariantMap args;
   args.insert("q", query);
 
