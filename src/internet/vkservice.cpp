@@ -840,8 +840,14 @@ void VkService::LoadBookmarks() {
 
 
 QStandardItem* VkService::AppendBookmark(const MusicOwner &owner) {
+  QIcon icon;
+  if (owner.id() > 0){
+    icon = QIcon(":vk/user.png");
+  } else {
+    icon = QIcon(":vk/group.png");
+  }
   QStandardItem *item = new QStandardItem(
-                          QIcon(":vk/group.png"),
+                          icon,
                           owner.name());
 
   item->setData(QVariant::fromValue(owner) ,Role_MusicOwnerMetadata);
@@ -1233,6 +1239,7 @@ void VkService::ShowSearchDialog()
 {
   if (vk_search_dialog_->exec() == QDialog::Accepted){
     AppendBookmark(vk_search_dialog_->found());
+    SaveBookmarks();
   }
 }
 
