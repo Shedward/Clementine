@@ -52,6 +52,7 @@
 
 #include "globalsearch/vksearchprovider.h"
 #include "vkmusiccache.h"
+#include "vksearchdialog.h"
 
 const char*  VkService::kServiceName = "Vk.com";
 const char*  VkService::kSettingGroup = "Vk.com";
@@ -221,7 +222,13 @@ VkService::VkService(Application *app, InternetModel *parent) :
   find_this_artist_(nullptr),
   add_to_my_music_(nullptr),
   remove_from_my_music_(nullptr),
+  add_song_to_cache_(nullptr),
+  copy_share_url_(nullptr),
+  add_to_bookmarks_(nullptr),
+  remove_from_bookmarks_(nullptr),
+  find_owner_(nullptr),
   search_box_(new SearchBoxWidget(this)),
+  vk_search_dialog_(new VkSearchDialog(this)),
   client_(new Vreen::Client),
   connection_(nullptr),
   hasAccount_(false),
@@ -274,8 +281,6 @@ VkService::~VkService() {
   delete client_;
   client_ = nullptr;
 }
-
-
 
 /***
  * Interface
@@ -351,6 +356,10 @@ void VkService::CreateMenu() {
   copy_share_url_ = context_menu_->addAction(
                       QIcon(":vk/link.png"), tr("Copy share url to clipboard"),
                       this, SLOT(CopyShareUrl()));
+
+  find_owner_ = context_menu_->addAction(
+                  QIcon(":vk/find.png"), tr("Add user/group to bookmarks"),
+                  this, SLOT(ShowSearchDialog()));
 
   context_menu_->addSeparator();
   context_menu_->addAction(
@@ -949,6 +958,7 @@ void VkService::CopyShareUrl() {
   QApplication::clipboard()->setText(share_url);
 }
 
+
 /***
  * Search
  */
@@ -1215,7 +1225,38 @@ void VkService::GroupSearchRecived(RequestID id, Vreen::Reply *reply) {
 }
 
 
+/***
+ * Vk search user or group.
+ */
 
+void VkService::ShowSearchDialog()
+{
+  if (vk_search_dialog_->exec() == QDialog::Accepted){
+    AppendBookmark(vk_search_dialog_->found());
+  }
+}
+
+void VkService::FindUserOrGroup(const QString &q)
+{
+  TRACE;
+  QVariantMap args;
+  args.insert("q", q);
+
+  auto reply = client_->request("execute.searchMusicOwner",args);
+
+  NewClosure(reply, SIGNAL(resultReady(QVariant)), this,
+             SLOT(UserOrGroupRecived(RequestID,Vreen::Reply*)),
+             RequestID(RequestID::UserOrGroup), reply);
+}
+
+void VkService::UserOrGroupRecived(RequestID id, Vreen::Reply *reply)
+{
+  TRACE;
+  VAR(id.id());
+  QVariant owners = reply->response();
+  reply->deleteLater();
+  emit UserOrGroupSearchResult(id, MusicOwner::parseMusicOwnerList(owners));
+}
 
 /***
  * Utils

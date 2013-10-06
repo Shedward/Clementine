@@ -59,6 +59,7 @@ class Buddy;
 
 class SearchBoxWidget;
 class VkMusicCache;
+class VkSearchDialog;
 
 
 /***
@@ -77,6 +78,7 @@ public:
 
   QString name() const { return name_; }
   int id() const { return id_; }
+  int song_count() const { return songs_count_; }
   static QList<MusicOwner> parseMusicOwnerList(const QVariant &request_result);
 
 private:
@@ -114,7 +116,8 @@ struct RequestID {
     MoreLocalSearch,
     UserAudio,
     MoreUserAudio,
-    UserRecomendations
+    UserRecomendations,
+    UserOrGroup
   };
 
   RequestID(Type type, int id = 0)
@@ -218,11 +221,13 @@ signals:
   void SongListLoaded(RequestID id, SongList songs);
   void SongSearchResult(RequestID id, const SongList &songs);
   void GroupSearchResult(RequestID id, const MusicOwnerList &groups);
+  void UserOrGroupSearchResult(RequestID id, const MusicOwnerList &owners);
   void StopWaiting();
 
 public slots:
   void ShowConfig();
   void LoadSongList(int uid, uint count = 0); // zero means - load full list
+  void FindUserOrGroup(const QString &q);
 
 private slots:
   /* Connection */
@@ -246,6 +251,7 @@ private slots:
   void RemoveFromMyMusic();
   void AddToCache();
   void CopyShareUrl();
+  void ShowSearchDialog();
 
   void AddSelectedToBookmarks();
   void RemoveFromBookmark();
@@ -254,6 +260,7 @@ private slots:
   void CountRecived(RequestID rid, Vreen::IntReply* reply);
   void SongSearchRecived(RequestID id, Vreen::AudioItemListReply *reply);
   void GroupSearchRecived(RequestID id, Vreen::Reply *reply);
+  void UserOrGroupRecived(RequestID id, Vreen::Reply *reply);
 
   void MyMusicLoaded(RequestID rid, const SongList &songs);
   void BookmarkSongsLoaded(RequestID rid, const SongList &songs);
@@ -283,8 +290,10 @@ private:
   QAction* copy_share_url_;
   QAction* add_to_bookmarks_;
   QAction* remove_from_bookmarks_;
+  QAction* find_owner_;
 
   SearchBoxWidget* search_box_;
+  VkSearchDialog* vk_search_dialog_;
 
   /* Connection */
   Vreen::Client *client_;
