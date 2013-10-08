@@ -76,37 +76,20 @@ void VkSettingsPage::Save() {
 }
 
 void VkSettingsPage::Login() {
-  ui_->account->setEnabled(false);
   service_->Login();
 }
 
 void VkSettingsPage::LoginSuccess(bool succ) {
   if (succ) {
-    ui_->login_button->setText("Logout");
-
-    ui_->name->setText("Loading...");
-    connect(service_, SIGNAL(NameUpdated(QString)),
-            ui_->name, SLOT(setText(QString)));
-
-    connect(ui_->login_button, SIGNAL(clicked()),
-            SLOT(Logout()));
-    disconnect(ui_->login_button, SIGNAL(clicked()),
-               this, SLOT(Login()));
+    LogoutWidgets();
+  } else {
+    LoginWidgets();
   }
-  ui_->account->setEnabled(true);
 }
 
 void VkSettingsPage::Logout() {
   service_->Logout();
-
-  ui_->login_button->setText("Login");
-  ui_->name->setText("");
-
-  connect(ui_->login_button, SIGNAL(clicked()),
-          SLOT(Login()));
-  disconnect(ui_->login_button, SIGNAL(clicked()),
-             this, SLOT(Logout()));
-  ui_->account->setEnabled(true);
+  LoginWidgets();
 }
 
 void VkSettingsPage::CasheDirBrowse() {
@@ -120,4 +103,29 @@ void VkSettingsPage::CasheDirBrowse() {
 
 void VkSettingsPage::ResetCasheFilenames() {
   ui_->cache_filename->setText(VkService::kDefCacheFilename);
+}
+
+void VkSettingsPage::LoginWidgets()
+{
+  ui_->login_button->setText("Login");
+  ui_->name->setText("");
+
+  connect(ui_->login_button, SIGNAL(clicked()),
+          SLOT(Login()));
+  disconnect(ui_->login_button, SIGNAL(clicked()),
+             this, SLOT(Logout()));
+}
+
+void VkSettingsPage::LogoutWidgets()
+{
+  ui_->login_button->setText("Logout");
+
+  ui_->name->setText("Loading...");
+  connect(service_, SIGNAL(NameUpdated(QString)),
+          ui_->name, SLOT(setText(QString)));
+
+  connect(ui_->login_button, SIGNAL(clicked()),
+          SLOT(Logout()));
+  disconnect(ui_->login_button, SIGNAL(clicked()),
+             this, SLOT(Login()));
 }

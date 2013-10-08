@@ -46,6 +46,8 @@ private slots:
   void ResetCasheFilenames();
 
 private:
+  void LoginWidgets();
+  void LogoutWidgets();
   Ui_VkSettingsPage* ui_;
   VkService* service_;
 };

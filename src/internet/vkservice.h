@@ -217,7 +217,8 @@ public:
 
 signals:
   void NameUpdated(QString name);
-  void LoginSuccess(bool succ);
+  void ConnectionStateChanged(Vreen::Client::State state);
+  void LoginSuccess(bool);
   void SongListLoaded(RequestID id, SongList songs);
   void SongSearchResult(RequestID id, const SongList &songs);
   void GroupSearchResult(RequestID id, const MusicOwnerList &groups);
@@ -233,7 +234,7 @@ private slots:
   /* Connection */
   void ChangeAccessToken(const QByteArray &token, time_t expiresIn);
   void ChangeUid(int uid);
-  void OnlineStateChanged(bool online);
+  void ChangeConnectionState(Vreen::Client::State state);
   void ChangeMe(Vreen::Buddy*me);
   void Error(Vreen::Client::Error error);
 

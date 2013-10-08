@@ -248,16 +248,14 @@ VkService::VkService(Application *app, InternetModel *parent) :
   client_->setTrackMessages(false);
   client_->setInvisible(true);
 
-  QByteArray token = s.value("token",QByteArray()).toByteArray();
-  my_id_ = s.value("uid",0).toInt();
-  hasAccount_ = (my_id_ != 0) and !token.isEmpty();
+  UpdateSettings();
 
-  if (hasAccount_) {
+  if (HasAccount()) {
     Login();
   };
 
-  connect(client_, SIGNAL(onlineStateChanged(bool)),
-          SLOT(OnlineStateChanged(bool)));
+  connect(client_, SIGNAL(connectionStateChanged(Vreen::Client::State)),
+          SLOT(ChangeConnectionState(Vreen::Client::State)));
   connect(client_, SIGNAL(error(Vreen::Client::Error)),
           SLOT(Error(Vreen::Client::Error)));
 
@@ -270,8 +268,6 @@ VkService::VkService(Application *app, InternetModel *parent) :
   connect(search_box_, SIGNAL(TextChanged(QString)), SLOT(FindSongs(QString)));
 
   app_->player()->RegisterUrlHandler(url_handler_);
-
-  UpdateSettings();
 }
 
 VkService::~VkService() {
@@ -482,7 +478,7 @@ void VkService::ShowConfig() {
 void VkService::RefreshRootSubitems() {
   ClearStandartItem(root_item_);
 
-  if (hasAccount_) {
+  if (HasAccount()) {
     CreateAndAppendRow(root_item_, Type_Recommendations);
     CreateAndAppendRow(root_item_, Type_MyMusic);
     LoadBookmarks();
@@ -594,7 +590,7 @@ void VkService::Login() {
     client_->setConnection(connection_);
   }
 
-  if (hasAccount_) {
+  if (HasAccount()) {
     connection_->setAccessToken(token_, expiresIn_);
     connection_->setUid(my_id_);
   }
@@ -635,14 +631,30 @@ void VkService::ChangeUid(int uid) {
   my_id_ = uid;
 }
 
-void VkService::OnlineStateChanged(bool online) {
-  qLog(Debug) << "Online state changed to" << online;
-  if (online) {
+void VkService::ChangeConnectionState(Vreen::Client::State state)
+{
+  qLog(Debug) << "Connection state changed to" << state;
+  switch (state) {
+
+  case Vreen::Client::StateOnline:
     hasAccount_ = true;
     emit LoginSuccess(true);
     RefreshRootSubitems();
     connect(client_, SIGNAL(meChanged(Vreen::Buddy*)),
             SLOT(ChangeMe(Vreen::Buddy*)));
+    break;
+
+  case Vreen::Client::StateInvalid:
+  case Vreen::Client::StateOffline:
+  case Vreen::Client::StateConnecting:
+    hasAccount_ = false;
+    emit LoginSuccess(false);
+    RefreshRootSubitems();
+    break;
+
+  default:
+    qLog(Error) << "Wrong connection state "<< state;
+    break;
   }
 }
 
@@ -1279,6 +1291,7 @@ void VkService::UpdateSettings() {
   token_ = s.value("token",QByteArray()).toByteArray();
   expiresIn_ = s.value("expiresIn", 0).toUInt();
   my_id_ = s.value("uid",0).toInt();
+  hasAccount_ = (my_id_ != 0) and !token_.isEmpty();
 }
 
 void VkService::ClearStandartItem(QStandardItem * item) {
