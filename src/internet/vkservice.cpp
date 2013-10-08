@@ -865,13 +865,11 @@ QStandardItem* VkService::AppendBookmark(const MusicOwner &owner) {
 
 
 void VkService::UpdateBookmarkSongs() {
-  TRACE;
   QModelIndex current(model()->current_index());
   LoadBookmarkSongs(root_item_->child(current.row()));
 }
 
 void VkService::LoadBookmarkSongs(QStandardItem *item) {
-  TRACE;
   ClearStandartItem(item);
   CreateAndAppendRow(item,Type_Loading);
 
@@ -901,7 +899,6 @@ QStandardItem * VkService::GetBookmarkItemById(int id) {
 }
 
 void VkService::BookmarkSongsLoaded(RequestID rid, const SongList &songs) {
-  TRACE;
 
   if (rid.type() == RequestID::UserAudio) {
     QStandardItem* item = GetBookmarkItemById(rid.id());
@@ -1249,7 +1246,6 @@ void VkService::ShowSearchDialog()
 
 void VkService::FindUserOrGroup(const QString &q)
 {
-  TRACE;
   QVariantMap args;
   args.insert("q", q);
 
@@ -1262,8 +1258,6 @@ void VkService::FindUserOrGroup(const QString &q)
 
 void VkService::UserOrGroupRecived(RequestID id, Vreen::Reply *reply)
 {
-  TRACE;
-  VAR(id.id());
   QVariant owners = reply->response();
   reply->deleteLater();
   emit UserOrGroupSearchResult(id, MusicOwner::parseMusicOwnerList(owners));

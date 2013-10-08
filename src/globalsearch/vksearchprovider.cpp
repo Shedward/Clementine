@@ -30,9 +30,7 @@ VkSearchProvider::VkSearchProvider(Application* app, QObject* parent) :
 }
 
 void VkSearchProvider::Init(VkService *service) {
-  TRACE
-
-      service_ = service;
+  service_ = service;
   SearchProvider::Init("Vk.com", "vk.com",
                        QIcon(":providers/vk.png"),
                        WantsDelayedQueries | CanShowConfig);

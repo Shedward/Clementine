@@ -46,9 +46,6 @@
 *          for example if user want to add many songs to his library.
 */
 
-#define  VAR(var) qLog(Debug) << ("---    where " #var " =") << (var);
-#define  TRACE qLog(Debug) << "--- " << __PRETTY_FUNCTION__ ;
-
 typedef Vreen::OAuthConnection::Scopes Scopes;
 
 namespace Vreen {

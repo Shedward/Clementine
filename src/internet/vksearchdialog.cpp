@@ -57,7 +57,6 @@ VkSearchDialog::~VkSearchDialog()
 
 void VkSearchDialog::suggest()
 {
-  TRACE;
   emit Find(ui->searchLine->text());
 }
 
@@ -71,9 +70,6 @@ void VkSearchDialog::selected()
 
 void VkSearchDialog::ReciveResults(RequestID id, const MusicOwnerList &owners)
 {
-  TRACE;
-  VAR(id.id());
-  VAR(last_search_.id());
   if (id.id() > last_search_.id()){
     popup->setUpdatesEnabled(false);
     popup->clear();
@@ -118,14 +114,12 @@ void VkSearchDialog::showEvent(QShowEvent *)
 
 void VkSearchDialog::selectionChanged()
 {
-  TRACE;
   if (popup->selectedItems().size() > 0){
     QTreeWidgetItem *sel = popup->selectedItems()[0];
     selected_ = sel->data(0, Qt::UserRole).value<MusicOwner>();
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(selected_.id() != 0);
     ui->buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
   }
-  VAR(selected_);
 }
 
 MusicOwner VkSearchDialog::found() const
