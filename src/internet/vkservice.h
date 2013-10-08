@@ -300,6 +300,8 @@ private:
   Vreen::OAuthConnection  *connection_;
   bool hasAccount_;
   int my_id_;
+  QByteArray token_;
+  time_t expiresIn_;
   VkUrlHandler* url_handler_;
 
   /* Music */

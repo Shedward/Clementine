@@ -233,6 +233,7 @@ VkService::VkService(Application *app, InternetModel *parent) :
   connection_(nullptr),
   hasAccount_(false),
   my_id_(0),
+  expiresIn_(0),
   url_handler_(new VkUrlHandler(this, this)),
   audio_provider_(nullptr),
   cache_(new VkMusicCache(this)),
@@ -576,7 +577,6 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem *parent, VkService::I
 
 void VkService::Login() {
   if (connection_) {
-    client_->connectToHost();
     emit LoginSuccess(true);
     if (client_->me()) {
       ChangeMe(client_->me());
@@ -595,14 +595,8 @@ void VkService::Login() {
   }
 
   if (hasAccount_) {
-    QSettings s;
-    s.beginGroup(kSettingGroup);
-    QByteArray token = s.value("token",QByteArray()).toByteArray();
-    time_t expiresIn = s.value("expiresIn", 0).toUInt();
-    int uid = s.value("uid",0).toInt();
-
-    connection_->setAccessToken(token, expiresIn);
-    connection_->setUid(uid);
+    connection_->setAccessToken(token_, expiresIn_);
+    connection_->setUid(my_id_);
   }
 
   client_->connectToHost();
@@ -621,8 +615,6 @@ void VkService::Logout() {
     client_->disconnectFromHost();
     connection_->clear();
     delete connection_;
-    delete client_->roster();
-    delete client_->me();
     connection_ = nullptr;
   }
 
@@ -1284,6 +1276,9 @@ void VkService::UpdateSettings() {
   cacheFilename_ = s.value("cache_filename", kDefCacheFilename).toString();
   love_is_add_to_mymusic_ = s.value("love_is_add_to_my_music",false).toBool();
   groups_in_global_search_ = s.value("groups_in_global_search", false).toBool();
+  token_ = s.value("token",QByteArray()).toByteArray();
+  expiresIn_ = s.value("expiresIn", 0).toUInt();
+  my_id_ = s.value("uid",0).toInt();
 }
 
 void VkService::ClearStandartItem(QStandardItem * item) {
