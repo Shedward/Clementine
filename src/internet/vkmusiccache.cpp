@@ -185,7 +185,7 @@ void VkMusicCache::Downloaded() {
 * Utils
 */
 
-inline bool VkMusicCache::InCache(const QString &filename) {
+bool VkMusicCache::InCache(const QString &filename) {
   return QFile::exists(filename);
 }
 

@@ -79,7 +79,7 @@ void VkSearchDialog::ReciveResults(RequestID id, const MusicOwnerList &owners)
         popup->addTopLevelItem(createItem(own));
       }
     } else {
-      popup->addTopLevelItem(new QTreeWidgetItem(QStringList(tr("Nothig found."))));
+      popup->addTopLevelItem(new QTreeWidgetItem(QStringList(tr("Nothig found"))));
     }
 
     popup->setCurrentItem(popup->topLevelItem(0));
