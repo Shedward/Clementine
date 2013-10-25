@@ -33,7 +33,7 @@ UrlHandler::LoadResult VkUrlHandler::StartLoading(const QUrl &url) {
   QStringList args = url.toString().remove("vk://").split("/");
 
   if (args.size() < 2) {
-    qLog(Error) << "Invalid vk.com URL: " << url.toString()
+    qLog(Error) << "Invalid Vk.com URL: " << url.toString()
                 << "Url format should be vk://<source>/<id>."
                 << "For example vk://song/61145020_166946521/Daughtry/Gone Too Soon";
   } else {
