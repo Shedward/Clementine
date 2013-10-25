@@ -5631,3 +5631,122 @@ msgstr "Остановить"
 #, qt-format
 msgid "track %1"
 msgstr "композиция %1"
+
+#: internet/vkservice.cpp:155
+msgid " Group radio"
+msgstr "Радио группы"
+
+#: internet/vkservice.cpp:149
+#, qt-format
+msgid "%1 (%0 songs)"
+msgstr "%1 композиций"
+
+#: ../build/src/ui_vksettingspage.h:218
+msgid "..."
+msgstr "..."
+
+#: internet/vkservice.cpp:350
+msgid "Add song to cache"
+msgstr "Добавить в кэш"
+
+#: internet/vkservice.cpp:342
+msgid "Add to My Music"
+msgstr "Добавить в Мою музыку"
+
+#: internet/vkservice.cpp:319
+msgid "Add to bookmarks"
+msgstr "Добавить в закладки"
+
+#: internet/vkservice.cpp:358
+msgid "Add user/group to bookmarks"
+msgstr "Добавить пользователя/группу в закладки"
+
+#: ../build/src/ui_vksettingspage.h:217
+msgid "Cache path:"
+msgstr "Путь к кэшу:"
+
+#: ../build/src/ui_vksettingspage.h:215
+msgid "Caching"
+msgstr "Кэширование"
+
+#: internet/vkmusiccache.cpp:125
+#, qt-format
+msgid "Caching %1"
+msgstr "Кэширование %1"
+
+#: internet/vksettingspage.cpp:97
+msgid "Choose Vk.com cache directory"
+msgstr "Выбрать каталог для кэша Vk.com"
+
+#: internet/vkservice.cpp:363
+msgid "Configure Vk.com..."
+msgstr "Настроить Vk.com..."
+
+#: internet/vkservice.cpp:910
+msgid "Connection trouble or audio is disabled by owner"
+msgstr "Проблемы с соединением или доступ к композиции закрыт правообладателем"
+
+#: internet/vkservice.cpp:354
+msgid "Copy share url to clipboard"
+msgstr "Скопировать ссылку в буфер"
+
+#: ../build/src/ui_vksearchdialog.h:60
+msgid "Dialog"
+msgstr "Диалог"
+
+#: internet/vkservice.cpp:506
+msgid "Double click to login"
+msgstr "Двойной щелчок для входа"
+
+#: ../build/src/ui_vksettingspage.h:216
+msgid "Enable automatic caching"
+msgstr "Включить автоматическое кэширование"
+
+#: ../build/src/ui_vksettingspage.h:219
+msgid "File name pattern:"
+msgstr "Шаблон имени файла:"
+
+#: internet/vkservice.cpp:338
+msgid "Find this artist"
+msgstr "Искать этого исполнителя"
+
+#: ../build/src/ui_vksettingspage.h:213
+msgid "Last.fm \"Love\" button also add song to My Music"
+msgstr "Кнопка \"Love\" на Last.fm также добавляет композицию в Мою музыку"
+
+#: ../build/src/ui_vksettingspage.h:212
+msgid "Max global search results"
+msgstr "Максимальное кол-во результатов поиска"
+
+#: internet/vkservice.cpp:519
+msgid "More"
+msgstr "Ещё"
+
+#: internet/vksearchdialog.cpp:82
+msgid "Nothig found"
+msgstr "Ничего не найдено"
+
+#: internet/vkservice.cpp:323
+msgid "Remove from bookmarks"
+msgstr "Удалить из закладок"
+
+#: ../build/src/ui_vksettingspage.h:214
+msgid "Show groups in global search result"
+msgstr "Отображать группы в результатах поиска"
+
+#: internet/vkservice.cpp:334
+msgid "Update"
+msgstr "Обновить"
+
+#: internet/vkservice.cpp:328
+msgid "Update My Music"
+msgstr "Обновить Мою музыку"
+
+#: internet/vkservice.cpp:331
+msgid "Update Recommendations"
+msgstr "Мои рекомендации"
+
+#: internet/vksettingspage.cpp:121
+msgid "Logout"
+msgstr "Выход"
+
