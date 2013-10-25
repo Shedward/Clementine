@@ -879,7 +879,7 @@ msgstr "Arkaplan resmi"
 msgid "Background opacity"
 msgstr "Artalan saydamlığı"
 
-#: core/database.cpp:735
+#: core/database.cpp:734
 msgid "Backing up database"
 msgstr "Veritabanını yedekliyor"
 
@@ -1512,7 +1512,7 @@ msgstr "DBus yolu"
 msgid "Dance"
 msgstr "Dans"
 
-#: core/database.cpp:689
+#: core/database.cpp:688
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -2313,7 +2313,7 @@ msgstr "Yüksek tiz"
 msgid "GStreamer audio engine"
 msgstr "GStreamer ses motoru"
 
-#: ui/settingsdialog.cpp:131
+#: ui/settingsdialog.cpp:133
 msgid "General"
 msgstr "Genel"
 
@@ -2592,7 +2592,7 @@ msgstr "Ekle..."
 msgid "Installed"
 msgstr "Kuruldu"
 
-#: core/database.cpp:674
+#: core/database.cpp:673
 msgid "Integrity check"
 msgstr "Bütünlük doğrulaması"
 
@@ -2600,7 +2600,7 @@ msgstr "Bütünlük doğrulaması"
 msgid "Internet"
 msgstr "Internet"
 
-#: ui/settingsdialog.cpp:153
+#: ui/settingsdialog.cpp:155
 msgid "Internet providers"
 msgstr "İnternet sağlayıcılar"
 
@@ -2938,7 +2938,7 @@ msgstr "Düşük karmaşıklık profili (LC)"
 msgid "Lyrics"
 msgstr "Şarkı sözleri"
 
-#: songinfo/ultimatelyricsprovider.cpp:139
+#: songinfo/ultimatelyricsprovider.cpp:136
 #, qt-format
 msgid "Lyrics from %1"
 msgstr "%1'den şarkı sözleri"
@@ -3875,7 +3875,7 @@ msgstr "Çalma listesinden kaldır"
 msgid "Remove playlist"
 msgstr "Çalma listesini kaldır"
 
-#: playlist/playlistlistcontainer.cpp:314
+#: playlist/playlistlistcontainer.cpp:310
 msgid "Remove playlists"
 msgstr "Çalma listesini kaldır"
 
@@ -5106,7 +5106,7 @@ msgstr "Kullanılan"
 msgid "User %1 doesn't have a Grooveshark Anywhere account"
 msgstr "%1 Kullanicinin Grooveshark Anywhere hasabi yok"
 
-#: ui/settingsdialog.cpp:145
+#: ui/settingsdialog.cpp:147
 msgid "User interface"
 msgstr "Kullanıcı arayüzü"
 
@@ -5314,7 +5314,7 @@ msgstr "Dün"
 msgid "You are about to download the following albums"
 msgstr "Aşağıdaki albümleri indirmek üzeresiniz"
 
-#: playlist/playlistlistcontainer.cpp:315
+#: playlist/playlistlistcontainer.cpp:311
 #, qt-format
 msgid ""
 "You are about to remove %1 playlists from your favorites, are you sure?"
@@ -5538,9 +5538,9 @@ msgstr "büyüktür"
 msgid "in the last"
 msgstr "Sonuncu"
 
+#: playlist/playlistview.cpp:206 ui/edittagdialog.cpp:460
 #: internet/spotifysettingspage.cpp:60 internet/spotifysettingspage.cpp:61
-#: internet/spotifysettingspage.cpp:62 playlist/playlistview.cpp:206
-#: ui/edittagdialog.cpp:460
+#: internet/spotifysettingspage.cpp:62
 msgid "kbps"
 msgstr "kbps"
 
