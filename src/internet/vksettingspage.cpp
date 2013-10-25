@@ -107,7 +107,7 @@ void VkSettingsPage::ResetCasheFilenames() {
 
 void VkSettingsPage::LoginWidgets()
 {
-  ui_->login_button->setText("Login");
+  ui_->login_button->setText(tr("Login"));
   ui_->name->setText("");
 
   connect(ui_->login_button, SIGNAL(clicked()),
@@ -118,9 +118,9 @@ void VkSettingsPage::LoginWidgets()
 
 void VkSettingsPage::LogoutWidgets()
 {
-  ui_->login_button->setText("Logout");
+  ui_->login_button->setText(tr("Logout"));
 
-  ui_->name->setText("Loading...");
+  ui_->name->setText(tr("Loading..."));
   connect(service_, SIGNAL(NameUpdated(QString)),
           ui_->name, SLOT(setText(QString)));
 
