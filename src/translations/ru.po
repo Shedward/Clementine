@@ -5744,7 +5744,7 @@ msgstr "Обновить Мою музыку"
 
 #: internet/vkservice.cpp:331
 msgid "Update Recommendations"
-msgstr "Мои рекомендации"
+msgstr "Обновить Мои рекомендации"
 
 #: internet/vksettingspage.cpp:121
 msgid "Logout"
