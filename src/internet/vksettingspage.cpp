@@ -94,7 +94,7 @@ void VkSettingsPage::Logout() {
 
 void VkSettingsPage::CasheDirBrowse() {
   QString directory = QFileDialog::getExistingDirectory(
-                        this, tr("Choose Vk.com cashe directory"), ui_->cache_dir->text());
+                        this, tr("Choose Vk.com cache directory"), ui_->cache_dir->text());
   if (directory.isEmpty())
     return;
 

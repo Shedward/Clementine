@@ -99,14 +99,14 @@
       <item>
        <widget class="QCheckBox" name="love_button_is_add_to_mymusic">
         <property name="text">
-         <string>Last.fm &quot;Love&quot; button also add song to My Music.</string>
+         <string>Last.fm &quot;Love&quot; button also add song to My Music</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="groups_in_global_search">
         <property name="text">
-         <string>Show groups in global search result.</string>
+         <string>Show groups in global search result</string>
         </property>
        </widget>
       </item>
@@ -122,7 +122,7 @@
       <item>
        <widget class="QCheckBox" name="enable_caching">
         <property name="text">
-         <string>Enable automatic cashing.</string>
+         <string>Enable automatic caching</string>
         </property>
        </widget>
       </item>
@@ -137,7 +137,7 @@
            <item>
             <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>Cashe path:</string>
+              <string>Cache path:</string>
              </property>
              <property name="buddy">
               <cstring>cache_dir</cstring>

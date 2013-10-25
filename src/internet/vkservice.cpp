@@ -908,7 +908,7 @@ void VkService::BookmarkSongsLoaded(RequestID rid, const SongList &songs) {
         AppendSongs(item, songs);
       } else {
         item->appendRow(new QStandardItem(tr("Connection trouble "
-                                             "or audio is disabled by owner.")));
+                                             "or audio is disabled by owner")));
       }
     } else {
       qLog(Warning) << "Item for requerst" << rid.id() << rid.type() << "not exist";
