@@ -551,7 +551,7 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem *parent, VkService::I
     break;
 
   case Type_Bookmark:
-    qLog(Error) << "Use AppendBookmarkFromRadio(QStandardItem *parent, const Song &owner_radio)"
+    qLog(Error) << "Use AppendBookmark(const MusicOwner &owner)"
                 << "for creating Bookmark item instead.";
     break;
 
