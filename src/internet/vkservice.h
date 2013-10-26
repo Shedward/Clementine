@@ -262,7 +262,7 @@ private slots:
 
   void MyMusicLoaded(RequestID rid, const SongList &songs);
   void BookmarkSongsLoaded(RequestID rid, const SongList &songs);
-  void RecommendationsLoaded(RequestID id, const SongList &songs);
+  void RecommendationsLoaded(Vreen::AudioItemListReply *reply);
   void SearchResultLoaded(RequestID rid, const SongList &songs);
 
 private:

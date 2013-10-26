@@ -746,11 +746,8 @@ void VkService::UpdateRecommendations() {
   auto myAudio = audio_provider_->getRecommendationsForUser(0,kCustomSongCount,0);
 
   NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
-             SLOT(SongListRecived(RequestID,Vreen::AudioItemListReply*)),
-             RequestID(RequestID::UserRecomendations), myAudio);
-
-  connect(this, SIGNAL(SongListLoaded(RequestID,SongList)),
-          this, SLOT(RecommendationsLoaded(RequestID,SongList)));
+             SLOT(RecommendationsLoaded(Vreen::AudioItemListReply*)),
+             myAudio);
 }
 
 void VkService::MoreRecommendations() {
@@ -761,22 +758,17 @@ void VkService::MoreRecommendations() {
   auto myAudio = audio_provider_->getRecommendationsForUser(0,kCustomSongCount,recommendations_->rowCount()-1);
 
   NewClosure(myAudio, SIGNAL(resultReady(QVariant)), this,
-             SLOT(SongListRecived(RequestID,Vreen::AudioItemListReply*)),
-             RequestID(RequestID::UserRecomendations), myAudio);
-
-  connect(this, SIGNAL(SongListLoaded(RequestID,SongList)),
-          this, SLOT(RecommendationsLoaded(RequestID,SongList)));
+             SLOT(RecommendationsLoaded(Vreen::AudioItemListReply*)),
+             myAudio);
 }
 
-void VkService::RecommendationsLoaded(RequestID id, const SongList &songs) {
-  if(id.type() == RequestID::UserRecomendations) {
-    update_recommendations_->setEnabled(true);
-    disconnect(this, SLOT(RecommendationsLoaded(RequestID,SongList)));
-    RemoveLastRow(recommendations_); // Last row is "Loading..."
-    AppendSongs(recommendations_,songs);
-    if (songs.count() == kCustomSongCount) {
-      CreateAndAppendRow(recommendations_,Type_More);
-    }
+void VkService::RecommendationsLoaded(Vreen::AudioItemListReply *reply) {
+  update_recommendations_->setEnabled(true);
+  SongList songs = FromAudioList(reply->result());
+  RemoveLastRow(recommendations_); // Last row is "Loading..."
+  AppendSongs(recommendations_, songs);
+  if (songs.count() > 0) {
+    CreateAndAppendRow(recommendations_,Type_More);
   }
 }
 
