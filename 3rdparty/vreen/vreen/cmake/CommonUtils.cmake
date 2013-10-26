@@ -52,6 +52,24 @@ macro(PARSE_ARGUMENTS prefix arg_names option_names)
     SET(${prefix}_${current_arg_name} ${current_arg_list})
 endmacro(PARSE_ARGUMENTS)
 
+macro(qt_use_modules target)
+    if(USE_QT5)
+	find_package(Qt5Core QUIET)
+    endif()
+    if(Qt5Core_DIR)
+	add_definitions("-DQT_DISABLE_DEPRECATED_BEFORE=0")
+	qt5_use_modules(${target} ${ARGN})
+    else()
+	foreach(_module ${ARGN})
+	    list(APPEND _modules Qt${_module})
+	endforeach()
+	find_package(Qt4 COMPONENTS ${_modules} QUIET)
+        include(UseQt4)
+	target_link_libraries(${target} ${QT_LIBRARIES})
+        set(${target}_libraries ${QT_LIBRARIES})
+    endif()
+endmacro()
+
 macro(UPDATE_COMPILER_FLAGS target)
     parse_arguments(FLAGS
         ""
@@ -84,7 +102,9 @@ macro(UPDATE_COMPILER_FLAGS target)
     elseif(${target}_TYPE STREQUAL "SHARED_LIBRARY")
         update_cxx_compiler_flag(${target} "-fvisibility=hidden" HIDDEN_VISIBILITY)
     endif()
-    update_cxx_compiler_flag(${target} "-flto" LTO)
+    if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+        update_cxx_compiler_flag(${target} "-flto" LTO)
+    endif()
     set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${COMPILER_FLAGS}")
 endmacro()
 
@@ -111,6 +131,7 @@ function(__GET_SOURCES name)
         ${CC}
         ${MM}
         ${HDR}
+	${FORMS}
 	${QRC}
     )
     set(${name} ${sources} PARENT_SCOPE)
@@ -126,14 +147,17 @@ function(__CHECK_SOURCE_FILES name)
 
     if(USE_QT5)
 	find_package(Qt5Core QUIET)
+	find_package(Qt5Widgets QUIET)
     else()
 	find_package(Qt4 COMPONENTS QtCore QUIET REQUIRED)
     endif()
 
     if(Qt5Core_DIR)
 	qt5_add_resources(${name}_QRC ${QRC})
+	qt5_wrap_ui(${name}_HDR ${FORMS})
     else()
 	qt4_add_resources(${name}_QRC ${QRC})
+	qt4_wrap_ui(${name}_HDR ${FORMS})
     endif()
 
     set(__sources "")
@@ -142,27 +166,12 @@ function(__CHECK_SOURCE_FILES name)
 	${CC}
 	${MM}
 	${HDR}
+	${FORMS}
 	${${name}_QRC}
+	${${name}_HDR}
     )
     set(${name} ${_extra_sources} PARENT_SCOPE)
 endfunction()
-
-macro(qt_use_modules target)
-    if(USE_QT5)
-	find_package(Qt5Core QUIET)
-    endif()
-    if(Qt5Core_DIR)
-	add_definitions("-DQT_DISABLE_DEPRECATED_BEFORE=0")
-	qt5_use_modules(${target} ${ARGN})
-    else()
-	foreach(_module ${ARGN})
-	    list(APPEND _modules Qt${_module})
-	endforeach()
-	find_package(Qt4 COMPONENTS ${_modules} QUIET)
-	target_link_libraries(${target} ${QT_LIBRARIES})
-	include(UseQt4)
-    endif()
-endmacro()
 
 macro(ADD_SIMPLE_LIBRARY target)
     parse_arguments(LIBRARY
@@ -237,11 +246,11 @@ macro(ADD_SIMPLE_LIBRARY target)
 
     generate_include_headers("include/${INCNAME}" ${PUBLIC_HEADERS})
     generate_include_headers("include/${INCNAME}/${LIBRARY_VERSION}/${INCNAME}/private/" ${PRIVATE_HEADERS})
-	if(FRAMEWORK)
-        set_source_files_properties(${PUBLIC_HEADERS}
-            PROPERTIES MACOSX_PACKAGE_LOCATION Headers)
-        set_source_files_properties(${PRIVATE_HEADERS}
-            PROPERTIES MACOSX_PACKAGE_LOCATION Headers/${LIBRARY_VERSION}/${INCNAME}/private/)
+    if(FRAMEWORK)
+	set_source_files_properties(${PUBLIC_HEADERS}
+	    PROPERTIES MACOSX_PACKAGE_LOCATION Headers)
+	set_source_files_properties(${PRIVATE_HEADERS}
+	    PROPERTIES MACOSX_PACKAGE_LOCATION Headers/${LIBRARY_VERSION}/${INCNAME}/private/)
     endif()
 
     if(NOT LIBRARY_INTERNAL)
@@ -275,7 +284,7 @@ endmacro()
 
 macro(ADD_SIMPLE_EXECUTABLE target)
     parse_arguments(EXECUTABLE
-	"LIBRARIES;INCLUDES;DEFINES;SOURCE_DIR;QT"
+	"LIBRARIES;INCLUDES;DEFINES;SOURCE_DIR;SOURCE_FILES;QT"
         "INTERNAL;GUI;CXX11"
         ${ARGN}
     )
@@ -294,7 +303,10 @@ macro(ADD_SIMPLE_EXECUTABLE target)
 	set(EXECUTABLE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
     endif()
 
-    __get_sources(SOURCES ${EXECUTABLE_SOURCE_DIR})
+    set(EXECUTABLE_EXTRA_SOURCES "")
+    __get_sources(EXECUTABLE_EXTRA_SOURCES ${EXECUTABLE_SOURCE_DIR})
+    __check_source_files(SOURCES "${EXECUTABLE_EXTRA_SOURCES};${EXECUTABLE_SOURCE_FILES}")
+
     # This project will generate library
     add_executable(${target} ${type} ${SOURCES})
     foreach(_define ${EXECUTABLE_DEFINES})
@@ -380,8 +392,9 @@ macro(ADD_QML_MODULE target)
         ${MODULE_INCLUDES}
     )
 
+    qt_use_modules(${target} ${MODULE_QT})
     target_link_libraries(${target}
-        ${QT_LIBRARIES}
+        ${${target}_libraries}
         ${MODULE_LIBRARIES}
     )
 
@@ -389,7 +402,6 @@ macro(ADD_QML_MODULE target)
         list(APPEND opts CXX11)
     endif()
     update_compiler_flags(${target} ${opts})
-    qt_use_modules(${target} ${MODULE_QT})
     message(STATUS "Added qml module: ${target} with uri ${MODULE_URI}")
     string(REPLACE "." "/" _URI ${MODULE_URI})
     install(TARGETS ${target} DESTINATION "${MODULE_IMPORTS_DIR}/${_URI}/${MODULE_PLUGIN_DIR}")
@@ -557,7 +569,7 @@ macro(FIND_MODULE module)
     endif()
     #try to find macosx framework
     if(APPLE AND NOT MODULE_NO_MACOSX_FRAMEWORK AND NOT ${_name}_FOUND)
-        message("Try to find MacosX framework ${module}.framework")
+        message(STATUS "Try to find MacosX framework ${module}.framework")
         find_library(${_name}_LIBRARIES
                 NAMES ${module}
                 HINTS ${MODULE_LIBRARY_HINTS}
@@ -584,7 +596,7 @@ macro(FIND_MODULE module)
             NAMES ${module}
             HINTS ${MODULE_LIBRARY_HINTS}
             )
-        #message("${${_name}_INCLUDE_DIR} \n ${${_name}_LIBRARIES}")
+        #message("${MODULE_HEADERS_DIR} ${MODULE_INCLUDE_HINTS} ${QT_INCLUDE_DIR}")
     endif()
 
     #include(FindPackageHandleStandardArgs)
@@ -617,6 +629,5 @@ macro(FIND_QT_MODULE module)
         HEADERS_DIR ${MODULE_HEADERS_DIR}
         GLOBAL_HEADER ${MODULE_GLOBAL_HEADER}
         LIBRARY_HINTS ${QT_LIBRARY_DIR}
-        INCLUDE_HINTS ${QT_INCLUDE_DIR}
     )
 endmacro()
