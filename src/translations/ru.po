@@ -5639,7 +5639,7 @@ msgstr "Радио группы"
 #: internet/vkservice.cpp:149
 #, qt-format
 msgid "%1 (%0 songs)"
-msgstr "%1 композиций"
+msgstr "%1 (%0 композиций)"
 
 #: ../build/src/ui_vksettingspage.h:218
 msgid "..."
