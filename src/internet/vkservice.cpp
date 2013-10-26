@@ -1122,8 +1122,10 @@ QUrl VkService::GetSongPlayUrl(const QUrl &url, bool is_playing) {
         current_song_ = FromAudioItem(song);
         current_song_.set_url(url);
       }
+      song_request->deleteLater();
       return song.url();
     }
+    song_request->deleteLater();
   }
 
   qLog(Info) << "Unresolved url by id" << song_id;
@@ -1156,11 +1158,13 @@ UrlHandler::LoadResult VkService::GetGroupNextSongUrl(const QUrl &url) {
       current_group_url_ = url;
       current_song_ = FromAudioItem(song);
       emit StreamMetadataFound(url, current_song_);
+      song_request->deleteLater();
       return UrlHandler::LoadResult(url,
                                     UrlHandler::LoadResult::TrackAvailable,
                                     song.url(),
                                     current_song_.length_nanosec());
     }
+    song_request->deleteLater();
   }
 
   qLog(Info) << "Unresolved group url" << url;
