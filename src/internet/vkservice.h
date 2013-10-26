@@ -105,29 +105,18 @@ QDebug operator<< (QDebug d, const MusicOwner &owner);
  * The simple structure allows the handler to determine
  * how to react to the received request or quickly skip unwanted.
  */
-struct RequestID {
+struct SearchID {
 
   enum Type {
     GlobalSearch,
     LocalSearch,
     MoreLocalSearch,
-    UserAudio,
-    MoreUserAudio,
-    UserRecomendations,
     UserOrGroup
   };
 
-  RequestID(Type type, int id = 0)
+  SearchID(Type type)
     : type_(type) {
-    switch (type) {
-    case UserAudio:
-    case UserRecomendations:
-      id_ = id; // For User/Group actions id is uid or gid...
-      break;
-    default:
-      id_= last_id_++; // otherwise is increasing unique number.
-      break;
-    }
+    id_= last_id_++;
   }
   int id() const { return id_; }
   Type type() const { return type_; }
@@ -200,8 +189,8 @@ public:
   // Return random song result from group playlist.
   UrlHandler::LoadResult GetGroupNextSongUrl(const QUrl& url);
 
-  void SongSearch(RequestID id,const QString &query, int count = 50, int offset = 0);
-  void GroupSearch(RequestID id, const QString &query);
+  void SongSearch(SearchID id,const QString &query, int count = 50, int offset = 0);
+  void GroupSearch(SearchID id, const QString &query);
 
   /* Settings */
   void UpdateSettings();
@@ -216,15 +205,13 @@ signals:
   void NameUpdated(QString name);
   void ConnectionStateChanged(Vreen::Client::State state);
   void LoginSuccess(bool);
-  void SongListLoaded(RequestID id, SongList songs);
-  void SongSearchResult(RequestID id, const SongList &songs);
-  void GroupSearchResult(RequestID id, const MusicOwnerList &groups);
-  void UserOrGroupSearchResult(RequestID id, const MusicOwnerList &owners);
+  void SongSearchResult(SearchID id, const SongList &songs);
+  void GroupSearchResult(SearchID id, const MusicOwnerList &groups);
+  void UserOrGroupSearchResult(SearchID id, const MusicOwnerList &owners);
   void StopWaiting();
 
 public slots:
   void ShowConfig();
-  void LoadSongList(int uid, uint count = 0); // zero means - load full list
   void FindUserOrGroup(const QString &q);
 
 private slots:
@@ -254,16 +241,13 @@ private slots:
   void AddSelectedToBookmarks();
   void RemoveFromBookmark();
 
-  void SongListRecived(RequestID rid, Vreen::AudioItemListReply *reply);
-  void CountRecived(RequestID rid, Vreen::IntReply* reply);
-  void SongSearchRecived(RequestID id, Vreen::AudioItemListReply *reply);
-  void GroupSearchRecived(RequestID id, Vreen::Reply *reply);
-  void UserOrGroupRecived(RequestID id, Vreen::Reply *reply);
+  void SongSearchRecived(SearchID id, Vreen::AudioItemListReply *reply);
+  void GroupSearchRecived(SearchID id, Vreen::Reply *reply);
+  void UserOrGroupRecived(SearchID id, Vreen::Reply *reply);
 
-  void MyMusicLoaded(RequestID rid, const SongList &songs);
-  void BookmarkSongsLoaded(RequestID rid, const SongList &songs);
+  void AppendLoadedSongs(QStandardItem* item, Vreen::AudioItemListReply *reply);
   void RecommendationsLoaded(Vreen::AudioItemListReply *reply);
-  void SearchResultLoaded(RequestID rid, const SongList &songs);
+  void SearchResultLoaded(SearchID rid, const SongList &songs);
 
 private:
   /* Interface */
@@ -303,6 +287,7 @@ private:
   VkUrlHandler* url_handler_;
 
   /* Music */
+  void LoadAndAppendSongList(QStandardItem *item, int uid);
   Song FromAudioItem(const Vreen::AudioItem &item);
   SongList FromAudioList(const Vreen::AudioItemList &list);
   void AppendSongs(QStandardItem *parent, const SongList &songs);

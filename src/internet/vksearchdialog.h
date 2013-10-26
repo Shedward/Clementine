@@ -24,7 +24,7 @@ signals:
   void Find(const QString &query);
 
 public slots:
-  void ReciveResults(RequestID id, const MusicOwnerList &owners);
+  void ReciveResults(SearchID id, const MusicOwnerList &owners);
 
 protected:
   void showEvent(QShowEvent *);
@@ -41,7 +41,7 @@ private:
   Ui::VkSearchDialog *ui;
   MusicOwner selected_;
   VkService *service_;
-  RequestID last_search_;
+  SearchID last_search_;
   QTreeWidget *popup;
   QTimer *timer;
 };

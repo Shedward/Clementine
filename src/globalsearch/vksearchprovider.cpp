@@ -35,17 +35,17 @@ void VkSearchProvider::Init(VkService *service) {
                        QIcon(":providers/vk.png"),
                        WantsDelayedQueries | CanShowConfig);
 
-  connect(service_, SIGNAL(SongSearchResult(RequestID,SongList)),
-          this, SLOT(SongSearchResult(RequestID,SongList)));
-  connect(service_, SIGNAL(GroupSearchResult(RequestID, MusicOwnerList)),
-          this, SLOT(GroupSearchResult(RequestID, MusicOwnerList)));
+  connect(service_, SIGNAL(SongSearchResult(SearchID,SongList)),
+          this, SLOT(SongSearchResult(SearchID,SongList)));
+  connect(service_, SIGNAL(GroupSearchResult(SearchID, MusicOwnerList)),
+          this, SLOT(GroupSearchResult(SearchID, MusicOwnerList)));
 
 }
 
 void VkSearchProvider::SearchAsync(int id, const QString &query) {
   int count = service_->maxGlobalSearch();
 
-  RequestID rid(RequestID::GlobalSearch);
+  SearchID rid(SearchID::GlobalSearch);
   songs_recived = false;
   groups_recived = false;
   pending_searches_[rid.id()] = PendingState(id, TokenizeQuery(query));
@@ -63,8 +63,8 @@ void VkSearchProvider::ShowConfig() {
   service_->ShowConfig();
 }
 
-void VkSearchProvider::SongSearchResult(RequestID rid, SongList songs) {
-  if (rid.type() == RequestID::GlobalSearch) {
+void VkSearchProvider::SongSearchResult(SearchID rid, SongList songs) {
+  if (rid.type() == SearchID::GlobalSearch) {
     ClearSimilarSongs(songs);
     ResultList ret;
     foreach (const Song& song, songs) {
@@ -80,8 +80,8 @@ void VkSearchProvider::SongSearchResult(RequestID rid, SongList songs) {
   }
 }
 
-void VkSearchProvider::GroupSearchResult(RequestID rid, const MusicOwnerList &groups) {
-  if (rid.type() == RequestID::GlobalSearch) {
+void VkSearchProvider::GroupSearchResult(SearchID rid, const MusicOwnerList &groups) {
+  if (rid.type() == SearchID::GlobalSearch) {
     ResultList ret;
     foreach (const MusicOwner &group, groups) {
       Result result(this);

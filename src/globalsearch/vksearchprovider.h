@@ -34,8 +34,8 @@ public:
   InternetService* internet_service() { return service_; }
 
 public slots:
-  void SongSearchResult(RequestID rid, SongList songs);
-  void GroupSearchResult(RequestID rid, const MusicOwnerList &groups);
+  void SongSearchResult(SearchID rid, SongList songs);
+  void GroupSearchResult(SearchID rid, const MusicOwnerList &groups);
 
 private:
   bool songs_recived;
