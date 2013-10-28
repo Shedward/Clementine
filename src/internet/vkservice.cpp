@@ -303,6 +303,8 @@ void VkService::LazyPopulate(QStandardItem *parent) {
   case Type_Bookmark:
     LoadBookmarkSongs(parent);
     break;
+  case Type_Album:
+    LoadAlbumSongs(parent);
 
   default:
     break;
@@ -481,6 +483,7 @@ void VkService::RefreshRootSubitems() {
   if (HasAccount()) {
     CreateAndAppendRow(root_item_, Type_Recommendations);
     CreateAndAppendRow(root_item_, Type_MyMusic);
+    LoadAlbums();
     LoadBookmarks();
   } else {
     CreateAndAppendRow(root_item_, Type_NeedLogin);
@@ -553,6 +556,11 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem *parent, VkService::I
   case Type_Bookmark:
     qLog(Error) << "Use AppendBookmark(const MusicOwner &owner)"
                 << "for creating Bookmark item instead.";
+    break;
+
+  case Type_Album:
+    qLog(Error) << "Use AppendAlbum(const Vreen::AudioAlbumItem &album)"
+                << "for creating Album item instead.";
     break;
 
   default:
@@ -710,7 +718,8 @@ void VkService::UpdateMyMusic() {
   if (not my_music_) {
     // Internet services panel still not created.
     return;
-  } LoadAndAppendSongList(my_music_, 0);
+  }
+  LoadAndAppendSongList(my_music_, 0);
 }
 
 
@@ -814,7 +823,6 @@ void VkService::LoadBookmarks() {
   s.endArray();
 }
 
-
 QStandardItem* VkService::AppendBookmark(const MusicOwner &owner) {
   QIcon icon;
   if (owner.id() > 0){
@@ -846,7 +854,46 @@ void VkService::LoadBookmarkSongs(QStandardItem *item) {
   LoadAndAppendSongList(item, owner.id());
 }
 
+/***
+ * Albums
+ */
 
+
+void VkService::LoadAlbums() {
+    auto albumsReq = audio_provider_->getAlbums(my_id_);
+    NewClosure(albumsReq, SIGNAL(resultReady(QVariant)), this,
+               SLOT(AlbumListRecived(Vreen::AudioAlbumItemListReply*)),
+               albumsReq);
+}
+
+QStandardItem* VkService::AppendAlbum(const Vreen::AudioAlbumItem &album) {
+  QStandardItem *item = new QStandardItem(
+              QIcon(":vk/playlist.png"), album.title());
+
+  item->setData(QVariant::fromValue(album) ,Role_AlbumMetadata);
+  item->setData(Type_Album, InternetModel::Role_Type);
+  item->setData(true, InternetModel::Role_CanLazyLoad);
+  item->setData(InternetModel::PlayBehaviour_MultipleItems,
+                InternetModel::Role_PlayBehaviour);
+  root_item_->appendRow(item);
+  return item;
+}
+
+void VkService::AlbumListRecived(Vreen::AudioAlbumItemListReply *reply) {
+  Vreen::AudioAlbumItemList albums = reply->result();
+  for (const auto &album : albums){
+    AppendAlbum(album);
+  }
+  reply->deleteLater();
+}
+
+void VkService::LoadAlbumSongs(QStandardItem *item)
+{
+  Vreen::AudioAlbumItem album =
+      item->data(Role_AlbumMetadata).value<Vreen::AudioAlbumItem>();
+
+  LoadAndAppendSongList(item , album.ownerId(), album.id());
+}
 
 /***
  * Features
@@ -960,14 +1007,15 @@ void VkService::SearchResultLoaded(SearchID rid, const SongList &songs) {
  * Load song list methods
  */
 
-void VkService::LoadAndAppendSongList(QStandardItem *item, int uid) {
+void VkService::LoadAndAppendSongList(QStandardItem *item, int uid, int album_id) {
+  if (item){
   ClearStandartItem(item);
   CreateAndAppendRow(item, Type_Loading);
-  auto audio = audio_provider_->getContactAudio(uid, kMaxVkSongList);
-  qLog(Info) << "Update" << item->text() << "(" << item->row() << ")";
-  NewClosure(audio, SIGNAL(resultReady(QVariant)),
+  auto audioreq = audio_provider_->getContactAudio(uid, kMaxVkSongList,0, album_id);
+  NewClosure(audioreq, SIGNAL(resultReady(QVariant)),
              this, SLOT(AppendLoadedSongs(QStandardItem*,Vreen::AudioItemListReply*)),
-             item, audio);
+             item, audioreq);
+  }
 }
 
 void VkService::AppendLoadedSongs(QStandardItem *item, Vreen::AudioItemListReply *reply){

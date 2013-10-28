@@ -158,11 +158,13 @@ public:
     Type_Recommendations,
     Type_MyMusic,
     Type_Bookmark,
+    Type_Album,
 
     Type_Search
   };
 
-  enum Role { Role_MusicOwnerMetadata = InternetModel::RoleCount };
+  enum Role { Role_MusicOwnerMetadata = InternetModel::RoleCount,
+              Role_AlbumMetadata };
 
   /* InternetService interface */
   QStandardItem* CreateRootItem();
@@ -226,6 +228,7 @@ private slots:
   void UpdateMyMusic();
   void UpdateBookmarkSongs();
   void LoadBookmarkSongs(QStandardItem *item);
+  void LoadAlbumSongs(QStandardItem *item);
   void FindSongs(QString query);
   void FindMore();
   void UpdateRecommendations();
@@ -244,6 +247,7 @@ private slots:
   void SongSearchRecived(SearchID id, Vreen::AudioItemListReply *reply);
   void GroupSearchRecived(SearchID id, Vreen::Reply *reply);
   void UserOrGroupRecived(SearchID id, Vreen::Reply *reply);
+  void AlbumListRecived(Vreen::AudioAlbumItemListReply *reply);
 
   void AppendLoadedSongs(QStandardItem* item, Vreen::AudioItemListReply *reply);
   void RecommendationsLoaded(Vreen::AudioItemListReply *reply);
@@ -287,7 +291,7 @@ private:
   VkUrlHandler* url_handler_;
 
   /* Music */
-  void LoadAndAppendSongList(QStandardItem *item, int uid);
+  void LoadAndAppendSongList(QStandardItem *item, int uid, int album_id = -1);
   Song FromAudioItem(const Vreen::AudioItem &item);
   SongList FromAudioList(const Vreen::AudioItemList &list);
   void AppendSongs(QStandardItem *parent, const SongList &songs);
@@ -295,6 +299,9 @@ private:
   QStandardItem *AppendBookmark(const MusicOwner &owner);
   void SaveBookmarks();
   void LoadBookmarks();
+
+  void LoadAlbums();
+  QStandardItem *AppendAlbum(const Vreen::AudioAlbumItem &album);
 
   Vreen::AudioProvider* audio_provider_;
   VkMusicCache* cache_;
