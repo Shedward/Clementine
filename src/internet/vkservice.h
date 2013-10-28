@@ -215,6 +215,9 @@ public slots:
   void FindUserOrGroup(const QString &q);
 
 private slots:
+  /* Interface */
+  void UpdateItem();
+
   /* Connection */
   void ChangeAccessToken(const QByteArray &token, time_t expiresIn);
   void ChangeUid(int uid);
@@ -224,9 +227,7 @@ private slots:
 
   /* Music */
   void UpdateMyMusic();
-  void UpdateBookmarkSongs();
   void LoadBookmarkSongs(QStandardItem *item);
-  void UpdateAlbumSongs();
   void LoadAlbumSongs(QStandardItem *item);
   void FindSongs(QString query);
   void FindMore();
@@ -265,11 +266,8 @@ private:
 
   QMenu* context_menu_;
 
-  QAction* update_root_;
-  QAction* update_my_music_;
+  QAction* update_item_;
   QAction* update_recommendations_;
-  QAction* update_bookmark_;
-  QAction* update_album_;
   QAction* find_this_artist_;
   QAction* add_to_my_music_;
   QAction* remove_from_my_music_;

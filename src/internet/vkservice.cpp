@@ -216,10 +216,8 @@ VkService::VkService(Application *app, InternetModel *parent) :
   my_music_(nullptr),
   search_(nullptr),
   context_menu_(nullptr),
-  update_my_music_(nullptr),
+  update_item_(nullptr),
   update_recommendations_(nullptr),
-  update_bookmark_(nullptr),
-  update_album_(nullptr),
   find_this_artist_(nullptr),
   add_to_my_music_(nullptr),
   remove_from_my_music_(nullptr),
@@ -327,24 +325,13 @@ void VkService::CreateMenu() {
                              this, SLOT(RemoveFromBookmark()));
 
   context_menu_->addSeparator();
-  update_my_music_ = context_menu_->addAction(
-                       IconLoader::Load("view-refresh"), tr("Update My Music"),
-                       this, SLOT(UpdateMyMusic()));
   update_recommendations_ = context_menu_->addAction(
                               IconLoader::Load("view-refresh"), tr("Update Recommendations"),
                               this, SLOT(UpdateRecommendations()));
 
-  update_root_ = context_menu_->addAction(
+  update_item_ = context_menu_->addAction(
                        IconLoader::Load("view-refresh"), tr("Update"),
-                       this, SLOT(RefreshRootSubitems()));
-
-  update_bookmark_ = context_menu_->addAction(
-                       IconLoader::Load("view-refresh"), tr("Update"),
-                       this, SLOT(UpdateBookmarkSongs()));
-
-  update_album_ = context_menu_->addAction(
-                       IconLoader::Load("view-refresh"), tr("Update"),
-                       this, SLOT(UpdateAlbumSongs()));
+                       this, SLOT(UpdateItem()));
 
   find_this_artist_ = context_menu_->addAction(
                         QIcon(":vk/find.png"), tr("Find this artist"),
@@ -389,9 +376,14 @@ void VkService::ShowContextMenu(const QPoint &global_pos) {
       item_type == Type_Recommendations or parent_type == Type_Recommendations;
   const bool is_track =
       item_type == InternetModel::Type_Track;
-  const bool is_bookmark_ = item_type == Type_Bookmark;
-  const bool is_album = item_type == Type_Album;
-  const bool is_root = item_type == InternetModel::Type_Service;
+
+  const bool is_bookmark = item_type == Type_Bookmark;
+
+  const bool is_updatable = item_type == InternetModel::Type_Service
+                            or item_type == Type_MyMusic
+                            or item_type == Type_Album
+                            or is_bookmark
+                            or is_my_music_item;
 
   bool is_in_mymusic = false;
   bool is_cached = false;
@@ -403,18 +395,15 @@ void VkService::ShowContextMenu(const QPoint &global_pos) {
     is_cached = cache()->InCache(selected_song_.url());
   }
 
-  update_root_->setVisible(is_root);
-  update_my_music_->setVisible(is_my_music_item);
+  update_item_->setVisible(is_updatable);
   update_recommendations_->setVisible(is_recommend_item);
   find_this_artist_->setVisible(is_track);
   add_song_to_cache_->setVisible(is_track and not is_cached);
   add_to_my_music_->setVisible(is_track and not is_in_mymusic);
   remove_from_my_music_->setVisible(is_track and is_in_mymusic);
   copy_share_url_->setVisible(is_track);
-  remove_from_bookmarks_->setVisible(is_bookmark_);
-  update_bookmark_->setVisible(is_bookmark_);
+  remove_from_bookmarks_->setVisible(is_bookmark);
   add_to_bookmarks_->setVisible(false);
-  update_album_->setVisible(is_album);
 
   GetAppendToPlaylistAction()->setEnabled(is_playable);
   GetReplacePlaylistAction()->setEnabled(is_playable);
@@ -858,9 +847,9 @@ QStandardItem* VkService::AppendBookmark(const MusicOwner &owner) {
 }
 
 
-void VkService::UpdateBookmarkSongs() {
+void VkService::UpdateItem() {
   QModelIndex current(model()->current_index());
-  LoadBookmarkSongs(root_item_->child(current.row()));
+  LazyPopulate(model()->itemFromIndex(current));
 }
 
 void VkService::LoadBookmarkSongs(QStandardItem *item) {
@@ -871,12 +860,6 @@ void VkService::LoadBookmarkSongs(QStandardItem *item) {
 /***
  * Albums
  */
-
-void VkService::UpdateAlbumSongs()
-{
-  QModelIndex current(model()->current_index());
-  LoadAlbumSongs(root_item_->child(current.row()));
-}
 
 void VkService::LoadAlbums() {
     auto albumsReq = audio_provider_->getAlbums(my_id_);
