@@ -329,10 +329,6 @@ void VkService::CreateMenu() {
                               IconLoader::Load("view-refresh"), tr("Update Recommendations"),
                               this, SLOT(UpdateRecommendations()));
 
-  update_item_ = context_menu_->addAction(
-                       IconLoader::Load("view-refresh"), tr("Update"),
-                       this, SLOT(UpdateItem()));
-
   find_this_artist_ = context_menu_->addAction(
                         QIcon(":vk/find.png"), tr("Find this artist"),
                         this, SLOT(FindThisArtist()));
@@ -356,6 +352,10 @@ void VkService::CreateMenu() {
   find_owner_ = context_menu_->addAction(
                   QIcon(":vk/find.png"), tr("Add user/group to bookmarks"),
                   this, SLOT(ShowSearchDialog()));
+
+  update_item_ = context_menu_->addAction(
+                       IconLoader::Load("view-refresh"), tr("Update"),
+                       this, SLOT(UpdateItem()));
 
   context_menu_->addSeparator();
   context_menu_->addAction(
