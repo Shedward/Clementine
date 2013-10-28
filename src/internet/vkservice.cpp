@@ -219,6 +219,7 @@ VkService::VkService(Application *app, InternetModel *parent) :
   update_my_music_(nullptr),
   update_recommendations_(nullptr),
   update_bookmark_(nullptr),
+  update_album_(nullptr),
   find_this_artist_(nullptr),
   add_to_my_music_(nullptr),
   remove_from_my_music_(nullptr),
