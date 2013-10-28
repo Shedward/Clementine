@@ -210,7 +210,7 @@ signals:
   void StopWaiting();
 
 public slots:
-  void RefreshRootSubitems();
+  void UpdateRoot();
   void ShowConfig();
   void FindUserOrGroup(const QString &q);
 
@@ -227,8 +227,8 @@ private slots:
 
   /* Music */
   void UpdateMyMusic();
-  void LoadBookmarkSongs(QStandardItem *item);
-  void LoadAlbumSongs(QStandardItem *item);
+  void UpdateBookmarkSongs(QStandardItem *item);
+  void UpdateAlbumSongs(QStandardItem *item);
   void FindSongs(QString query);
   void FindMore();
   void UpdateRecommendations();

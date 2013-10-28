@@ -291,7 +291,7 @@ QStandardItem *VkService::CreateRootItem() {
 void VkService::LazyPopulate(QStandardItem *parent) {
   switch (parent->data(InternetModel::Role_Type).toInt()) {
   case InternetModel::Type_Service:
-    RefreshRootSubitems();
+    UpdateRoot();
     break;
   case Type_MyMusic:
     UpdateMyMusic();
@@ -300,10 +300,10 @@ void VkService::LazyPopulate(QStandardItem *parent) {
     UpdateRecommendations();
     break;
   case Type_Bookmark:
-    LoadBookmarkSongs(parent);
+    UpdateBookmarkSongs(parent);
     break;
   case Type_Album:
-    LoadAlbumSongs(parent);
+    UpdateAlbumSongs(parent);
 
   default:
     break;
@@ -480,7 +480,7 @@ void VkService::ShowConfig() {
   app_->OpenSettingsDialogAtPage(SettingsDialog::Page_Vk);
 }
 
-void VkService::RefreshRootSubitems() {
+void VkService::UpdateRoot() {
   ClearStandartItem(root_item_);
 
   if (HasAccount()) {
@@ -625,7 +625,7 @@ void VkService::Logout() {
     connection_ = nullptr;
   }
 
-  RefreshRootSubitems();
+  UpdateRoot();
 }
 
 void VkService::ChangeAccessToken(const QByteArray &token, time_t expiresIn) {
@@ -650,7 +650,7 @@ void VkService::ChangeConnectionState(Vreen::Client::State state)
   case Vreen::Client::StateOnline:
     hasAccount_ = true;
     emit LoginSuccess(true);
-    RefreshRootSubitems();
+    UpdateRoot();
     connect(client_, SIGNAL(meChanged(Vreen::Buddy*)),
             SLOT(ChangeMe(Vreen::Buddy*)));
     break;
@@ -660,7 +660,7 @@ void VkService::ChangeConnectionState(Vreen::Client::State state)
   case Vreen::Client::StateConnecting:
     hasAccount_ = false;
     emit LoginSuccess(false);
-    RefreshRootSubitems();
+    UpdateRoot();
     break;
 
   default:
@@ -852,7 +852,7 @@ void VkService::UpdateItem() {
   LazyPopulate(model()->itemFromIndex(current));
 }
 
-void VkService::LoadBookmarkSongs(QStandardItem *item) {
+void VkService::UpdateBookmarkSongs(QStandardItem *item) {
   MusicOwner owner = item->data(Role_MusicOwnerMetadata).value<MusicOwner>();
   LoadAndAppendSongList(item, owner.id());
 }
@@ -889,7 +889,7 @@ void VkService::AlbumListRecived(Vreen::AudioAlbumItemListReply *reply) {
   reply->deleteLater();
 }
 
-void VkService::LoadAlbumSongs(QStandardItem *item)
+void VkService::UpdateAlbumSongs(QStandardItem *item)
 {
   Vreen::AudioAlbumItem album =
       item->data(Role_AlbumMetadata).value<Vreen::AudioAlbumItem>();
