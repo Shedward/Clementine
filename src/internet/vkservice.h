@@ -148,10 +148,8 @@ public:
   static const int kCustomSongCount;
 
   enum ItemType {
-    Type_Root = InternetModel::TypeCount,
 
-    Type_NeedLogin,
-
+    Type_NeedLogin = InternetModel::TypeCount,
     Type_Loading,
     Type_More,
 

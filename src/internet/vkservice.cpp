@@ -391,7 +391,6 @@ void VkService::ShowContextMenu(const QPoint &global_pos) {
       item_type == InternetModel::Type_Track;
   const bool is_bookmark_ = item_type == Type_Bookmark;
   const bool is_album = item_type == Type_Album;
-  qLog(Info) << item_type << (int)Type_Root;
   const bool is_root = item_type == InternetModel::Type_Service;
 
   bool is_in_mymusic = false;
