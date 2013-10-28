@@ -332,9 +332,14 @@ void VkService::CreateMenu() {
   update_recommendations_ = context_menu_->addAction(
                               IconLoader::Load("view-refresh"), tr("Update Recommendations"),
                               this, SLOT(UpdateRecommendations()));
+
   update_bookmark_ = context_menu_->addAction(
                        IconLoader::Load("view-refresh"), tr("Update"),
                        this, SLOT(UpdateBookmarkSongs()));
+
+  update_album_ = context_menu_->addAction(
+                       IconLoader::Load("view-refresh"), tr("Update"),
+                       this, SLOT(UpdateAlbumSongs()));
 
   find_this_artist_ = context_menu_->addAction(
                         QIcon(":vk/find.png"), tr("Find this artist"),
@@ -380,6 +385,7 @@ void VkService::ShowContextMenu(const QPoint &global_pos) {
   const bool is_track =
       item_type == InternetModel::Type_Track;
   const bool is_bookmark_ = item_type == Type_Bookmark;
+  const bool is_album = item_type == Type_Album;
 
   bool is_in_mymusic = false;
   bool is_cached = false;
@@ -401,6 +407,7 @@ void VkService::ShowContextMenu(const QPoint &global_pos) {
   remove_from_bookmarks_->setVisible(is_bookmark_);
   update_bookmark_->setVisible(is_bookmark_);
   add_to_bookmarks_->setVisible(false);
+  update_album_->setVisible(is_album);
 
   GetAppendToPlaylistAction()->setEnabled(is_playable);
   GetReplacePlaylistAction()->setEnabled(is_playable);
@@ -858,6 +865,11 @@ void VkService::LoadBookmarkSongs(QStandardItem *item) {
  * Albums
  */
 
+void VkService::UpdateAlbumSongs()
+{
+  QModelIndex current(model()->current_index());
+  LoadAlbumSongs(root_item_->child(current.row()));
+}
 
 void VkService::LoadAlbums() {
     auto albumsReq = audio_provider_->getAlbums(my_id_);

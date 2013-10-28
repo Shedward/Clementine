@@ -228,6 +228,7 @@ private slots:
   void UpdateMyMusic();
   void UpdateBookmarkSongs();
   void LoadBookmarkSongs(QStandardItem *item);
+  void UpdateAlbumSongs();
   void LoadAlbumSongs(QStandardItem *item);
   void FindSongs(QString query);
   void FindMore();
@@ -269,6 +270,7 @@ private:
   QAction* update_my_music_;
   QAction* update_recommendations_;
   QAction* update_bookmark_;
+  QAction* update_album_;
   QAction* find_this_artist_;
   QAction* add_to_my_music_;
   QAction* remove_from_my_music_;
