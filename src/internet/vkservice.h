@@ -175,7 +175,6 @@ public:
   Application* app() { return app_; }
 
   /* Interface*/
-  void RefreshRootSubitems();
   QWidget* HeaderWidget() const;
 
   /* Connection */
@@ -213,6 +212,7 @@ signals:
   void StopWaiting();
 
 public slots:
+  void RefreshRootSubitems();
   void ShowConfig();
   void FindUserOrGroup(const QString &q);
 
@@ -267,6 +267,7 @@ private:
 
   QMenu* context_menu_;
 
+  QAction* update_root_;
   QAction* update_my_music_;
   QAction* update_recommendations_;
   QAction* update_bookmark_;

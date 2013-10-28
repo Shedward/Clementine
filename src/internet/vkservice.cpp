@@ -334,6 +334,10 @@ void VkService::CreateMenu() {
                               IconLoader::Load("view-refresh"), tr("Update Recommendations"),
                               this, SLOT(UpdateRecommendations()));
 
+  update_root_ = context_menu_->addAction(
+                       IconLoader::Load("view-refresh"), tr("Update"),
+                       this, SLOT(RefreshRootSubitems()));
+
   update_bookmark_ = context_menu_->addAction(
                        IconLoader::Load("view-refresh"), tr("Update"),
                        this, SLOT(UpdateBookmarkSongs()));
@@ -387,6 +391,8 @@ void VkService::ShowContextMenu(const QPoint &global_pos) {
       item_type == InternetModel::Type_Track;
   const bool is_bookmark_ = item_type == Type_Bookmark;
   const bool is_album = item_type == Type_Album;
+  qLog(Info) << item_type << (int)Type_Root;
+  const bool is_root = item_type == InternetModel::Type_Service;
 
   bool is_in_mymusic = false;
   bool is_cached = false;
@@ -398,6 +404,7 @@ void VkService::ShowContextMenu(const QPoint &global_pos) {
     is_cached = cache()->InCache(selected_song_.url());
   }
 
+  update_root_->setVisible(is_root);
   update_my_music_->setVisible(is_my_music_item);
   update_recommendations_->setVisible(is_recommend_item);
   find_this_artist_->setVisible(is_track);
