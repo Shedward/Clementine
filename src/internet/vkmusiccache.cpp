@@ -110,6 +110,7 @@ void VkMusicCache::DownloadNext() {
     if (file_) {
       qLog(Warning) << "QFile" << file_->fileName() << "is not null";
       delete file_;
+      file_ = NULL;
     }
 
     file_ = new QTemporaryFile;
