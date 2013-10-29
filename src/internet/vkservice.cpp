@@ -211,30 +211,30 @@ MusicOwnerList MusicOwner::parseMusicOwnerList(const QVariant &request_result) {
 
 VkService::VkService(Application *app, InternetModel *parent) :
   InternetService(kServiceName, app, parent, parent),
-  root_item_(nullptr),
-  recommendations_(nullptr),
-  my_music_(nullptr),
-  search_(nullptr),
-  context_menu_(nullptr),
-  update_item_(nullptr),
-  update_recommendations_(nullptr),
-  find_this_artist_(nullptr),
-  add_to_my_music_(nullptr),
-  remove_from_my_music_(nullptr),
-  add_song_to_cache_(nullptr),
-  copy_share_url_(nullptr),
-  add_to_bookmarks_(nullptr),
-  remove_from_bookmarks_(nullptr),
-  find_owner_(nullptr),
+  root_item_(NULL),
+  recommendations_(NULL),
+  my_music_(NULL),
+  search_(NULL),
+  context_menu_(NULL),
+  update_item_(NULL),
+  update_recommendations_(NULL),
+  find_this_artist_(NULL),
+  add_to_my_music_(NULL),
+  remove_from_my_music_(NULL),
+  add_song_to_cache_(NULL),
+  copy_share_url_(NULL),
+  add_to_bookmarks_(NULL),
+  remove_from_bookmarks_(NULL),
+  find_owner_(NULL),
   search_box_(new SearchBoxWidget(this)),
   vk_search_dialog_(new VkSearchDialog(this)),
   client_(new Vreen::Client),
-  connection_(nullptr),
+  connection_(NULL),
   hasAccount_(false),
   my_id_(0),
   expiresIn_(0),
   url_handler_(new VkUrlHandler(this, this)),
-  audio_provider_(nullptr),
+  audio_provider_(NULL),
   cache_(new VkMusicCache(this)),
   last_search_id_(0)
 {
@@ -271,11 +271,11 @@ VkService::VkService(Application *app, InternetModel *parent) :
 
 VkService::~VkService() {
   delete cache_;
-  cache_ = nullptr;
+  cache_ = NULL;
   delete audio_provider_;
-  audio_provider_ = nullptr;
+  audio_provider_ = NULL;
   delete client_;
-  client_ = nullptr;
+  client_ = NULL;
 }
 
 /***
@@ -498,13 +498,13 @@ QWidget *VkService::HeaderWidget() const {
   if (HasAccount()) {
     return search_box_;
   } else {
-    return nullptr;
+    return NULL;
   }
 }
 
 QStandardItem* VkService::CreateAndAppendRow(QStandardItem *parent, VkService::ItemType type) {
 
-  QStandardItem* item = nullptr;
+  QStandardItem* item = NULL;
 
   switch (type) {
   case Type_NeedLogin:
@@ -623,7 +623,7 @@ void VkService::Logout() {
     client_->disconnectFromHost();
     connection_->clear();
     delete connection_;
-    connection_ = nullptr;
+    connection_ = NULL;
   }
 
   UpdateRoot();
@@ -952,7 +952,7 @@ void VkService::CopyShareUrl() {
 void VkService::FindSongs(QString query) {
   if (query.isEmpty()) {
     root_item_->removeRow(search_->row());
-    search_ = nullptr;
+    search_ = NULL;
     last_search_id_ = 0;
   } else {
     last_query_ = query;

@@ -31,9 +31,9 @@ VkMusicCache::VkMusicCache(VkService *service, QObject *parent)
     is_downloading(false),
     is_aborted(false),
     task_id(0),
-    file_(nullptr),
+    file_(NULL),
     network_manager_(new QNetworkAccessManager),
-    reply_(nullptr)
+    reply_(NULL)
 {
 }
 
@@ -172,10 +172,10 @@ void VkMusicCache::Downloaded() {
   }
 
   delete file_;
-  file_ = nullptr;
+  file_ = NULL;
 
   reply_->deleteLater();
-  reply_ = nullptr;
+  reply_ = NULL;
 
   is_downloading = false;
   DownloadNext();
