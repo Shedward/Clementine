@@ -128,7 +128,7 @@ void VkMusicCache::DownloadNext() {
     reply_ = network_manager_->get(QNetworkRequest(current_download.url));
     connect(reply_, SIGNAL(finished()), SLOT(Downloaded()));
     connect(reply_, SIGNAL(readyRead()), SLOT(DownloadReadyToRead()));
-    connect(reply_,SIGNAL(downloadProgress(qint64,qint64)), SLOT(DownloadProgress(qint64,qint64)));
+    connect(reply_, SIGNAL(downloadProgress(qint64,qint64)), SLOT(DownloadProgress(qint64,qint64)));
     qLog(Info)<< "Start cashing" << current_download.filename  << "from" << current_download.url;
   }
 }
@@ -194,7 +194,7 @@ bool VkMusicCache::InCache(const QUrl &url) {
   return InCache(CachedFilename(url));
 }
 
-QString VkMusicCache::CachedFilename(QUrl url) {
+QString VkMusicCache::CachedFilename(const QUrl &url) {
   QStringList args = url.toString().remove("vk://").split('/');
 
   QString cache_filename;

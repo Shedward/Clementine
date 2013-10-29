@@ -56,7 +56,7 @@ private:
     }
   };
 
-  QString CachedFilename(QUrl url);
+  QString CachedFilename(const QUrl &url);
 
   VkService* service_;
   QList<DownloadItem> queue_;
