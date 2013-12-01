@@ -5,11 +5,11 @@
 # Translators:
 # xanan <ahmedmmirza@gmail.com>, 2012
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010
+# uvcyclotron <utkarsh.nvm@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-08-10 19:08+0000\n"
+"PO-Revision-Date: 2013-11-26 18:48+0000\n"
 "Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Language-Team: Hindi (http://www.transifex.com/projects/p/clementine/language/hi/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -56,26 +56,26 @@ msgstr "pt"
 #: ../bin/src/ui_notificationssettingspage.h:439
 #: ../bin/src/ui_visualisationselector.h:116
 msgid " seconds"
-msgstr "kshan"
+msgstr "सेकंड्स"
 
 #: ../bin/src/ui_querysortpage.h:143
 msgid " songs"
-msgstr "gaaney"
+msgstr "गाने"
 
 #: widgets/osd.cpp:188
 #, qt-format
 msgid "%1 albums"
-msgstr "%1 album"
+msgstr "%1 एल्बम "
 
 #: core/utilities.cpp:109
 #, qt-format
 msgid "%1 days"
-msgstr "%1 din"
+msgstr "%1 दिन"
 
 #: core/utilities.cpp:130
 #, qt-format
 msgid "%1 days ago"
-msgstr "%1 din pehle"
+msgstr "%1 दिन पहले "
 
 #: podcasts/gpoddersync.cpp:79
 #, qt-format
@@ -85,58 +85,58 @@ msgstr ""
 #: playlistparsers/playlistparser.cpp:76
 #, qt-format
 msgid "%1 playlists (%2)"
-msgstr ""
+msgstr "%1 प्लेलिस्ट (%2)"
 
 #: playlist/playlistmanager.cpp:413
 #, qt-format
 msgid "%1 selected of"
-msgstr ""
+msgstr "%1 चयन किया "
 
 #: devices/deviceview.cpp:123
 #, qt-format
 msgid "%1 song"
-msgstr ""
+msgstr "%1 गाना "
 
 #: devices/deviceview.cpp:125
 #, qt-format
 msgid "%1 songs"
-msgstr ""
+msgstr "%1 gane"
 
 #: smartplaylists/searchpreview.cpp:133
 #, qt-format
 msgid "%1 songs found"
-msgstr "%1 gaaney miley"
+msgstr "%1 गाने mile"
 
 #: smartplaylists/searchpreview.cpp:130
 #, qt-format
 msgid "%1 songs found (showing %2)"
-msgstr "%1 gaaney miley ( %2  pradarshit hain)"
+msgstr "%1 गाने मिले ( %2 प्रदर्शित है )"
 
 #: playlist/playlistmanager.cpp:419
 #, qt-format
 msgid "%1 tracks"
-msgstr ""
+msgstr "%1 tracks"
 
 #: ui/albumcovermanager.cpp:459
 #, qt-format
 msgid "%1 transferred"
-msgstr ""
+msgstr "%1 hastantarit"
 
 #: widgets/osd.cpp:238 widgets/osd.cpp:243 widgets/osd.cpp:248
 #: widgets/osd.cpp:253 widgets/osd.cpp:258 widgets/osd.cpp:263
 #, qt-format
 msgid "%1: Wiimotedev module"
-msgstr ""
+msgstr "%1 Wiimotedev modul"
 
 #: songinfo/lastfmtrackinfoprovider.cpp:94
 #, qt-format
 msgid "%L1 other listeners"
-msgstr "%L1 aur shrota hain"
+msgstr "%L1 अन्य shrota"
 
 #: songinfo/lastfmtrackinfoprovider.cpp:92
 #, qt-format
 msgid "%L1 total plays"
-msgstr ""
+msgstr "कुल %L1 बार चलाया"
 
 #: ../bin/src/ui_notificationssettingspage.h:427
 msgid "%filename%"
@@ -145,7 +145,7 @@ msgstr ""
 #: transcoder/transcodedialog.cpp:202
 #, c-format
 msgid "%n failed"
-msgstr ""
+msgstr "%n असफल "
 
 #: transcoder/transcodedialog.cpp:197
 #, c-format
@@ -155,19 +155,19 @@ msgstr "%n samapt"
 #: transcoder/transcodedialog.cpp:192
 #, c-format
 msgid "%n remaining"
-msgstr "%n baaki hain"
+msgstr "%n शेष hain"
 
 #: playlist/playlistheader.cpp:37
 msgid "&Align text"
-msgstr ""
+msgstr "&संरेखित lipi"
 
 #: playlist/playlistheader.cpp:40
 msgid "&Center"
-msgstr ""
+msgstr "&kendra"
 
 #: ../bin/src/ui_globalshortcutssettingspage.h:178
 msgid "&Custom"
-msgstr ""
+msgstr "&anukul"
 
 #: ../bin/src/ui_mainwindow.h:730
 msgid "&Extras"
@@ -175,20 +175,20 @@ msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:729
 msgid "&Help"
-msgstr "&Sahayata"
+msgstr "&saha"
 
 #: playlist/playlistheader.cpp:70
 #, qt-format
 msgid "&Hide %1"
-msgstr "&Chupaye %1"
+msgstr "&chipaye %1"
 
 #: playlist/playlistheader.cpp:33
 msgid "&Hide..."
-msgstr "&Chupaye "
+msgstr "&chipaye"
 
 #: playlist/playlistheader.cpp:39
 msgid "&Left"
-msgstr ""
+msgstr "&baye"
 
 #: ../bin/src/ui_mainwindow.h:727
 msgid "&Music"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: ../bin/src/ui_globalshortcutssettingspage.h:176
 msgid "&None"
-msgstr ""
+msgstr "&कोई nahi"
 
 #: ../bin/src/ui_mainwindow.h:728
 msgid "&Playlist"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:656
 msgid "&Quit"
-msgstr ""
+msgstr "&बंद"
 
 #: ../bin/src/ui_mainwindow.h:694
 msgid "&Repeat mode"
@@ -212,7 +212,7 @@ msgstr ""
 
 #: playlist/playlistheader.cpp:41
 msgid "&Right"
-msgstr ""
+msgstr "&dayen"
 
 #: ../bin/src/ui_mainwindow.h:693
 msgid "&Shuffle mode"
@@ -220,19 +220,19 @@ msgstr ""
 
 #: playlist/playlistheader.cpp:34
 msgid "&Stretch columns to fit window"
-msgstr ""
+msgstr "&खीचे कॉलम विंडो फिट करने के लिए"
 
 #: ../bin/src/ui_mainwindow.h:731
 msgid "&Tools"
-msgstr ""
+msgstr "&upkaran"
 
 #: ui/edittagdialog.cpp:48
 msgid "(different across multiple songs)"
-msgstr ""
+msgstr "(कई गानो में विभिन्नता)"
 
 #: ui/about.cpp:77
 msgid "...and all the Amarok contributors"
-msgstr "aur baaki saarey Amarok sahyogi"
+msgstr "और बाकि सारे आमरोक सहयोगि.."
 
 #: ../bin/src/ui_albumcovermanager.h:223 ../bin/src/ui_albumcovermanager.h:224
 msgid "0"
@@ -252,7 +252,7 @@ msgstr "1 din"
 
 #: playlist/playlistmanager.cpp:419
 msgid "1 track"
-msgstr "1 geet"
+msgstr "1 giit"
 
 #: ../bin/src/ui_networkremotesettingspage.h:201
 msgid "127.0.0.1"
@@ -261,7 +261,7 @@ msgstr ""
 #: ../bin/src/ui_magnatunedownloaddialog.h:143
 #: ../bin/src/ui_magnatunesettingspage.h:174
 msgid "128k MP3"
-msgstr "128k MP3"
+msgstr "128k एमपी3"
 
 #: ../bin/src/ui_appearancesettingspage.h:291
 msgid "40%"
@@ -269,11 +269,11 @@ msgstr ""
 
 #: library/library.cpp:60
 msgid "50 random tracks"
-msgstr "50"
+msgstr "50 यादृच्छिक giit"
 
 #: ../bin/src/ui_digitallyimportedsettingspage.h:165
 msgid "<a href=\"http://www.di.fm/premium/\">Upgrade to Premium now</a>"
-msgstr ""
+msgstr "<a href=\"http://www.di.fm/premium/\">आज ही परीमियम मे उननयन करे</a>"
 
 #: ../bin/src/ui_ubuntuonesettingspage.h:133
 msgid ""
@@ -863,7 +863,7 @@ msgstr ""
 msgid "Background opacity"
 msgstr ""
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr ""
 
@@ -1496,7 +1496,7 @@ msgstr ""
 msgid "Dance"
 msgstr ""
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -2576,7 +2576,7 @@ msgstr ""
 msgid "Installed"
 msgstr ""
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr ""
 
@@ -3582,7 +3582,7 @@ msgstr ""
 msgid "Playlists"
 msgstr ""
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr ""
 
@@ -3971,7 +3971,7 @@ msgstr ""
 msgid "Retrieving Grooveshark playlists"
 msgstr ""
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr ""
 
@@ -4578,7 +4578,7 @@ msgstr ""
 msgid "Subsonic"
 msgstr ""
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr ""
 

@@ -13,8 +13,9 @@
 # ceal105 <ceal105@gmail.com>, 2011
 # felipeacsi <felipeacsi@gmail.com>, 2012
 # Fernando Torres <free.thought.ae@gmail.com>, 2012
+# moray33 <moray33@gmx.com>, 2013
 # legion1978 <legion1978@gmail.com>, 2012
-# LeonimuZ <leontaveras@gmail.com>, 2011
+# LeonimuZ <inactive+LeonimuZ@transifex.com>, 2011
 # davidsansome <me@davidsansome.com>, 2013
 # aldraia <nus.gentoo@gmail.com>, 2012
 # Ricardo Andrés <blurmuse@gmail.com>, 2012
@@ -25,9 +26,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-10-27 05:13+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitoschido@ubuntu.com>\n"
+"PO-Revision-Date: 2013-11-26 18:48+0000\n"
+"Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/clementine/language/es/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -321,7 +321,7 @@ msgid ""
 "<p>Tokens start with %, for example: %artist %album %title </p>\n"
 "\n"
 "<p>If you surround sections of text that contain a token with curly-braces, that section will be hidden if the token is empty.</p>"
-msgstr "<p>Las fichas de reemplazo empiezan con %, por ejemplo: %artist %album %title </p>\n\n<p>Si marca una sección de texto que contenga una ficha de reemplazo entre llaves, esa sección no se mostrará si la ficha de reemplazo se encuentra vacía.</p>"
+msgstr "<p>Las fichas de reemplazo empiezan con «%», por ejemplo: %artist %album %title </p>\n\n<p>Si marca una sección de texto que contenga una ficha de reemplazo entre llaves, esa sección no se mostrará si la ficha de reemplazo se encuentra vacía.</p>"
 
 #: internet/groovesharksettingspage.cpp:111
 msgid "A Grooveshark Anywhere account is required."
@@ -414,11 +414,11 @@ msgstr "Activar/desactivar Wiiremote"
 
 #: podcasts/addpodcastdialog.cpp:56
 msgid "Add Podcast"
-msgstr "Añadir podcast"
+msgstr "Añadir un podcast"
 
 #: ../bin/src/ui_addstreamdialog.h:113
 msgid "Add Stream"
-msgstr "Añadir transmisión"
+msgstr "Añadir una transmisión"
 
 #: ../bin/src/ui_notificationssettingspage.h:425
 msgid "Add a new line if supported by the notification type"
@@ -426,7 +426,7 @@ msgstr "Añadir una línea nueva si la permite el tipo de notificación"
 
 #: ../bin/src/ui_wiimotesettingspage.h:193
 msgid "Add action"
-msgstr "Añadir acción"
+msgstr "Añadir una acción"
 
 #: internet/savedradio.cpp:103
 msgid "Add another stream..."
@@ -434,7 +434,7 @@ msgstr "Añadir otra transmisión…"
 
 #: library/librarysettingspage.cpp:68
 msgid "Add directory..."
-msgstr "Añadir directorio…"
+msgstr "Añadir una carpeta…"
 
 #: ui/mainwindow.cpp:1603
 msgid "Add file"
@@ -450,7 +450,7 @@ msgstr "Añadir archivo(s) al convertidor"
 
 #: ../bin/src/ui_mainwindow.h:681
 msgid "Add file..."
-msgstr "Añadir archivo…"
+msgstr "Añadir un archivo…"
 
 #: transcoder/transcodedialog.cpp:214
 msgid "Add files to transcode"
@@ -458,11 +458,11 @@ msgstr "Añadir archivos para convertir"
 
 #: ui/mainwindow.cpp:1631
 msgid "Add folder"
-msgstr "Añadir carpeta"
+msgstr "Añadir una carpeta"
 
 #: ../bin/src/ui_mainwindow.h:698
 msgid "Add folder..."
-msgstr "Añadir carpeta…"
+msgstr "Añadir una carpeta…"
 
 #: ../bin/src/ui_librarysettingspage.h:188
 msgid "Add new folder..."
@@ -470,11 +470,11 @@ msgstr "Añadir carpeta nueva…"
 
 #: ../bin/src/ui_addpodcastdialog.h:179
 msgid "Add podcast"
-msgstr "Añadir podcast"
+msgstr "Añadir un podcast"
 
 #: podcasts/podcastservice.cpp:257 ../bin/src/ui_mainwindow.h:719
 msgid "Add podcast..."
-msgstr "Añadir podcast…"
+msgstr "Añadir un podcast…"
 
 #: smartplaylists/searchtermwidget.cpp:341
 msgid "Add search term"
@@ -550,7 +550,7 @@ msgstr "Añadir etiqueta de año a la canción"
 
 #: ../bin/src/ui_mainwindow.h:683
 msgid "Add stream..."
-msgstr "Añadir transmisión…"
+msgstr "Añadir una transmisión…"
 
 #: internet/groovesharkservice.cpp:1087
 msgid "Add to Grooveshark favorites"
@@ -880,7 +880,7 @@ msgstr "Imagen de fondo"
 msgid "Background opacity"
 msgstr "Opacidad del fondo"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "Respaldando la base de datos"
 
@@ -1039,7 +1039,7 @@ msgstr "Elegir color…"
 
 #: ../bin/src/ui_notificationssettingspage.h:462
 msgid "Choose font..."
-msgstr "Elegir tipografía…"
+msgstr "Elegir tipo de letra…"
 
 #: ../bin/src/ui_visualisationselector.h:113
 msgid "Choose from the list"
@@ -1287,12 +1287,12 @@ msgstr "Conectando con Spotify"
 msgid ""
 "Connection refused by server, check server URL. Example: "
 "http://localhost:4040/"
-msgstr "El servidor rechazó la conexión, compruebe el URL del servidor. Ejemplo: http://localhost:4040/"
+msgstr "El servidor rechazó la conexión. Compruebe el URL del servidor. Ejemplo: http://localhost:4040/"
 
 #: internet/subsonicsettingspage.cpp:117
 msgid ""
 "Connection timed out, check server URL. Example: http://localhost:4040/"
-msgstr "Se agotó el tiempo de espera de la conexión, compruebe el URL del servidor. Ejemplo: http://localhost:4040/"
+msgstr "Se agotó el tiempo de espera de la conexión. Compruebe el URL del servidor. Ejemplo: http://localhost:4040/"
 
 #: ../bin/src/ui_console.h:80 ../bin/src/ui_mainwindow.h:692
 msgid "Console"
@@ -1332,7 +1332,7 @@ msgstr "Copyright"
 msgid ""
 "Could not connect to Subsonic, check server URL. Example: "
 "http://localhost:4040/"
-msgstr "No se pudo conectar a Subsonic, revise la URL del servidor. Ejemplo: http://localhost:4040/"
+msgstr "No se pudo conectar a Subsonic. Compruebe el URL del servidor. Ejemplo: http://localhost:4040/"
 
 #: transcoder/transcoder.cpp:64
 #, qt-format
@@ -1513,7 +1513,7 @@ msgstr "Ruta de DBus"
 msgid "Dance"
 msgstr "Dance"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1705,7 +1705,7 @@ msgstr "Volver a analizar toda la colección"
 
 #: ../bin/src/ui_deviceproperties.h:377
 msgid "Do not convert any music"
-msgstr "No convertir ninguna música"
+msgstr "No convertir ninguna pista"
 
 #: ../bin/src/ui_albumcoverexport.h:209
 msgid "Do not overwrite"
@@ -1746,7 +1746,7 @@ msgstr "Descargar %n episodios"
 
 #: internet/magnatunedownloaddialog.cpp:252
 msgid "Download directory"
-msgstr "Directorio de descargas"
+msgstr "Carpeta de descargas"
 
 #: ../bin/src/ui_podcastsettingspage.h:240
 msgid "Download episodes to"
@@ -1819,7 +1819,7 @@ msgstr "Dropbox"
 
 #: ../bin/src/ui_dynamicplaylistcontrols.h:109
 msgid "Dynamic mode is on"
-msgstr "Modo dinámico encendido"
+msgstr "Modo dinámico activado"
 
 #: internet/jamendoservice.cpp:113 library/library.cpp:93
 msgid "Dynamic random mix"
@@ -1832,7 +1832,7 @@ msgstr "Editar lista de reproducción inteligente…"
 #: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
-msgstr "Editar la etiqueta «%1»…"
+msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
@@ -1895,7 +1895,7 @@ msgstr "Modo de codificación"
 
 #: ../bin/src/ui_addpodcastbyurl.h:76
 msgid "Enter a URL"
-msgstr "Introduzca una URL"
+msgstr "Escriba un URL"
 
 #: ../bin/src/ui_coverfromurldialog.h:103
 msgid "Enter a URL to download a cover from the Internet:"
@@ -1921,11 +1921,11 @@ msgstr "Escriba términos de búsqueda arriba para encontrar música en su equip
 
 #: ../bin/src/ui_itunessearchpage.h:77
 msgid "Enter search terms below to find podcasts in the iTunes Store"
-msgstr "Introduzca términos de búsqueda para encontrar podcasts en la tienda iTunes"
+msgstr "Escriba términos de búsqueda para encontrar podcasts en la tienda iTunes"
 
 #: ../bin/src/ui_gpoddersearchpage.h:77
 msgid "Enter search terms below to find podcasts on gpodder.net"
-msgstr "Introduzca términos de búsqueda para encontrar podcasts en gpodder.net"
+msgstr "Escriba términos de búsqueda para encontrar podcasts en gpodder.net"
 
 #: ../bin/src/ui_libraryfilterwidget.h:96
 #: ../bin/src/ui_albumcovermanager.h:219
@@ -2003,7 +2003,7 @@ msgstr "Error al cargar el CD de audio"
 
 #: library/library.cpp:63
 msgid "Ever played"
-msgstr "Reproducidos alguna vez"
+msgstr "Reproducidas alguna vez"
 
 #: ../bin/src/ui_podcastsettingspage.h:232
 msgid "Every 10 minutes"
@@ -2330,11 +2330,11 @@ msgstr "Género"
 
 #: internet/groovesharkservice.cpp:542
 msgid "Get a URL to share this Grooveshark playlist"
-msgstr "Obtener una URL para compartir esta lista de reproducción de Grooveshark"
+msgstr "Obtener un URL para compartir esta lista de reproducción de Grooveshark"
 
 #: internet/groovesharkservice.cpp:539 internet/groovesharkservice.cpp:1110
 msgid "Get a URL to share this Grooveshark song"
-msgstr "Obtener una URL para compartir esta canción de Grooveshark"
+msgstr "Obtener un URL para compartir esta canción de Grooveshark"
 
 #: internet/groovesharkservice.cpp:790
 msgid "Getting Grooveshark popular songs"
@@ -2442,7 +2442,7 @@ msgstr "La página HTML no contiene ningún canal RSS"
 #: internet/subsonicsettingspage.cpp:135
 msgid ""
 "HTTP 3xx status code received without URL, verify server configuration."
-msgstr "Se recibió el código de estado de HTTP 3xx sin un URL, compruebe la configuración del servidor."
+msgstr "Se recibió el código de estado de HTTP 3xx sin un URL. Compruebe la configuración del servidor."
 
 #: ../bin/src/ui_networkproxysettingspage.h:163
 msgid "HTTP proxy"
@@ -2510,7 +2510,7 @@ msgstr "Si continúa, este dispositivo funcionará con lentitud y las canciones 
 
 #: ../bin/src/ui_addpodcastbyurl.h:77
 msgid "If you know the URL of a podcast, enter it below and press Go."
-msgstr "Si conoce la URL de un podcast, introdúzcala a continuación y pulse Ir."
+msgstr "Si conoce el URL de un podcast, escríbalo a continuación y pulse en Ir."
 
 #: ../bin/src/ui_organisedialog.h:204
 msgid "Ignore \"The\" in artist names"
@@ -2593,7 +2593,7 @@ msgstr "Insertar…"
 msgid "Installed"
 msgstr "Instalado"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "Comprobación de integridad"
 
@@ -3377,15 +3377,15 @@ msgstr "Abrir %1 en el navegador"
 
 #: ../bin/src/ui_mainwindow.h:686
 msgid "Open &audio CD..."
-msgstr "Abrir CD de &audio…"
+msgstr "Abrir un &CD de sonido…"
 
 #: podcasts/addpodcastdialog.cpp:230
 msgid "Open OPML file"
-msgstr "Abrir archivo OPML"
+msgstr "Abrir un archivo OPML"
 
 #: podcasts/addpodcastdialog.cpp:73
 msgid "Open OPML file..."
-msgstr "Abrir archivo OPML…"
+msgstr "Abrir un archivo OPML…"
 
 #: ../bin/src/ui_deviceproperties.h:382
 msgid "Open device"
@@ -3393,7 +3393,7 @@ msgstr "Abrir dispositivo"
 
 #: ../bin/src/ui_mainwindow.h:685
 msgid "Open file..."
-msgstr "Abrir archivo…"
+msgstr "Abrir un archivo…"
 
 #: internet/googledriveservice.cpp:184
 msgid "Open in Google Drive"
@@ -3599,7 +3599,7 @@ msgstr "Tipo de lista de reproducción"
 msgid "Playlists"
 msgstr "Listas rep."
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Cierre su navegador y regrese a Clementine."
 
@@ -3638,7 +3638,7 @@ msgstr "Puerto"
 
 #: ui/equalizer.cpp:47 ../bin/src/ui_playbacksettingspage.h:317
 msgid "Pre-amp"
-msgstr "Preamplificación"
+msgstr "Preamp."
 
 #: ../bin/src/ui_digitallyimportedsettingspage.h:166
 #: ../bin/src/ui_magnatunesettingspage.h:166
@@ -3949,7 +3949,7 @@ msgstr "Modo de regulación de volumen"
 
 #: ../bin/src/ui_dynamicplaylistcontrols.h:112
 msgid "Repopulate"
-msgstr "Repoblar"
+msgstr "Rellenar"
 
 #: ../bin/src/ui_networkremotesettingspage.h:191
 msgid "Require authentication code"
@@ -3988,7 +3988,7 @@ msgstr "Recuperando canciones favoritas de Grooveshark"
 msgid "Retrieving Grooveshark playlists"
 msgstr "Recuperando listas de reproducción de Grooveshark"
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Volver a Clementine"
 
@@ -4293,7 +4293,7 @@ msgstr "Mostrar OSD estético"
 
 #: widgets/nowplayingwidget.cpp:113
 msgid "Show above status bar"
-msgstr "Mostrar la barra de estado superior"
+msgstr "Mostrar sobre la barra de estado"
 
 #: ui/mainwindow.cpp:460
 msgid "Show all songs"
@@ -4318,7 +4318,7 @@ msgstr "Mostrar a tamaño completo…"
 #: library/libraryview.cpp:399 ui/mainwindow.cpp:508
 #: widgets/fileviewlist.cpp:52
 msgid "Show in file browser..."
-msgstr "Mostrar en navegador de archivos…"
+msgstr "Mostrar en el gestor de archivos…"
 
 #: library/libraryview.cpp:403
 msgid "Show in various artists"
@@ -4334,7 +4334,7 @@ msgstr "Mostrar solo los duplicados"
 
 #: ui/mainwindow.cpp:462
 msgid "Show only untagged"
-msgstr "Mostrar canciones sin etiquetar solamente"
+msgstr "Solo mostrar no etiquetadas"
 
 #: ../bin/src/ui_globalsearchsettingspage.h:153
 msgid "Show search suggestions"
@@ -4595,7 +4595,7 @@ msgstr "Suscriptores"
 msgid "Subsonic"
 msgstr "Subsonic"
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Exitoso"
 
@@ -4677,7 +4677,7 @@ msgstr "Opciones del texto"
 
 #: ui/about.cpp:70
 msgid "Thanks to"
-msgstr "Gracias a"
+msgstr "Agradecemos a"
 
 #: ui/globalshortcutssettingspage.cpp:175
 #, qt-format
@@ -5390,11 +5390,11 @@ msgstr "No tiene una suscripción activa"
 msgid ""
 "You have been logged out of Spotify, please re-enter your password in the "
 "Settings dialog."
-msgstr "Ha cerrado su sesión en Spotify, vuelva a introducir su contraseña en el diálogo de Configuración."
+msgstr "Ha cerrado la sesión de Spotify. Vuelva a escribir su contraseña en el diálogo de Configuración."
 
 #: internet/spotifysettingspage.cpp:158
 msgid "You have been logged out of Spotify, please re-enter your password."
-msgstr "Su sesión en Spotify ha caducado, vuelva a introducir su contraseña."
+msgstr "Ha cerrado la sesión de Spotify. Vuelva a escribir su contraseña."
 
 #: songinfo/lastfmtrackinfoprovider.cpp:87
 msgid "You love this track"

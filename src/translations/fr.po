@@ -38,9 +38,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-10-05 00:17+0000\n"
-"Last-Translator: arnaudbienner <arnaud.bienner@gmail.com>\n"
+"PO-Revision-Date: 2013-11-26 19:18+0000\n"
+"Last-Translator: Tubuntu\n"
 "Language-Team: French (http://www.transifex.com/projects/p/clementine/language/fr/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -70,27 +69,27 @@ msgstr " jours"
 #: ../bin/src/ui_transcoderoptionsvorbis.h:211
 #: ../bin/src/ui_transcoderoptionswma.h:80
 msgid " kbps"
-msgstr " kbps"
+msgstr "kbps"
 
 #: ../bin/src/ui_songinfosettingspage.h:186
 #: ../bin/src/ui_playbacksettingspage.h:305
 #: ../bin/src/ui_playbacksettingspage.h:308
 #: ../bin/src/ui_playbacksettingspage.h:328
 msgid " ms"
-msgstr " ms"
+msgstr "ms"
 
 #: ../bin/src/ui_songinfosettingspage.h:182
 msgid " pt"
-msgstr " pt"
+msgstr "pt"
 
 #: ../bin/src/ui_notificationssettingspage.h:439
 #: ../bin/src/ui_visualisationselector.h:116
 msgid " seconds"
-msgstr " secondes"
+msgstr "secondes"
 
 #: ../bin/src/ui_querysortpage.h:143
 msgid " songs"
-msgstr " morceaux"
+msgstr "morceaux"
 
 #: widgets/osd.cpp:188
 #, qt-format
@@ -893,7 +892,7 @@ msgstr "Image d'arrière-plan"
 msgid "Background opacity"
 msgstr "Opacité de l'arrière-plan"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "Sauvegarde de la base de données"
 
@@ -1526,7 +1525,7 @@ msgstr "Chemin DBus"
 msgid "Dance"
 msgstr "Danse"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1845,7 +1844,7 @@ msgstr "Éditer la liste de lecture intelligente..."
 #: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
-msgstr "Modifer le tag « %1 »..."
+msgstr "Modifier le tag \"%1\"..."
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
@@ -1925,7 +1924,7 @@ msgstr "Saisissez un nom pour la liste de lecture"
 #: ../bin/src/ui_lastfmstationdialog.h:93
 msgid ""
 "Enter an <b>artist</b> or <b>tag</b> to start listening to Last.fm radio."
-msgstr "Saisissez le nom d'un <b>artiste</b> ou n'importe quel <b>tag</b> pour écouter la radio Last.fm."
+msgstr "Saisissez un nom d'<b>artiste</b> ou n'importe quel <b>tag</b> pour écouter la radio Last.fm."
 
 #: ../bin/src/ui_globalsearchview.h:209
 msgid ""
@@ -2606,7 +2605,7 @@ msgstr "Insérer..."
 msgid "Installed"
 msgstr "Installé"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "Vérification de l'intégrité"
 
@@ -3612,7 +3611,7 @@ msgstr "Type de liste de lecture"
 msgid "Playlists"
 msgstr "Listes de lecture"
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Merci de fermer votre navigateur et de retourner dans Clementine."
 
@@ -4001,7 +4000,7 @@ msgstr "Récupération des morceaux Grooveshark favoris"
 msgid "Retrieving Grooveshark playlists"
 msgstr "Récupération des listes de lecture Grooveshark"
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Retourner dans Clementine"
 
@@ -4608,7 +4607,7 @@ msgstr "Abonnés"
 msgid "Subsonic"
 msgstr "Subsonic"
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Succès !"
 

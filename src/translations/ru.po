@@ -29,9 +29,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-09-08 09:06+0000\n"
-"Last-Translator: Dmitry <linuxsquirrel.dev@gmail.com>\n"
+"PO-Revision-Date: 2013-11-26 18:48+0000\n"
+"Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/clementine/language/ru/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -884,7 +883,7 @@ msgstr "Фоновое изображение"
 msgid "Background opacity"
 msgstr "Прозрачность фона"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "Резервное копирование базы данных"
 
@@ -1517,7 +1516,7 @@ msgstr "DBus path"
 msgid "Dance"
 msgstr "Танцевальный"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1836,7 +1835,7 @@ msgstr "Изменить умный список воспроизведения�
 #: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
-msgstr "Редактировать тег \"%1\"..."
+msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
@@ -2597,7 +2596,7 @@ msgstr "Вставить..."
 msgid "Installed"
 msgstr "Установлено"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "Проверка целостности"
 
@@ -3603,7 +3602,7 @@ msgstr "Тип списка воспроизведения"
 msgid "Playlists"
 msgstr "Списки воспроизведения"
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Закройте браузер и вернитесь в Clementine."
 
@@ -3992,7 +3991,7 @@ msgstr "Получение избранных композиций из Groovesh
 msgid "Retrieving Grooveshark playlists"
 msgstr "Получение списков воспроизведения из Grooveshark  "
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Вернуться в Clementine"
 
@@ -4599,7 +4598,7 @@ msgstr "Подписчики"
 msgid "Subsonic"
 msgstr "Subsonic"
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Успешно!"
 

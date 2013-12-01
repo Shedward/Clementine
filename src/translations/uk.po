@@ -9,8 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-08-10 19:09+0000\n"
+"PO-Revision-Date: 2013-11-26 18:56+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/clementine/language/uk/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -864,7 +863,7 @@ msgstr "Зображення тла"
 msgid "Background opacity"
 msgstr "Прозорість фону"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "Створення резервної копії бази даних"
 
@@ -1497,7 +1496,7 @@ msgstr "Шлях DBus"
 msgid "Dance"
 msgstr "Танцювальна"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1816,7 +1815,7 @@ msgstr "Редагувати розумний список відтворенн�
 #: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
-msgstr "Редагувати мітку \"%1\""
+msgstr "Змінити «%1»…"
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
@@ -2577,7 +2576,7 @@ msgstr "Вставити…"
 msgid "Installed"
 msgstr "Встановлено"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "Перевірка цілісності даних"
 
@@ -3583,7 +3582,7 @@ msgstr "Тип списку відтворення"
 msgid "Playlists"
 msgstr "Списки відтворення"
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Будь ласка, закрийте вікно програми для перегляду інтернету і поверніться до роботи з Clementine."
 
@@ -3972,7 +3971,7 @@ msgstr "Отримання улюблених пісень з Grooveshark"
 msgid "Retrieving Grooveshark playlists"
 msgstr "Отримання списків відтворення з Grooveshark"
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Повернутися до Clementine"
 
@@ -4579,7 +4578,7 @@ msgstr "Передплатники"
 msgid "Subsonic"
 msgstr "Subsonic"
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Виконано!"
 

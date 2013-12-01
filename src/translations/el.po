@@ -14,9 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-08-18 16:12+0000\n"
-"Last-Translator: firewalker <firew4lker@gmail.com>\n"
+"PO-Revision-Date: 2013-11-26 18:48+0000\n"
+"Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Language-Team: Greek (http://www.transifex.com/projects/p/clementine/language/el/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -869,7 +868,7 @@ msgstr "Εικόνα φόντου"
 msgid "Background opacity"
 msgstr "Διαφάνεια φόντου"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "Αντίγραφο ασφαλείας της βάσης δεδομένων"
 
@@ -1502,7 +1501,7 @@ msgstr "Διαδρομή του DBus"
 msgid "Dance"
 msgstr "Dance"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1821,7 +1820,7 @@ msgstr "Τροποποίηση έξυπνης λίστας αναπαραγωγ�
 #: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
-msgstr "Τροποποίηση ετικέτας \"%1\"..."
+msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
@@ -2582,7 +2581,7 @@ msgstr "Εισαγωγή..."
 msgid "Installed"
 msgstr "Εγκατεστημένο"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "έλεγχος ακεραιότητας"
 
@@ -3588,7 +3587,7 @@ msgstr "Τύπος λίστας αναπαραγωγής"
 msgid "Playlists"
 msgstr "Λίστες"
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Παρακαλώ κλείστε τον περιηγητή σας και επιστρέψτε στον Clementine. "
 
@@ -3977,7 +3976,7 @@ msgstr "Ανάκτηση αγαπημένων τραγουδιών από το G
 msgid "Retrieving Grooveshark playlists"
 msgstr "Ανάκτηση λιστών αναπαραγωγής από το Grooveshark"
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Επιστροφή στον Clementine"
 
@@ -4584,7 +4583,7 @@ msgstr "Συνδομητές"
 msgid "Subsonic"
 msgstr "Subsonic"
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Επιτυχία!"
 

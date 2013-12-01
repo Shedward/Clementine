@@ -11,9 +11,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-10-27 05:55+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitoschido@ubuntu.com>\n"
+"PO-Revision-Date: 2013-11-26 18:48+0000\n"
+"Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/projects/p/clementine/language/ca/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -282,7 +281,7 @@ msgstr "<a href=\"http://www.di.fm/premium/\">Actualitzeu a Premium ara</a>"
 msgid ""
 "<a href=\"https://one.ubuntu.com/auth/login\">Create a new account or reset "
 "your password</a>"
-msgstr "<a href=\"https://one.ubuntu.com/auth/login\">Crea un compte nou o restableix la vostra contrasenya</a>"
+msgstr "<a href=\"https://one.ubuntu.com/auth/login\">Creeu un compte nou o restabliu la vostra contrasenya</a>"
 
 #: ../bin/src/ui_librarysettingspage.h:195
 msgid ""
@@ -472,7 +471,7 @@ msgstr "Afegeix l’etiqueta d’àlbum a la cançó"
 
 #: ../bin/src/ui_notificationssettingspage.h:386
 msgid "Add song albumartist tag"
-msgstr "Afegeix l'etiqueta albumartist a la cançó"
+msgstr "Afegeix l’etiqueta «albumartist» a la cançó"
 
 #: ../bin/src/ui_notificationssettingspage.h:377
 msgid "Add song artist tag"
@@ -785,7 +784,7 @@ msgstr "Artista"
 
 #: ui/mainwindow.cpp:242
 msgid "Artist info"
-msgstr "Inf. artista"
+msgstr "Inf.artista"
 
 #: internet/lastfmservice.cpp:208
 msgid "Artist radio"
@@ -866,7 +865,7 @@ msgstr "Imatge de fons"
 msgid "Background opacity"
 msgstr "Opacitat del fons"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "S’està fent una còpia de seguretat de la base de dades"
 
@@ -1371,7 +1370,7 @@ msgstr "S’ha esborrat la imatge de la caràtula manualment"
 
 #: ui/edittagdialog.cpp:447
 msgid "Cover art not set"
-msgstr "Imatge de portada no establerta"
+msgstr "No s’ha definit la caràtula"
 
 #: ui/edittagdialog.cpp:441
 #, qt-format
@@ -1499,7 +1498,7 @@ msgstr "Camí del DBus"
 msgid "Dance"
 msgstr "Dance"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1818,7 +1817,7 @@ msgstr "Edita la llista de reproducció intel·ligent"
 #: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
-msgstr "Edita l’etiqueta «%1»…"
+msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
@@ -2579,7 +2578,7 @@ msgstr "Insereix…"
 msgid "Installed"
 msgstr "Instal·lat"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "Comprovació d’integritat"
 
@@ -3363,7 +3362,7 @@ msgstr "Obre %1 en un navegador"
 
 #: ../bin/src/ui_mainwindow.h:686
 msgid "Open &audio CD..."
-msgstr "Obre un CD d’àudio…"
+msgstr "Obre un &CD d’àudio…"
 
 #: podcasts/addpodcastdialog.cpp:230
 msgid "Open OPML file"
@@ -3583,9 +3582,9 @@ msgstr "Tipus de llista de reproducció"
 
 #: internet/groovesharkservice.cpp:626 ui/mainwindow.cpp:237
 msgid "Playlists"
-msgstr "Llistes de reproducció"
+msgstr "Llistes rep."
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Tanqueu el navegador i torneu a Clementine."
 
@@ -3974,7 +3973,7 @@ msgstr "S’estan obtenint les cançons favorites de Grooveshark"
 msgid "Retrieving Grooveshark playlists"
 msgstr "S’estan obtenint les llistes de reproducció de Grooveshark"
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Torna a Clementine"
 
@@ -4524,7 +4523,7 @@ msgstr "S’està començant %1"
 
 #: internet/magnatunedownloaddialog.cpp:120
 msgid "Starting..."
-msgstr "Iniciant..."
+msgstr "S’està iniciant…"
 
 #: internet/groovesharkservice.cpp:598
 msgid "Stations"
@@ -4581,7 +4580,7 @@ msgstr "Subscriptors"
 msgid "Subsonic"
 msgstr "Subsonic"
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Correcte!"
 
@@ -4607,7 +4606,7 @@ msgstr "Molt alta (%1 fps)"
 
 #: visualisations/visualisationcontainer.cpp:120
 msgid "Super high (2048x2048)"
-msgstr "Molt alta (2048×2048)"
+msgstr "Molt alta (2048 × 2048)"
 
 #: ../bin/src/ui_deviceproperties.h:374
 msgid "Supported formats"
@@ -4663,7 +4662,7 @@ msgstr "Opcions del text"
 
 #: ui/about.cpp:70
 msgid "Thanks to"
-msgstr "Gràcies a"
+msgstr "Agraïm a"
 
 #: ui/globalshortcutssettingspage.cpp:175
 #, qt-format
@@ -5391,7 +5390,7 @@ msgid ""
 "You need to launch System Preferences and turn on \"<span style=\" font-"
 "style:italic;\">Enable access for assistive devices</span>\" to use global "
 "shortcuts in Clementine."
-msgstr "Necessita llançar les Preferències del Sistema i activar \"<span style=\" font-style:italic;\">Habilita l'accés per dispositivos d'ajuda </ span>\", per utilitzar dreceres globals a Clementine."
+msgstr "Necessiteu obrir les Preferències del sistema i activar «<span style=\" font-style:italic;\">Habilita l’accés per dispositius d’ajuda</span>» per utilitzar dreceres globals a Clementine."
 
 #: ../bin/src/ui_behavioursettingspage.h:200
 msgid "You will need to restart Clementine if you change the language."

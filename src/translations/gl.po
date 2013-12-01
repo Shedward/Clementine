@@ -10,9 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-10-02 21:50+0000\n"
-"Last-Translator: oscarkxps <oscarpereira1989@gmail.com>\n"
+"PO-Revision-Date: 2013-11-26 18:48+0000\n"
+"Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Language-Team: Galician (http://www.transifex.com/projects/p/clementine/language/gl/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -865,7 +864,7 @@ msgstr "Imaxe de fondo"
 msgid "Background opacity"
 msgstr "Opacidad de fondo"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "Gardando unha copia de seguranza da base de datos…"
 
@@ -1498,7 +1497,7 @@ msgstr "Ruta a DBus"
 msgid "Dance"
 msgstr "Dance"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1817,7 +1816,7 @@ msgstr "Editar a lista intelixente…"
 #: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
-msgstr "Editar a etiqueta «%1»…"
+msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
@@ -2578,7 +2577,7 @@ msgstr "Inserir"
 msgid "Installed"
 msgstr "Instalado"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "Comprobación da integridade"
 
@@ -3584,7 +3583,7 @@ msgstr "Tipo de lista"
 msgid "Playlists"
 msgstr "Listas de reprodución"
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Peche o navegador web e volva a Clementine."
 
@@ -3973,7 +3972,7 @@ msgstr "Descargando as cancións favoritas de Grooveshark…"
 msgid "Retrieving Grooveshark playlists"
 msgstr "Descargando as listas de Grooveshark…"
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Volver a Clementine"
 
@@ -4580,7 +4579,7 @@ msgstr "Subscritores"
 msgid "Subsonic"
 msgstr "Subsonic"
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Accedeuse correctamente."
 

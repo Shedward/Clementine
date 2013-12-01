@@ -13,9 +13,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-08-14 22:26+0000\n"
-"Last-Translator: R33D3M33R <andrejm@ubuntu.si>\n"
+"PO-Revision-Date: 2013-11-26 18:48+0000\n"
+"Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Language-Team: Slovenian (http://www.transifex.com/projects/p/clementine/language/sl/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -868,7 +867,7 @@ msgstr "Slika ozadja"
 msgid "Background opacity"
 msgstr "Prekrivnost ozadja"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "Varnostno kopiranje podatkovne zbirke"
 
@@ -1501,7 +1500,7 @@ msgstr "Pot DBus"
 msgid "Dance"
 msgstr "Plesna"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1820,7 +1819,7 @@ msgstr "Uredi pametni seznam predvajanja ..."
 #: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
-msgstr "Uredi oznako \"%1\" ..."
+msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
@@ -2581,7 +2580,7 @@ msgstr "Vstavi ..."
 msgid "Installed"
 msgstr "Nameščeno"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "Preverjanje celovitosti"
 
@@ -3587,7 +3586,7 @@ msgstr "Vrsta seznama predvajanja"
 msgid "Playlists"
 msgstr "Seznami predvajanja"
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Zaprite vaš brskalnik in se vrnite v Clementine."
 
@@ -3976,7 +3975,7 @@ msgstr "Pridobivanje priljubljenih skladb Grooveshark"
 msgid "Retrieving Grooveshark playlists"
 msgstr "Pridobivanje seznamov predvajanja Grooveshark"
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Vrni se v Clementine"
 
@@ -4583,7 +4582,7 @@ msgstr "Naročniki"
 msgid "Subsonic"
 msgstr "Subsonic"
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Uspeh!"
 

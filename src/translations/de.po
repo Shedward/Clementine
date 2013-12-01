@@ -19,6 +19,7 @@
 # Lenzitsch <lenz.furrer@gmail.com>, 2012
 # Martin Herkt <lachs0r@hong-mailing.de>, 2011
 # Martin Herkt <luck3r@phicode.de>, 2010
+# simohamed <mohamed.sakhri@gmail.com>, 2013
 # Paul E. <>, 2012
 # quick_wango <quick_wango@code-infection.de>, 2013
 # robfloop <robertbeckmann@fastmail.fm>, 2012
@@ -32,9 +33,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-08-11 10:21+0000\n"
-"Last-Translator: Asfaloth <asfa194@gmail.com>\n"
+"PO-Revision-Date: 2013-11-26 18:48+0000\n"
+"Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/clementine/language/de/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -887,7 +887,7 @@ msgstr "Hintergrundbild"
 msgid "Background opacity"
 msgstr "Deckkraft:"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "Sichere die Datenbank"
 
@@ -1520,7 +1520,7 @@ msgstr "DBus Pfad"
 msgid "Dance"
 msgstr "Dance"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1839,7 +1839,7 @@ msgstr "Intelligente Wiedergabelist bearbeiten..."
 #: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
-msgstr "%1 bearbeiten"
+msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
@@ -2600,7 +2600,7 @@ msgstr "Einfügen..."
 msgid "Installed"
 msgstr "Installiert"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "Integritätsprüfung"
 
@@ -3606,7 +3606,7 @@ msgstr "Art der Wiedergabeliste"
 msgid "Playlists"
 msgstr "Wiedergabelisten"
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Bitte Browser schließen und zu Clementine zurückkehren"
 
@@ -3995,7 +3995,7 @@ msgstr "Rufe favorisierte Titel von Grooveshark ab"
 msgid "Retrieving Grooveshark playlists"
 msgstr "Rufe Grooveshark-Wiedergabelisten ab"
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Zu Clementine zurückkehren"
 
@@ -4602,7 +4602,7 @@ msgstr "Abonnenten"
 msgid "Subsonic"
 msgstr "Subsonic"
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Erfolg!"
 

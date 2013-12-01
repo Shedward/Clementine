@@ -9,8 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-08-10 19:07+0000\n"
+"PO-Revision-Date: 2013-11-26 18:48+0000\n"
 "Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Language-Team: Norwegian Bokmål (http://www.transifex.com/projects/p/clementine/language/nb/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -864,7 +863,7 @@ msgstr "Bakgrunnsbilde"
 msgid "Background opacity"
 msgstr "Bakgrunnsgjennomsiktighet"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "Tar sikkerhetskopi av databasen"
 
@@ -1497,7 +1496,7 @@ msgstr "DBus sti"
 msgid "Dance"
 msgstr "Dansemusikk"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1816,7 +1815,7 @@ msgstr "Rediger smart spilleliste..."
 #: ui/mainwindow.cpp:1396
 #, qt-format
 msgid "Edit tag \"%1\"..."
-msgstr "Endre merkelapp \"%1\"..."
+msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
@@ -2577,7 +2576,7 @@ msgstr "Sett inn..."
 msgid "Installed"
 msgstr "Installert"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "Integritetskontrol"
 
@@ -3583,7 +3582,7 @@ msgstr "Type spilleliste"
 msgid "Playlists"
 msgstr "Spillelister"
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Vennligst lukk nettleseren og gå tilbake til Clementine."
 
@@ -3972,7 +3971,7 @@ msgstr "Henter favorittsanger fra Grooveshark"
 msgid "Retrieving Grooveshark playlists"
 msgstr "Henter Grooveshark-spillelister"
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Returnér til Clementine"
 
@@ -4579,7 +4578,7 @@ msgstr "Abonnente"
 msgid "Subsonic"
 msgstr "Subson"
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Lykkes!"
 

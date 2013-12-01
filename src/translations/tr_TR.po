@@ -5,12 +5,12 @@
 # Translators:
 # devingregory <devingregory@yandex.com>, 2012
 # Erhan BURHAN <>, 2012
+# mutlucan96 <mtlcnylmz@gmail.com>, 2013
 # Necdet Yücel <necdetyucel@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Clementine Music Player\n"
-"Report-Msgid-Bugs-To: http://code.google.com/p/clementine-player/issues/list\n"
-"PO-Revision-Date: 2013-08-10 19:08+0000\n"
+"PO-Revision-Date: 2013-11-26 18:48+0000\n"
 "Last-Translator: Clementine Buildbot <clementinebuildbot@davidsansome.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/clementine/language/tr_TR/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -132,7 +132,7 @@ msgstr ""
 #: songinfo/lastfmtrackinfoprovider.cpp:94
 #, qt-format
 msgid "%L1 other listeners"
-msgstr ""
+msgstr "%L1 diğer dinleyici"
 
 #: songinfo/lastfmtrackinfoprovider.cpp:92
 #, qt-format
@@ -864,7 +864,7 @@ msgstr "Arkaplan resmi"
 msgid "Background opacity"
 msgstr "Arkaplan saydamlığı"
 
-#: core/database.cpp:749
+#: core/database.cpp:648
 msgid "Backing up database"
 msgstr "Veritabanı yedekleniyor"
 
@@ -1126,7 +1126,7 @@ msgstr ""
 
 #: widgets/prettyimage.cpp:201
 msgid "Clementine image viewer"
-msgstr ""
+msgstr "Clementine Resim Görüntüleyici"
 
 #: ../bin/src/ui_trackselectiondialog.h:206
 msgid "Clementine was unable to find results for this file"
@@ -1369,7 +1369,7 @@ msgstr ""
 
 #: ui/edittagdialog.cpp:447
 msgid "Cover art not set"
-msgstr ""
+msgstr "Kapak resmi ayarlanmadı"
 
 #: ui/edittagdialog.cpp:441
 #, qt-format
@@ -1497,7 +1497,7 @@ msgstr ""
 msgid "Dance"
 msgstr "Dans"
 
-#: core/database.cpp:703
+#: core/database.cpp:602
 msgid ""
 "Database corruption detected. Please read https://code.google.com/p"
 "/clementine-player/wiki/DatabaseCorruption for instructions on how to "
@@ -1663,7 +1663,7 @@ msgstr ""
 #: globalsearch/searchproviderstatuswidget.cpp:47
 #: ../bin/src/ui_notificationssettingspage.h:433
 msgid "Disabled"
-msgstr ""
+msgstr "Pasif"
 
 #: playlist/playlist.cpp:1211 ui/organisedialog.cpp:63
 #: ../bin/src/ui_edittagdialog.h:685
@@ -1685,11 +1685,11 @@ msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:715
 msgid "Do a full library rescan"
-msgstr ""
+msgstr "Tam bir kütüphane taraması yap"
 
 #: ../bin/src/ui_deviceproperties.h:377
 msgid "Do not convert any music"
-msgstr ""
+msgstr "Hiçbir müziği dönüştürme"
 
 #: ../bin/src/ui_albumcoverexport.h:209
 msgid "Do not overwrite"
@@ -1721,7 +1721,7 @@ msgstr "Açmak için çift tıklayın"
 
 #: ../bin/src/ui_behavioursettingspage.h:214
 msgid "Double clicking a song will..."
-msgstr ""
+msgstr "Çift tıklayarak bir şarkı..."
 
 #: podcasts/podcastservice.cpp:350
 #, c-format
@@ -1754,11 +1754,11 @@ msgstr ""
 
 #: internet/magnatuneservice.cpp:276
 msgid "Download this album"
-msgstr ""
+msgstr "Bu albümü indir"
 
 #: internet/jamendoservice.cpp:417
 msgid "Download this album..."
-msgstr ""
+msgstr "Bu albümü indir..."
 
 #: podcasts/podcastservice.cpp:352
 msgid "Download this episode"
@@ -1766,7 +1766,7 @@ msgstr ""
 
 #: ../bin/src/ui_spotifysettingspage.h:215
 msgid "Download..."
-msgstr ""
+msgstr "İndir..."
 
 #: podcasts/podcastservice.cpp:195
 #, qt-format
@@ -1811,7 +1811,7 @@ msgstr ""
 
 #: library/libraryview.cpp:381
 msgid "Edit smart playlist..."
-msgstr ""
+msgstr "Akıllı çalma listesini düzenle..."
 
 #: ui/mainwindow.cpp:1396
 #, qt-format
@@ -1820,40 +1820,40 @@ msgstr ""
 
 #: ../bin/src/ui_mainwindow.h:673
 msgid "Edit tag..."
-msgstr ""
+msgstr "Etiket Düzenle..."
 
 #: ../bin/src/ui_edittagdialog.h:695
 msgid "Edit tags"
-msgstr ""
+msgstr "Etiketleri düzenle"
 
 #: ../bin/src/ui_edittagdialog.h:662
 msgid "Edit track information"
-msgstr ""
+msgstr "Parça bilgisini düzenle"
 
 #: library/libraryview.cpp:395 widgets/fileviewlist.cpp:50
 #: ../bin/src/ui_mainwindow.h:669
 msgid "Edit track information..."
-msgstr ""
+msgstr "Parça bilgisini düzenle..."
 
 #: library/libraryview.cpp:397
 msgid "Edit tracks information..."
-msgstr ""
+msgstr "Parça bilgilerinii düzenle..."
 
 #: internet/savedradio.cpp:101
 msgid "Edit..."
-msgstr ""
+msgstr "Düzenle..."
 
 #: ../bin/src/ui_wiimotesettingspage.h:183
 msgid "Enable Wii Remote support"
-msgstr ""
+msgstr "Wii Remote desteğini etkinleştir"
 
 #: ../bin/src/ui_equalizer.h:171
 msgid "Enable equalizer"
-msgstr ""
+msgstr "Ekolayzırı etkinleştir"
 
 #: ../bin/src/ui_wiimotesettingspage.h:187
 msgid "Enable shortcuts only when Clementine is focused"
-msgstr ""
+msgstr "Kısayolları sadece Clementine görünürken etkinleştir"
 
 #: ../bin/src/ui_globalsearchsettingspage.h:147
 msgid ""
@@ -1891,7 +1891,7 @@ msgstr ""
 
 #: playlist/playlisttabbar.cpp:137
 msgid "Enter a new name for this playlist"
-msgstr ""
+msgstr "Çalma listesi için yeni bir isim girin"
 
 #: ../bin/src/ui_lastfmstationdialog.h:93
 msgid ""
@@ -2577,7 +2577,7 @@ msgstr ""
 msgid "Installed"
 msgstr "Yüklendi"
 
-#: core/database.cpp:688
+#: core/database.cpp:587
 msgid "Integrity check"
 msgstr "Bütünlük kontrolü"
 
@@ -3583,7 +3583,7 @@ msgstr ""
 msgid "Playlists"
 msgstr "Çalma listeleri"
 
-#: ../data/oauthsuccess.html:36
+#: ../data/oauthsuccess.html:38
 msgid "Please close your browser and return to Clementine."
 msgstr "Lütfen tarayıcınızı seçin ve Clementine dönün"
 
@@ -3972,7 +3972,7 @@ msgstr ""
 msgid "Retrieving Grooveshark playlists"
 msgstr ""
 
-#: ../data/oauthsuccess.html:3
+#: ../data/oauthsuccess.html:5
 msgid "Return to Clementine"
 msgstr "Clementine dön"
 
@@ -4579,7 +4579,7 @@ msgstr ""
 msgid "Subsonic"
 msgstr ""
 
-#: ../data/oauthsuccess.html:34
+#: ../data/oauthsuccess.html:36
 msgid "Success!"
 msgstr "Başarılı!"
 
