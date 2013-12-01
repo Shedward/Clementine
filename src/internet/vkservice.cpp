@@ -887,7 +887,6 @@ void VkService::AlbumListRecived(Vreen::AudioAlbumItemListReply *reply) {
   for (const auto &album : albums){
     AppendAlbum(album);
   }
-  reply->deleteLater();
 }
 
 void VkService::UpdateAlbumSongs(QStandardItem *item)
@@ -1023,7 +1022,6 @@ void VkService::LoadAndAppendSongList(QStandardItem *item, int uid, int album_id
 
 void VkService::AppendLoadedSongs(QStandardItem *item, Vreen::AudioItemListReply *reply){
   SongList songs = FromAudioList(reply->result());
-  reply->deleteLater();
 
   if (item) {
     ClearStandartItem(item);
@@ -1098,10 +1096,8 @@ QUrl VkService::GetSongPlayUrl(const QUrl &url, bool is_playing) {
         current_song_ = FromAudioItem(song);
         current_song_.set_url(url);
       }
-      song_request->deleteLater();
       return song.url();
     }
-    song_request->deleteLater();
   }
 
   qLog(Info) << "Unresolved url by id" << song_id;
@@ -1134,13 +1130,11 @@ UrlHandler::LoadResult VkService::GetGroupNextSongUrl(const QUrl &url) {
       current_group_url_ = url;
       current_song_ = FromAudioItem(song);
       emit StreamMetadataFound(url, current_song_);
-      song_request->deleteLater();
       return UrlHandler::LoadResult(url,
                                     UrlHandler::LoadResult::TrackAvailable,
                                     song.url(),
                                     current_song_.length_nanosec());
     }
-    song_request->deleteLater();
   }
 
   qLog(Info) << "Unresolved group url" << url;
@@ -1164,7 +1158,6 @@ void VkService::SongSearch(SearchID id, const QString &query, int count, int off
 
 void VkService::SongSearchRecived(SearchID id, Vreen::AudioItemListReply *reply) {
   SongList songs = FromAudioList(reply->result());
-  reply->deleteLater();
   emit SongSearchResult(id, songs);
 }
 
@@ -1207,7 +1200,6 @@ void VkService::GroupSearch(SearchID id, const QString &query) {
 
 void VkService::GroupSearchRecived(SearchID id, Vreen::Reply *reply) {
   QVariant groups = reply->response();
-  reply->deleteLater();
   emit GroupSearchResult(id, MusicOwner::parseMusicOwnerList(groups));
 }
 
@@ -1239,7 +1231,6 @@ void VkService::FindUserOrGroup(const QString &q)
 void VkService::UserOrGroupRecived(SearchID id, Vreen::Reply *reply)
 {
   QVariant owners = reply->response();
-  reply->deleteLater();
   emit UserOrGroupSearchResult(id, MusicOwner::parseMusicOwnerList(owners));
 }
 
