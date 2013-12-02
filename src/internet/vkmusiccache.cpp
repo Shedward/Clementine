@@ -195,16 +195,27 @@ bool VkMusicCache::InCache(const QUrl &url) {
 }
 
 QString VkMusicCache::CachedFilename(const QUrl &url) {
-  QStringList args = url.toString().remove("vk://").split('/');
+  QStringList args = QString(url.toEncoded()).remove("vk://").split('/');
 
   QString cache_filename;
-  if (args.size() == 4) {
+  if (args.size() == 3) {
     cache_filename = service_->cacheFilename();
-    cache_filename.replace("%artist",args[2]);
-    cache_filename.replace("%title", args[3]);
+
+    // Workaround of unicode in song url issue.
+    // All unicode song data stored as base64.
+    // There is can be problem with case sensetivity of url.
+    QByteArray songData64Enc = QUrl::fromPercentEncoding(args[2].toAscii()).toUtf8();
+    QStringList songData = QString::fromUtf8(QByteArray::fromBase64(songData64Enc)).split('\n');
+
+    if (songData.size() == 2){
+        cache_filename.replace("%artist",songData[0]);
+        cache_filename.replace("%title", songData[1]);
+    } else {
+        qLog(Warning) << "Wrong song data" << songData << "used id as file name for cache.";
+    }
   } else {
     qLog(Warning) << "Song url with args" << args << "does not contain artist and title"
-                  << "use id as file name for cache.";
+                  << "used id as file name for cache.";
     cache_filename = args[1];
   }
 
