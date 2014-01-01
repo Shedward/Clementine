@@ -452,6 +452,9 @@ void TagReader::ParseOggTag(const TagLib::Ogg::FieldListMap& map,
   if (!map["COVERART"].isEmpty())
     song->set_art_automatic(kEmbeddedCover);
 
+  if (!map["METADATA_BLOCK_PICTURE"].isEmpty())
+    song->set_art_automatic(kEmbeddedCover);
+
   if (!map["FMPS_RATING"].isEmpty() && song->rating() <= 0)
     song->set_rating(TStringToQString( map["FMPS_RATING"].front() ).trimmed().toFloat());
 
@@ -785,6 +788,25 @@ QByteArray TagReader::LoadEmbeddedArt(const QString& filename) const {
 
   if (xiph_comment) {
     TagLib::Ogg::FieldListMap map = xiph_comment->fieldListMap();
+
+    // Other than the below mentioned non-standard COVERART, METADATA_BLOCK_PICTURE
+    // is the proposed tag for cover pictures.
+    // (see http://wiki.xiph.org/VorbisComment#METADATA_BLOCK_PICTURE)
+    if (map.contains("METADATA_BLOCK_PICTURE")) {
+      TagLib::StringList pict_list = map["METADATA_BLOCK_PICTURE"];
+      for(std::list<TagLib::String>::iterator it = pict_list.begin(); it != pict_list.end(); ++it) {
+        QByteArray data(QByteArray::fromBase64(it->toCString()));
+        TagLib::ByteVector tdata(data.data(), data.size());
+        TagLib::FLAC::Picture p(tdata);
+        if (p.type() == TagLib::FLAC::Picture::FrontCover)
+          return QByteArray(p.data().data(), p.data().size());
+      }
+      // If there was no specific front cover, just take the first picture
+      QByteArray data(QByteArray::fromBase64(map["METADATA_BLOCK_PICTURE"].front().toCString()));
+      TagLib::ByteVector tdata(data.data(), data.size());
+      TagLib::FLAC::Picture p(tdata);
+      return QByteArray(p.data().data(), p.data().size());
+    }
 
     // Ogg lacks a definitive standard for embedding cover art, but it seems
     // b64 encoding a field called COVERART is the general convention

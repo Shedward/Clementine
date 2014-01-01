@@ -1383,6 +1383,21 @@ if (APPLE)
   install(DIRECTORY "${GROWL}/Versions/Current/Resources"
     DESTINATION "${CMAKE_BINARY_DIR}/clementine.app/Contents/Frameworks/Growl.framework")
 
+  install(FILES "${QT_QTCORE_LIBRARY}/Contents/Info.plist"
+    DESTINATION "${CMAKE_BINARY_DIR}/clementine.app/Contents/Frameworks/QtCore.framework/Contents")
+  install(FILES "${QT_QTGUI_LIBRARY}/Contents/Info.plist"
+    DESTINATION "${CMAKE_BINARY_DIR}/clementine.app/Contents/Frameworks/QtGui.framework/Contents")
+  install(FILES "${QT_QTNETWORK_LIBRARY}/Contents/Info.plist"
+    DESTINATION "${CMAKE_BINARY_DIR}/clementine.app/Contents/Frameworks/QtNetwork.framework/Contents")
+  install(FILES "${QT_QTOPENGL_LIBRARY}/Contents/Info.plist"
+    DESTINATION "${CMAKE_BINARY_DIR}/clementine.app/Contents/Frameworks/QtOpenGL.framework/Contents")
+  install(FILES "${QT_QTSQL_LIBRARY}/Contents/Info.plist"
+    DESTINATION "${CMAKE_BINARY_DIR}/clementine.app/Contents/Frameworks/QtSql.framework/Contents")
+  install(FILES "${QT_QTSVG_LIBRARY}/Contents/Info.plist"
+    DESTINATION "${CMAKE_BINARY_DIR}/clementine.app/Contents/Frameworks/QtSvg.framework/Contents")
+  install(FILES "${QT_QTXML_LIBRARY}/Contents/Info.plist"
+    DESTINATION "${CMAKE_BINARY_DIR}/clementine.app/Contents/Frameworks/QtXml.framework/Contents")
+
   if (HAVE_BREAKPAD)
     install(DIRECTORY
         ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/google-breakpad/client/mac/build/Release/Breakpad.framework
@@ -1416,7 +1431,7 @@ if (APPLE)
     add_custom_target(
       sign
       COMMAND
-      codesign -s ${APPLE_DEVELOPER_ID} -fv ${PROJECT_BINARY_DIR}/clementine.app
+      codesign --deep --preserve-metadata=identifier,entitlements,resource-rules,requirements -s ${APPLE_DEVELOPER_ID} -fv ${PROJECT_BINARY_DIR}/clementine.app
       DEPENDS clementine
       VERBATIM
     )

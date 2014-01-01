@@ -509,10 +509,15 @@ void OutgoingDataCreator::UpdateTrackPosition() {
   pb::remote::Message msg;
   msg.set_type(pb::remote::UPDATE_TRACK_POSITION);
 
-  const int position = std::floor(
+  int position = std::floor(
     float(app_->player()->engine()->position_nanosec()) / kNsecPerSec + 0.5);
 
+  if (app_->player()->engine()->position_nanosec() > current_song_.length_nanosec())
+    position = last_track_position_;
+
   msg.mutable_response_update_track_position()->set_position(position);
+
+  last_track_position_ = position;
 
   SendDataToClients(&msg);
 }
@@ -726,7 +731,7 @@ void OutgoingDataCreator::SendLibrary(RemoteClient *client) {
   app_->database()->AttachDatabaseOnDbConnection("songs_export", adb, db);
 
   // Copy the content of the song table to this temporary database
-  QSqlQuery q(QString("create table songs_export.songs as SELECT * FROM songs;"), db);
+  QSqlQuery q(QString("create table songs_export.songs as SELECT * FROM songs where unavailable = 0;"), db);
 
   if (app_->database()->CheckErrors(q)) return;
 
