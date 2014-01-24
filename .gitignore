@@ -45,3 +45,6 @@ dist/windows/Python27.zip
 *.swp
 src/translations/translations.pot
 *.DS_Store
+
+/.bzr/
+.bzrignore

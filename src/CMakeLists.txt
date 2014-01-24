@@ -1137,6 +1137,30 @@ optional_source(HAVE_BOX
     internet/boxsettingspage.ui
 )
 
+# Vk.com support
+optional_source(HAVE_VK
+  INCLUDE_DIRECTORIES 
+    ${VREEN_INCLUDE_DIRS}
+    ${VREENOAUTH_INCLUDE_DIRS}
+  SOURCES
+    internet/vkservice.cpp
+    internet/vksettingspage.cpp
+    internet/vkurlhandler.cpp
+    globalsearch/vksearchprovider.cpp
+    internet/vkmusiccache.cpp
+		internet/vksearchdialog.cpp
+  HEADERS
+    internet/vkservice.h
+    internet/vksettingspage.h
+    internet/vkurlhandler.h
+    globalsearch/vksearchprovider.h
+    internet/vkmusiccache.h
+		internet/vksearchdialog.h
+  UI
+    internet/vksettingspage.ui
+		internet/vksearchdialog.ui
+)
+
 # Hack to add Clementine to the Unity system tray whitelist
 optional_source(LINUX
   SOURCES core/ubuntuunityhack.cpp
@@ -1203,6 +1227,10 @@ target_link_libraries(clementine_lib
   z
   Qocoa
 )
+
+if(HAVE_VK)
+    target_link_libraries(clementine_lib ${VREEN_LIBRARIES} ${VREENOAUTH_LIBRARIES})
+endif(HAVE_VK)
 
 if(ENABLE_VISUALISATIONS)
   target_link_libraries(clementine_lib ${LIBPROJECTM_LIBRARIES})

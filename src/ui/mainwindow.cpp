@@ -122,6 +122,10 @@
 # include "moodbar/moodbarproxystyle.h"
 #endif
 
+#ifdef HAVE_VK
+# include "internet/vkservice.h"
+#endif
+
 #include <QCloseEvent>
 #include <QDir>
 #include <QFileDialog>
@@ -333,6 +337,10 @@ MainWindow::MainWindow(Application* app,
   connect(ui_->action_ban, SIGNAL(triggered()), InternetModel::Service<LastFMService>(), SLOT(Ban()));
   connect(ui_->action_love, SIGNAL(triggered()), SLOT(Love()));
   connect(ui_->action_toggle_scrobbling, SIGNAL(triggered()), InternetModel::Service<LastFMService>(), SLOT(ToggleScrobbling()));
+#endif
+
+#ifdef HAVE_VK
+  connect(ui_->action_love, SIGNAL(triggered()), InternetModel::Service<VkService>(), SLOT(AddToMyMusicCurrent()));
 #endif
   connect(ui_->action_clear_playlist, SIGNAL(triggered()), app_->playlist_manager(), SLOT(ClearCurrent()));
   connect(ui_->action_remove_duplicates, SIGNAL(triggered()), app_->playlist_manager(), SLOT(RemoveDuplicatesCurrent()));

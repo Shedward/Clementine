@@ -84,6 +84,7 @@ public:
     Page_Dropbox,
     Page_Skydrive,
     Page_Box,
+    Page_Vk
   };
 
   enum Role {
