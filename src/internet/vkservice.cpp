@@ -568,7 +568,7 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem *parent, VkService::I
     break;
 
   default:
-    qLog(Error) << "Invalid type for creating" << type;
+    qLog(Error) << "Invalid type for creating row: " << type;
     break;
   }
 
