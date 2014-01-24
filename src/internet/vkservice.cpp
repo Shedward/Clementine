@@ -1051,18 +1051,13 @@ Song VkService::FromAudioItem(const Vreen::AudioItem &item) {
   song.set_artist(ClearString(item.artist()));
   song.set_length_nanosec(floor(item.duration() * kNsecPerSec));
 
-  // Workaround of unicode in song url issue.
-  // Convert all unicode data into base64
-  // There is can be problem with case sensetivity of url.
-  QString songData = item.artist() + '\n' + item.title();
-  QString songDataEnc(QUrl::toPercentEncoding(songData.toUtf8().toBase64()));
-
-  QString url = QString("vk://song/%1_%2/%3").
+  QString url = QString("vk://song/%1_%2/%3/%4").
                 arg(item.ownerId()).
                 arg(item.id()).
-                arg(songDataEnc);
+                arg(item.artist().replace('/','_')).
+                arg(item.title().replace('/','_'));
 
-  song.set_url(QUrl::fromEncoded(url.toUtf8()));
+  song.set_url(QUrl(url));
   return song;
 }
 
