@@ -168,7 +168,6 @@ public:
   void ShowContextMenu(const QPoint &global_pos);
   void ItemDoubleClicked(QStandardItem *item);
   QList<QAction*> playlistitem_actions(const Song &song);
-  Application* app() { return app_; }
 
   /* Interface*/
   QWidget* HeaderWidget() const;

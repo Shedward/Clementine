@@ -25,11 +25,12 @@
 #include <QUrl>
 
 class VkService;
+class Application;
 
 class VkMusicCache : public QObject {
   Q_OBJECT
 public:
-  explicit VkMusicCache(VkService* service, QObject *parent = 0);
+  explicit VkMusicCache(Application* app, VkService* service, QObject *parent = 0);
   ~VkMusicCache() {}
   // Return file path if file in cache otherwise
   // return internet url and add song to caching queue
@@ -58,7 +59,8 @@ private:
 
   QString CachedFilename(const QUrl &url);
 
-  VkService* service_;
+  Application *app_;
+  VkService *service_;
   QList<DownloadItem> queue_;
   // Contain index of current song in queue, need for removing if song was skipped.
   // Is zero if song downloading now, and less that zero if current song not caching or cached.

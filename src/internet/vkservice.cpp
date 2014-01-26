@@ -235,7 +235,7 @@ VkService::VkService(Application *app, InternetModel *parent) :
   expiresIn_(0),
   url_handler_(new VkUrlHandler(this, this)),
   audio_provider_(NULL),
-  cache_(new VkMusicCache(this)),
+  cache_(new VkMusicCache(app_, this)),
   last_search_id_(0)
 {
   QSettings s;
