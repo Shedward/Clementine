@@ -256,6 +256,21 @@ private:
   void ClearStandartItem(QStandardItem*item);
   QStandardItem * GetBookmarkItemById(int id);
   void CreateMenu();
+
+  /* Music */
+  void LoadAndAppendSongList(QStandardItem *item, int uid, int album_id = -1);
+  Song FromAudioItem(const Vreen::AudioItem &item);
+  SongList FromAudioList(const Vreen::AudioItemList &list);
+  void AppendSongs(QStandardItem *parent, const SongList &songs);
+
+  QStandardItem *AppendBookmark(const MusicOwner &owner);
+  void SaveBookmarks();
+  void LoadBookmarks();
+
+  void LoadAlbums();
+  QStandardItem *AppendAlbum(const Vreen::AudioAlbumItem &album);
+
+  /* Interface */
   QStandardItem* root_item_;
   QStandardItem* recommendations_;
   QStandardItem* my_music_;
@@ -286,19 +301,7 @@ private:
   time_t expiresIn_;
   VkUrlHandler* url_handler_;
 
-  /* Music */
-  void LoadAndAppendSongList(QStandardItem *item, int uid, int album_id = -1);
-  Song FromAudioItem(const Vreen::AudioItem &item);
-  SongList FromAudioList(const Vreen::AudioItemList &list);
-  void AppendSongs(QStandardItem *parent, const SongList &songs);
-
-  QStandardItem *AppendBookmark(const MusicOwner &owner);
-  void SaveBookmarks();
-  void LoadBookmarks();
-
-  void LoadAlbums();
-  QStandardItem *AppendAlbum(const Vreen::AudioAlbumItem &album);
-
+ /* Music */
   Vreen::AudioProvider* audio_provider_;
   VkMusicCache* cache_;
   // Keeping when more recent results recived.
