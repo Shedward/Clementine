@@ -116,15 +116,15 @@ static Song SongFromUrl(const QUrl& url) {
     if (ids.size() == 4) {
       result.set_artist(ids[2]);
       result.set_title(ids[3]);
-    } else if (ids.size() > 1){
-      result.set_title(ids[1]);
-      qLog(Error) << "Missing title and artist for" << url;
+      result.set_valid(true);
     } else {
       qLog(Error) << "Wrong song url" << url;
+      result.set_valid(false);
     }
     result.set_url(url);
   } else {
     qLog(Error) << "Wrong song url" << url;
+    result.set_valid(false);
   }
   return result;
 }
@@ -151,6 +151,7 @@ Song MusicOwner::toOwnerRadio() const {
                     .arg(screen_name_)
                     .arg(QString(name_).replace('/','_'))));
   song.set_artist(QObject::tr(" Group radio"));
+  song.set_valid(true);
   return song;
 }
 
@@ -1036,6 +1037,7 @@ Song VkService::FromAudioItem(const Vreen::AudioItem& item) {
                 arg(item.title().replace('/','_'));
 
   song.set_url(QUrl(url));
+  song.set_valid(true);
   return song;
 }
 
