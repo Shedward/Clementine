@@ -37,6 +37,7 @@
 #include "core/mergedproxymodel.h"
 #include "core/player.h"
 #include "core/timeconstants.h"
+#include "core/utilities.h"
 #include "ui/iconloader.h"
 #include "widgets/didyoumean.h"
 
@@ -65,10 +66,12 @@ const Vreen::OAuthConnection::Scopes VkService::kScopes =
   Vreen::OAuthConnection::Groups;
 
 const char* VkService::kDefCacheFilename = "%artist - %title";
-QString     VkService::kDefCacheDir() {  return QDir::homePath()+"/Vk Cache";}
-
 const int VkService::kMaxVkSongList = 6000;
 const int VkService::kCustomSongCount = 50;
+
+QString VkService::DefaultCacheDir() {
+  return Utilities::GetConfigPath(Utilities::Path_CacheRoot) + "/vkcache";
+}
 
 uint SearchID::last_id_ = 0;
 
@@ -1338,7 +1341,7 @@ void VkService::UpdateSettings() {
   s.beginGroup(kSettingGroup);
   maxGlobalSearch_ = s.value("max_global_search",kCustomSongCount).toInt();
   cachingEnabled_ = s.value("cache_enabled", false).toBool();
-  cacheDir_ = s.value("cache_dir",kDefCacheDir()).toString();
+  cacheDir_ = s.value("cache_dir",DefaultCacheDir()).toString();
   cacheFilename_ = s.value("cache_filename", kDefCacheFilename).toString();
   love_is_add_to_mymusic_ = s.value("love_is_add_to_my_music",false).toBool();
   groups_in_global_search_ = s.value("groups_in_global_search", false).toBool();

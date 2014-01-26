@@ -141,7 +141,7 @@ public:
   static const uint  kApiKey;
   static const Vreen::OAuthConnection::Scopes kScopes;
   static const char* kDefCacheFilename;
-  static QString kDefCacheDir();
+  static QString DefaultCacheDir();
   static const int kMaxVkSongList;
   static const int kCustomSongCount;
 
