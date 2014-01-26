@@ -23,13 +23,13 @@
 #include "vkservice.h"
 #include "vkmusiccache.h"
 
-VkUrlHandler::VkUrlHandler(VkService *service, QObject *parent)
+VkUrlHandler::VkUrlHandler(VkService* service, QObject* parent)
   : UrlHandler(parent),
     service_(service)
 {
 }
 
-UrlHandler::LoadResult VkUrlHandler::StartLoading(const QUrl &url) {
+UrlHandler::LoadResult VkUrlHandler::StartLoading(const QUrl& url) {
   QStringList args = url.toString().remove("vk://").split("/");
 
   if (args.size() < 2) {
@@ -43,7 +43,7 @@ UrlHandler::LoadResult VkUrlHandler::StartLoading(const QUrl &url) {
     if (action == "song") {
       service_->SetCurrentSongFromUrl(url);
       return LoadResult(url, LoadResult::TrackAvailable, service_->cache()->Get(url));
-    } else if (action == "group"){
+    } else if (action == "group") {
       return service_->GetGroupNextSongUrl(url);
     } else {
       qLog(Error) << "Invalid vk.com url action:" << action;
@@ -56,11 +56,11 @@ void VkUrlHandler::TrackSkipped() {
   service_->cache()->BreakCurrentCaching();
 }
 
-void VkUrlHandler::ForceAddToCache(const QUrl &url) {
+void VkUrlHandler::ForceAddToCache(const QUrl& url) {
   service_->cache()->ForceCache(url);
 }
 
-UrlHandler::LoadResult VkUrlHandler::LoadNext(const QUrl &url) {
+UrlHandler::LoadResult VkUrlHandler::LoadNext(const QUrl& url) {
   if (url.toString().startsWith("vk://group"))
     return StartLoading(url);
   else

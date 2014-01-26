@@ -24,7 +24,7 @@
 #include "core/logging.h"
 #include "core/taskmanager.h"
 
-VkMusicCache::VkMusicCache(Application *app, VkService *service, QObject *parent)
+VkMusicCache::VkMusicCache(Application* app, VkService* service, QObject* parent)
   :QObject(parent),
     app_(app),
     service_(service),
@@ -38,7 +38,7 @@ VkMusicCache::VkMusicCache(Application *app, VkService *service, QObject *parent
 {
 }
 
-QUrl VkMusicCache::Get(const QUrl &url) {
+QUrl VkMusicCache::Get(const QUrl& url) {
   QString cached_filename = CachedFilename(url);
   QUrl result;
 
@@ -56,8 +56,7 @@ QUrl VkMusicCache::Get(const QUrl &url) {
   return result;
 }
 
-
-void VkMusicCache::ForceCache(const QUrl &url) {
+void VkMusicCache::ForceCache(const QUrl& url) {
   AddToQueue(CachedFilename(url), service_->GetSongPlayUrl(url));
 }
 
@@ -74,20 +73,17 @@ void VkMusicCache::BreakCurrentCaching() {
   }
 }
 
-
 /***
 * Queue operations
 */
 
-void VkMusicCache::AddToQueue(const QString &filename, const QUrl &download_url) {
+void VkMusicCache::AddToQueue(const QString& filename, const QUrl& download_url) {
   DownloadItem item;
   item.filename = filename;
   item.url = download_url;
   queue_.push_back(item);
   DownloadNext();
 }
-
-
 
 /***
 * Downloading
@@ -187,15 +183,15 @@ void VkMusicCache::Downloaded() {
 * Utils
 */
 
-bool VkMusicCache::InCache(const QString &filename) {
+bool VkMusicCache::InCache(const QString& filename) {
   return QFile::exists(filename);
 }
 
-bool VkMusicCache::InCache(const QUrl &url) {
+bool VkMusicCache::InCache(const QUrl& url) {
   return InCache(CachedFilename(url));
 }
 
-QString VkMusicCache::CachedFilename(const QUrl &url) {
+QString VkMusicCache::CachedFilename(const QUrl& url) {
   QStringList args = url.toString().remove("vk://").split('/');
 
   QString cache_filename;

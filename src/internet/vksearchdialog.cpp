@@ -6,7 +6,7 @@
 #include "vksearchdialog.h"
 #include "ui_vksearchdialog.h"
 
-VkSearchDialog::VkSearchDialog(VkService *service, QWidget *parent) :
+VkSearchDialog::VkSearchDialog(VkService* service, QWidget* parent) :
   QDialog(parent),
   ui(new Ui::VkSearchDialog),
   service_(service),
@@ -49,33 +49,29 @@ VkSearchDialog::VkSearchDialog(VkService *service, QWidget *parent) :
   ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 }
 
-VkSearchDialog::~VkSearchDialog()
-{
+VkSearchDialog::~VkSearchDialog() {
   delete ui;
   delete popup;
 }
 
-void VkSearchDialog::suggest()
-{
+void VkSearchDialog::suggest() {
   emit Find(ui->searchLine->text());
 }
 
-void VkSearchDialog::selected()
-{
+void VkSearchDialog::selected() {
   selectionChanged();
   ui->searchLine->setText(selected_.name());
   timer->stop();
   popup->hide();
 }
 
-void VkSearchDialog::ReciveResults(const SearchID &id, const MusicOwnerList &owners)
-{
-  if (id.id() > last_search_.id()){
+void VkSearchDialog::ReciveResults(const SearchID& id, const MusicOwnerList& owners) {
+  if (id.id() > last_search_.id()) {
     popup->setUpdatesEnabled(false);
     popup->clear();
 
-    if (owners.count() > 0){
-      for(const MusicOwner &own : owners){
+    if (owners.count() > 0) {
+      for(const MusicOwner &own : owners) {
         popup->addTopLevelItem(createItem(own));
       }
     } else {
@@ -86,14 +82,14 @@ void VkSearchDialog::ReciveResults(const SearchID &id, const MusicOwnerList &own
 
     popup->resizeColumnToContents(0);
     int ch = popup->columnWidth(0);
-    if (ch > 0.8*ui->searchLine->width()){
+    if (ch > 0.8*ui->searchLine->width()) {
       popup->setColumnWidth(0, qRound(0.8*ui->searchLine->width()));
     }
     popup->resizeColumnToContents(1);
     popup->adjustSize();
     popup->setUpdatesEnabled(true);
 
-    int elems = (owners.count() > 0)?owners.count():1;
+    int elems = (owners.count() > 0) ? owners.count() : 1;
     int h = popup->sizeHintForRow(0) * qMin(10, elems) + 3;
 
     popup->resize(ui->searchLine->width(), h);
@@ -105,7 +101,7 @@ void VkSearchDialog::ReciveResults(const SearchID &id, const MusicOwnerList &own
   }
 }
 
-void VkSearchDialog::showEvent(QShowEvent *)
+void VkSearchDialog::showEvent(QShowEvent*)
 {
   ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
   selected_ = MusicOwner();
@@ -115,7 +111,7 @@ void VkSearchDialog::showEvent(QShowEvent *)
 void VkSearchDialog::selectionChanged()
 {
   if (popup->selectedItems().size() > 0){
-    QTreeWidgetItem *sel = popup->selectedItems()[0];
+    QTreeWidgetItem* sel = popup->selectedItems()[0];
     selected_ = sel->data(0, Qt::UserRole).value<MusicOwner>();
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(selected_.id() != 0);
     ui->buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
@@ -127,7 +123,7 @@ MusicOwner VkSearchDialog::found() const
   return selected_;
 }
 
-bool VkSearchDialog::eventFilter(QObject *obj, QEvent *ev)
+bool VkSearchDialog::eventFilter(QObject* obj, QEvent* ev)
 {
   if (obj != popup)
     return false;
@@ -175,11 +171,11 @@ bool VkSearchDialog::eventFilter(QObject *obj, QEvent *ev)
   return false;
 }
 
-QTreeWidgetItem *VkSearchDialog::createItem(const MusicOwner &own)
+QTreeWidgetItem* VkSearchDialog::createItem(const MusicOwner& own)
 {
   QTreeWidgetItem* item = new QTreeWidgetItem(popup);
   item->setText(0, own.name());
-  if (own.id() > 0){
+  if (own.id() > 0) {
     item->setIcon(0, QIcon(":vk/user.png"));
   } else {
     item->setIcon(0, QIcon(":vk/group.png"));

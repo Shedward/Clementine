@@ -29,29 +29,28 @@ VkSearchProvider::VkSearchProvider(Application* app, QObject* parent) :
 {
 }
 
-void VkSearchProvider::Init(VkService *service) {
+void VkSearchProvider::Init(VkService* service) {
   service_ = service;
   SearchProvider::Init("Vk.com", "vk.com",
                        QIcon(":providers/vk.png"),
                        WantsDelayedQueries | CanShowConfig);
 
-  connect(service_, SIGNAL(SongSearchResult(SearchID,SongList)),
-          this, SLOT(SongSearchResult(SearchID,SongList)));
+  connect(service_, SIGNAL(SongSearchResult(SearchID, SongList)),
+          this, SLOT(SongSearchResult(SearchID, SongList)));
   connect(service_, SIGNAL(GroupSearchResult(SearchID, MusicOwnerList)),
           this, SLOT(GroupSearchResult(SearchID, MusicOwnerList)));
-
 }
 
-void VkSearchProvider::SearchAsync(int id, const QString &query) {
+void VkSearchProvider::SearchAsync(int id, const QString& query) {
   int count = service_->maxGlobalSearch();
 
   SearchID rid(SearchID::GlobalSearch);
   songs_recived = false;
   groups_recived = false;
   pending_searches_[rid.id()] = PendingState(id, TokenizeQuery(query));
-  service_->SongSearch(rid, query,count,0);
+  service_->SongSearch(rid, query, count, 0);
   if (service_->isGroupsInGlobalSearch()){
-    service_->GroupSearch(rid,query);
+    service_->GroupSearch(rid, query);
   }
 }
 
@@ -63,8 +62,8 @@ void VkSearchProvider::ShowConfig() {
   service_->ShowConfig();
 }
 
-void VkSearchProvider::SongSearchResult(const SearchID &rid, SongList songs) {
-  if (rid.type() == SearchID::GlobalSearch) {
+void VkSearchProvider::SongSearchResult(const SearchID& id, SongList songs) {
+  if (id.type() == SearchID::GlobalSearch) {
     ClearSimilarSongs(songs);
     ResultList ret;
     foreach (const Song& song, songs) {
@@ -74,16 +73,16 @@ void VkSearchProvider::SongSearchResult(const SearchID &rid, SongList songs) {
     }
     qLog(Info) << "Found" << songs.count() << "songs.";
     songs_recived = true;
-    const PendingState state = pending_searches_[rid.id()];
+    const PendingState state = pending_searches_[id.id()];
     emit ResultsAvailable(state.orig_id_, ret);
-    MaybeSearchFinished(rid.id());
+    MaybeSearchFinished(id.id());
   }
 }
 
-void VkSearchProvider::GroupSearchResult(const SearchID &rid, const MusicOwnerList &groups) {
+void VkSearchProvider::GroupSearchResult(const SearchID& rid, const MusicOwnerList& groups) {
   if (rid.type() == SearchID::GlobalSearch) {
     ResultList ret;
-    foreach (const MusicOwner &group, groups) {
+    foreach (const MusicOwner& group, groups) {
       Result result(this);
       result.metadata_ = group.toOwnerRadio();
       ret << result;
@@ -97,25 +96,23 @@ void VkSearchProvider::GroupSearchResult(const SearchID &rid, const MusicOwnerLi
 }
 
 void VkSearchProvider::MaybeSearchFinished(int id) {
-  if (pending_searches_.keys(PendingState(id, QStringList())).isEmpty() and songs_recived and groups_recived) {
+  if (pending_searches_.keys(PendingState(id, QStringList())).isEmpty() && songs_recived && groups_recived) {
     const PendingState state = pending_searches_.take(id);
     emit SearchFinished(state.orig_id_);
   }
 }
 
-void VkSearchProvider::ClearSimilarSongs(SongList &list) {
-  /* Search result sorted by relevance, and better quality songs usualy come first.
-     * Stable sort don't mix similar song, so std::unique will remove bad quality copies.
-     */
-
-  qStableSort(list.begin(), list.end(), [](const Song &a, const Song &b){
+void VkSearchProvider::ClearSimilarSongs(SongList& list) {
+  // Search result sorted by relevance, and better quality songs usualy come first.
+  // Stable sort don't mix similar song, so std::unique will remove bad quality copies.
+  qStableSort(list.begin(), list.end(), [](const Song& a, const Song& b) {
     return (a.artist().localeAwareCompare(b.artist()) > 0)
         or (a.title().localeAwareCompare(b.title()) > 0);
   });
 
   int old = list.count();
 
-  auto end = std::unique(list.begin(), list.end(), [](const Song &a, const Song &b){
+  auto end = std::unique(list.begin(), list.end(), [](const Song& a, const Song& b) {
     return (a.artist().localeAwareCompare(b.artist()) == 0)
         and (a.title().localeAwareCompare(b.title()) == 0);
   });

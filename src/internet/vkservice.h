@@ -28,24 +28,6 @@
 
 #include "vkurlhandler.h"
 
-/***
-* TODO(Vk): SUMMARY
-*  Cashing:
-*    - Using playing stream for caching.
-*      First version - return downloading filename to GStreamer.
-*      But GStreamer will not wait untill the file will be downloaded, it's just skip.
-*      Second version  - beforehand load next file, but it's not always possible
-*      to predict correctly, for example if user start to play any other song he want.
-*  Groups:
-*    - Maybe store bookmarks in vk servers, for sync between platforms/computers for same user.
-*    - Maybe skip group radio if user press next before next song is received or any time out
-*    - Use dynamic playlist instead/with radio.
-*
-*  Ui:
-*      - Actions should work with multiple selected items in playlist,
-*          for example if user want to add many songs to his library.
-*/
-
 namespace Vreen {
 class Client;
 class OAuthConnection;
@@ -68,18 +50,18 @@ public:
     id_(0)
   {}
 
-  explicit MusicOwner(const QUrl &group_url);
+  explicit MusicOwner(const QUrl& group_url);
   Song toOwnerRadio() const;
 
   QString name() const { return name_; }
   int id() const { return id_; }
   int song_count() const { return songs_count_; }
-  static QList<MusicOwner> parseMusicOwnerList(const QVariant &request_result);
+  static QList<MusicOwner> parseMusicOwnerList(const QVariant& request_result);
 
 private:
-  friend QDataStream &operator <<(QDataStream &stream, const MusicOwner &val);
-  friend QDataStream &operator >>(QDataStream &stream, MusicOwner &val);
-  friend QDebug operator<< (QDebug d, const MusicOwner &owner);
+  friend QDataStream& operator<<(QDataStream& stream, const MusicOwner& val);
+  friend QDataStream& operator>>(QDataStream& stream, MusicOwner& val);
+  friend QDebug operator<<(QDebug d, const MusicOwner& owner);
 
   int songs_count_;
   int id_; // if id > 0 is user otherwise id group
@@ -93,9 +75,9 @@ typedef QList<MusicOwner> MusicOwnerList;
 
 Q_DECLARE_METATYPE(MusicOwner)
 
-QDataStream& operator<<(QDataStream & stream, const MusicOwner & val);
-QDataStream& operator>>(QDataStream & stream, MusicOwner & var);
-QDebug operator<< (QDebug d, const MusicOwner &owner);
+QDataStream& operator<<(QDataStream& stream, const MusicOwner& val);
+QDataStream& operator>>(QDataStream& stream, MusicOwner& var);
+QDebug operator<< (QDebug d, const MusicOwner& owner);
 
 
 
@@ -164,10 +146,10 @@ public:
 
   /* InternetService interface */
   QStandardItem* CreateRootItem();
-  void LazyPopulate(QStandardItem *parent);
-  void ShowContextMenu(const QPoint &global_pos);
-  void ItemDoubleClicked(QStandardItem *item);
-  QList<QAction*> playlistitem_actions(const Song &song);
+  void LazyPopulate(QStandardItem* parent);
+  void ShowContextMenu(const QPoint& global_pos);
+  void ItemDoubleClicked(QStandardItem* item);
+  QList<QAction*> playlistitem_actions(const Song& song);
 
   /* Interface*/
   QWidget* HeaderWidget() const;
@@ -176,17 +158,17 @@ public:
   void Login();
   void Logout();
   bool HasAccount() const { return hasAccount_; }
-  bool WaitForReply(Vreen::Reply *reply);
+  bool WaitForReply(Vreen::Reply* reply);
 
   /* Music */
   VkMusicCache* cache() const { return cache_; }
-  void SetCurrentSongFromUrl(const QUrl &url); // Used if song taked from cache.
-  QUrl GetSongPlayUrl(const QUrl &url, bool is_playing = true);
+  void SetCurrentSongFromUrl(const QUrl& url); // Used if song taked from cache.
+  QUrl GetSongPlayUrl(const QUrl& url, bool is_playing = true);
   // Return random song result from group playlist.
   UrlHandler::LoadResult GetGroupNextSongUrl(const QUrl& url);
 
-  void SongSearch(SearchID id,const QString &query, int count = 50, int offset = 0);
-  void GroupSearch(SearchID id, const QString &query);
+  void SongSearch(SearchID id,const QString& query, int count = 50, int offset = 0);
+  void GroupSearch(SearchID id, const QString& query);
 
   /* Settings */
   void UpdateSettings();
@@ -198,35 +180,35 @@ public:
   bool isLoveAddToMyMusic() const { return love_is_add_to_mymusic_; }
 
 signals:
-  void NameUpdated(const QString &name);
+  void NameUpdated(const QString& name);
   void ConnectionStateChanged(Vreen::Client::State state);
   void LoginSuccess(bool);
-  void SongSearchResult(const SearchID &id, const SongList &songs);
-  void GroupSearchResult(const SearchID &id, const MusicOwnerList &groups);
-  void UserOrGroupSearchResult(const SearchID &id, const MusicOwnerList &owners);
+  void SongSearchResult(const SearchID& id, const SongList& songs);
+  void GroupSearchResult(const SearchID& id, const MusicOwnerList& groups);
+  void UserOrGroupSearchResult(const SearchID& id, const MusicOwnerList& owners);
   void StopWaiting();
 
 public slots:
   void UpdateRoot();
   void ShowConfig();
-  void FindUserOrGroup(const QString &q);
+  void FindUserOrGroup(const QString& q);
 
 private slots:
   /* Interface */
   void UpdateItem();
 
   /* Connection */
-  void ChangeAccessToken(const QByteArray &token, time_t expiresIn);
+  void ChangeAccessToken(const QByteArray& token, time_t expiresIn);
   void ChangeUid(int uid);
   void ChangeConnectionState(Vreen::Client::State state);
-  void ChangeMe(Vreen::Buddy*me);
+  void ChangeMe(Vreen::Buddy* me);
   void Error(Vreen::Client::Error error);
 
   /* Music */
   void UpdateMyMusic();
-  void UpdateBookmarkSongs(QStandardItem *item);
-  void UpdateAlbumSongs(QStandardItem *item);
-  void FindSongs(const QString &query);
+  void UpdateBookmarkSongs(QStandardItem* item);
+  void UpdateAlbumSongs(QStandardItem* item);
+  void FindSongs(const QString& query);
   void FindMore();
   void UpdateRecommendations();
   void MoreRecommendations();
@@ -241,34 +223,34 @@ private slots:
   void AddSelectedToBookmarks();
   void RemoveFromBookmark();
 
-  void SongSearchRecived(const SearchID &id, Vreen::AudioItemListReply *reply);
-  void GroupSearchRecived(const SearchID &id, Vreen::Reply *reply);
-  void UserOrGroupRecived(const SearchID &id, Vreen::Reply *reply);
-  void AlbumListRecived(Vreen::AudioAlbumItemListReply *reply);
+  void SongSearchRecived(const SearchID& id, Vreen::AudioItemListReply* reply);
+  void GroupSearchRecived(const SearchID& id, Vreen::Reply* reply);
+  void UserOrGroupRecived(const SearchID& id, Vreen::Reply* reply);
+  void AlbumListRecived(Vreen::AudioAlbumItemListReply* reply);
 
-  void AppendLoadedSongs(QStandardItem* item, Vreen::AudioItemListReply *reply);
-  void RecommendationsLoaded(Vreen::AudioItemListReply *reply);
-  void SearchResultLoaded(const SearchID &id, const SongList &songs);
+  void AppendLoadedSongs(QStandardItem* item, Vreen::AudioItemListReply* reply);
+  void RecommendationsLoaded(Vreen::AudioItemListReply* reply);
+  void SearchResultLoaded(const SearchID& id, const SongList& songs);
 
 private:
   /* Interface */
-  QStandardItem *CreateAndAppendRow(QStandardItem *parent, VkService::ItemType type);
-  void ClearStandartItem(QStandardItem*item);
-  QStandardItem * GetBookmarkItemById(int id);
+  QStandardItem* CreateAndAppendRow(QStandardItem* parent, VkService::ItemType type);
+  void ClearStandartItem(QStandardItem* item);
+  QStandardItem* GetBookmarkItemById(int id);
   void CreateMenu();
 
   /* Music */
-  void LoadAndAppendSongList(QStandardItem *item, int uid, int album_id = -1);
-  Song FromAudioItem(const Vreen::AudioItem &item);
-  SongList FromAudioList(const Vreen::AudioItemList &list);
-  void AppendSongs(QStandardItem *parent, const SongList &songs);
+  void LoadAndAppendSongList(QStandardItem* item, int uid, int album_id = -1);
+  Song FromAudioItem(const Vreen::AudioItem& item);
+  SongList FromAudioList(const Vreen::AudioItemList& list);
+  void AppendSongs(QStandardItem* parent, const SongList& songs);
 
-  QStandardItem *AppendBookmark(const MusicOwner &owner);
+  QStandardItem* AppendBookmark(const MusicOwner& owner);
   void SaveBookmarks();
   void LoadBookmarks();
 
   void LoadAlbums();
-  QStandardItem *AppendAlbum(const Vreen::AudioAlbumItem &album);
+  QStandardItem* AppendAlbum(const Vreen::AudioAlbumItem& album);
 
   /* Interface */
   QStandardItem* root_item_;
@@ -293,8 +275,8 @@ private:
   VkSearchDialog* vk_search_dialog_;
 
   /* Connection */
-  Vreen::Client *client_;
-  Vreen::OAuthConnection  *connection_;
+  Vreen::Client* client_;
+  Vreen::OAuthConnection* connection_;
   bool hasAccount_;
   int my_id_;
   QByteArray token_;

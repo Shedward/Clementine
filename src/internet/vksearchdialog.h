@@ -16,18 +16,18 @@ class VkSearchDialog : public QDialog
   Q_OBJECT
 
 public:
-  explicit VkSearchDialog(VkService *service, QWidget *parent = 0);
+  explicit VkSearchDialog(VkService* service, QWidget* parent = 0);
   ~VkSearchDialog();
   MusicOwner found() const;
 
 signals:
-  void Find(const QString &query);
+  void Find(const QString& query);
 
 public slots:
-  void ReciveResults(const SearchID &id, const MusicOwnerList &owners);
+  void ReciveResults(const SearchID& id, const MusicOwnerList& owners);
 
 protected:
-  void showEvent(QShowEvent *);
+  void showEvent(QShowEvent*);
 
 private slots:
   void selectionChanged();
@@ -35,15 +35,15 @@ private slots:
   void selected();
 
 private:
-  bool eventFilter(QObject *obj, QEvent *ev);
-  QTreeWidgetItem *createItem(const MusicOwner &own);
+  bool eventFilter(QObject* obj, QEvent* ev);
+  QTreeWidgetItem* createItem(const MusicOwner& own);
 
-  Ui::VkSearchDialog *ui;
+  Ui::VkSearchDialog* ui;
   MusicOwner selected_;
-  VkService *service_;
+  VkService* service_;
   SearchID last_search_;
-  QTreeWidget *popup;
-  QTimer *timer;
+  QTreeWidget* popup;
+  QTimer* timer;
 };
 
 #endif // VKSEARCHDIALOG_H

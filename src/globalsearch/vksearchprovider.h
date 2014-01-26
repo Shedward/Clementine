@@ -28,13 +28,13 @@ class VkSearchProvider : public SearchProvider {
 public:
   VkSearchProvider(Application* app, QObject* parent = 0);
   void Init(VkService* service);
-  void SearchAsync(int id, const QString &query);
+  void SearchAsync(int id, const QString& query);
   bool IsLoggedIn();
   void ShowConfig();
   InternetService* internet_service() { return service_; }
 
 public slots:
-  void SongSearchResult(const SearchID& rid, SongList songs);
+  void SongSearchResult(const SearchID& id, SongList songs);
   void GroupSearchResult(const SearchID& rid, const MusicOwnerList& groups);
 
 private:

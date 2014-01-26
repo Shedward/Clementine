@@ -30,18 +30,18 @@ class Application;
 class VkMusicCache : public QObject {
   Q_OBJECT
 public:
-  explicit VkMusicCache(Application* app, VkService* service, QObject *parent = 0);
+  explicit VkMusicCache(Application* app, VkService* service, QObject* parent = 0);
   ~VkMusicCache() {}
   // Return file path if file in cache otherwise
   // return internet url and add song to caching queue
-  QUrl Get(const QUrl &url);
-  void ForceCache(const QUrl &url);
+  QUrl Get(const QUrl& url);
+  void ForceCache(const QUrl& url);
   void BreakCurrentCaching();
-  bool InCache(const QUrl &url);
+  bool InCache(const QUrl& url);
 
 private slots:
-  bool InCache(const QString &filename);
-  void AddToQueue(const QString &filename, const QUrl &download_url);
+  bool InCache(const QString& filename);
+  void AddToQueue(const QString& filename, const QUrl& download_url);
   void DownloadNext();
   void DownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
   void DownloadReadyToRead();
@@ -52,15 +52,15 @@ private:
     QString filename;
     QUrl url;
 
-    bool operator ==(const DownloadItem &rhv) {
+    bool operator ==(const DownloadItem& rhv) {
       return filename == rhv.filename;
     }
   };
 
-  QString CachedFilename(const QUrl &url);
+  QString CachedFilename(const QUrl& url);
 
-  Application *app_;
-  VkService *service_;
+  Application* app_;
+  VkService* service_;
   QList<DownloadItem> queue_;
   // Contain index of current song in queue, need for removing if song was skipped.
   // Is zero if song downloading now, and less that zero if current song not caching or cached.
@@ -69,9 +69,9 @@ private:
   bool is_downloading;
   bool is_aborted;
   int task_id;
-  QFile *file_;
-  QNetworkAccessManager *network_manager_;
-  QNetworkReply *reply_;
+  QFile* file_;
+  QNetworkAccessManager* network_manager_;
+  QNetworkReply* reply_;
 };
 
 #endif // VKMUSICCACHE_H

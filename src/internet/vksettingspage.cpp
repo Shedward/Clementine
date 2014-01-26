@@ -25,7 +25,6 @@
 #include "core/logging.h"
 #include "internet/vkservice.h"
 
-
 VkSettingsPage::VkSettingsPage(SettingsDialog *parent)
   : SettingsPage(parent),
     ui_(new Ui::VkSettingsPage),
@@ -95,8 +94,9 @@ void VkSettingsPage::Logout() {
 void VkSettingsPage::CasheDirBrowse() {
   QString directory = QFileDialog::getExistingDirectory(
                         this, tr("Choose Vk.com cache directory"), ui_->cache_dir->text());
-  if (directory.isEmpty())
+  if (directory.isEmpty()){
     return;
+  }
 
   ui_->cache_dir->setText(QDir::toNativeSeparators(directory));
 }
