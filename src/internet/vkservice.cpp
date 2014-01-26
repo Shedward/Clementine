@@ -131,11 +131,6 @@ static Song SongFromUrl(const QUrl& url) {
   return result;
 }
 
-/*******************************************************************************
- *
- * MusicOwner
- *
- *******************************************************************************/
 MusicOwner::MusicOwner(const QUrl& group_url) {
   QStringList tokens = group_url.toString().remove("vk://").split('/');
   id_ = -tokens[1].toInt();
@@ -199,12 +194,6 @@ MusicOwnerList MusicOwner::parseMusicOwnerList(const QVariant& request_result) {
 
   return result;
 }
-
-/*****************************************************************************
- *
- * VkService realisation
- *
- *****************************************************************************/
 
 VkService::VkService(Application* app, InternetModel* parent) :
   InternetService(kServiceName, app, parent, parent),
