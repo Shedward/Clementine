@@ -46,8 +46,6 @@
 *          for example if user want to add many songs to his library.
 */
 
-typedef Vreen::OAuthConnection::Scopes Scopes;
-
 namespace Vreen {
 class Client;
 class OAuthConnection;
@@ -141,7 +139,7 @@ public:
   static const char* kSettingGroup;
   static const char* kUrlScheme;
   static const uint  kApiKey;
-  static const Scopes kScopes;
+  static const Vreen::OAuthConnection::Scopes kScopes;
   static const char* kDefCacheFilename;
   static QString kDefCacheDir();
   static const int kMaxVkSongList;

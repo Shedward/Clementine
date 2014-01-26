@@ -58,7 +58,7 @@ const char*  VkService::kServiceName = "Vk.com";
 const char*  VkService::kSettingGroup = "Vk.com";
 const char*  VkService::kUrlScheme = "vk";
 const uint   VkService::kApiKey = 3421812;
-const Scopes VkService::kScopes =
+const Vreen::OAuthConnection::Scopes VkService::kScopes =
   Vreen::OAuthConnection::Offline |
   Vreen::OAuthConnection::Audio |
   Vreen::OAuthConnection::Friends |
