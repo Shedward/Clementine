@@ -192,7 +192,7 @@ bool VkMusicCache::InCache(const QUrl& url) {
 }
 
 QString VkMusicCache::CachedFilename(const QUrl& url) {
-  QStringList args = url.toString().remove("vk://").split('/');
+  QStringList args = url.path().split('/');
 
   QString cache_filename;
   if (args.size() == 4) {

@@ -30,14 +30,14 @@ VkUrlHandler::VkUrlHandler(VkService* service, QObject* parent)
 }
 
 UrlHandler::LoadResult VkUrlHandler::StartLoading(const QUrl& url) {
-  QStringList args = url.toString().remove("vk://").split("/");
+  QStringList args = url.path().split("/");
 
   if (args.size() < 2) {
-    qLog(Error) << "Invalid Vk.com URL: " << url.toString()
+    qLog(Error) << "Invalid Vk.com URL: " << url
                 << "Url format should be vk://<source>/<id>."
                 << "For example vk://song/61145020_166946521/Daughtry/Gone Too Soon";
   } else {
-    QString action = args[0];
+    QString action = url.host();
     QString id = args[1];
 
     if (action == "song") {
@@ -61,8 +61,9 @@ void VkUrlHandler::ForceAddToCache(const QUrl& url) {
 }
 
 UrlHandler::LoadResult VkUrlHandler::LoadNext(const QUrl& url) {
-  if (url.toString().startsWith("vk://group"))
+  if (url.host() == "group") {
     return StartLoading(url);
-  else
+  } else {
     return LoadResult();
+  }
 }

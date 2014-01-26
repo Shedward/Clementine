@@ -94,49 +94,52 @@ struct SongId {
 };
 
 static SongId ExtractIds(const QUrl& url) {
-  QString str = url.toString();
-  if (str.startsWith("vk://song/")) {
-    QStringList ids =
-      str.remove("vk://song/")    // "<oid>_<aid>/<artist>/<title>"
-      .section('/', 0, 0)           // "<oid>_<aid>
-      .split('_');                // {"<oid>","<aid>"}
+  SongId res;
+  QString song_ids = url.path().section('/', 1, 1);
+  res.owner_id = song_ids.section('_', 0, 0).toInt();
+  res.audio_id = song_ids.section('_', 1, 1).toInt();
 
-    if (ids.count() < 2) {
-      qLog(Warning) << "Wrong song url" << url;
-      return SongId();
-    }
-    SongId res;
-    res.owner_id = ids[0].toInt();
-    res.audio_id = ids[1].toInt();
+  if (res.owner_id && res.audio_id
+      && url.scheme() == "vk"
+      && url.host() == "song") {
     return res;
   } else {
     qLog(Error) << "Wromg song url" << url;
+    return SongId();
   }
-  return SongId();
 }
 
 static Song SongFromUrl(const QUrl& url) {
-  QString str = url.toString();
   Song result;
-  if (str.startsWith("vk://song/")) {
-    QStringList ids = str.remove("vk://song/").split('/');
-    if (ids.size() == 3) {
-      result.set_artist(ids[1]);
-      result.set_title(ids[2]);
+  if (url.scheme() == "vk" && url.host() == "song") {
+    QStringList ids = url.path().split('/');
+    if (ids.size() == 4) {
+      result.set_artist(ids[2]);
+      result.set_title(ids[3]);
+    } else if (ids.size() > 1){
+      result.set_title(ids[1]);
+      qLog(Error) << "Missing title and artist for" << url;
+    } else {
+      qLog(Error) << "Wrong song url" << url;
     }
     result.set_url(url);
   } else {
-    qLog(Error) << "Wromg song url" << url;
+    qLog(Error) << "Wrong song url" << url;
   }
   return result;
 }
 
 MusicOwner::MusicOwner(const QUrl& group_url) {
-  QStringList tokens = group_url.toString().remove("vk://").split('/');
-  id_ = -tokens[1].toInt();
-  songs_count_ = tokens[2].toInt();
-  screen_name_ = tokens[3];
-  name_ = tokens[4].replace('_','/');
+  QStringList tokens = group_url.path().split('/');
+  if (group_url.scheme() == "vk" && group_url.host() == "group"
+      && tokens.size() == 5){
+    id_ = -tokens[1].toInt();
+    songs_count_ = tokens[2].toInt();
+    screen_name_ = tokens[3];
+    name_ = tokens[4].replace('_','/');
+    } else {
+      qLog(Error) << "Wrong group url" << group_url;
+    }
 }
 
 Song MusicOwner::toOwnerRadio() const {
@@ -423,11 +426,10 @@ void VkService::ItemDoubleClicked(QStandardItem* item) {
 
 QList<QAction*> VkService::playlistitem_actions(const Song& song) {
   QList<QAction*> actions;
-  QString url = song.url().toString();
 
-  if (url.startsWith("vk://song")) {
+  if (song.url().host() == "song") {
     selected_song_ = song;
-  } else if (url.startsWith("vk://group")) {
+  } else if (song.url().host() == "group") {
     add_to_bookmarks_->setVisible(true);
     actions << add_to_bookmarks_;
     if (song.url() == current_group_url_) {
@@ -756,7 +758,8 @@ void VkService::RecommendationsLoaded(Vreen::AudioItemListReply* reply) {
 
 void VkService::AddSelectedToBookmarks() {
   QUrl group_url;
-  if (selected_song_.url().toString().startsWith("vk://song")) {
+  if (selected_song_.url().scheme() == "vk"
+      && selected_song_.url().host() == "song") {
     // Selected song is song of now playing group, so group url in current_group_url_
     group_url = current_group_url_;
   } else {
@@ -1049,14 +1052,14 @@ SongList VkService::FromAudioList(const Vreen::AudioItemList& list) {
  */
 
 QUrl VkService::GetSongPlayUrl(const QUrl& url, bool is_playing) {
-  QStringList tokens = url.toString().remove("vk://song/").split('/');
+  QStringList tokens = url.path().split('/');
 
   if (tokens.count() < 2) {
     qLog(Error) << "Wrong song url" << url;
     return QUrl();
   }
 
-  QString song_id =  tokens[0];
+  QString song_id =  tokens[1];
 
   if (HasAccount()) {
     Vreen::AudioItemListReply* song_request = audio_provider_->getAudiosByIds(song_id);
@@ -1078,14 +1081,14 @@ QUrl VkService::GetSongPlayUrl(const QUrl& url, bool is_playing) {
 }
 
 UrlHandler::LoadResult VkService::GetGroupNextSongUrl(const QUrl& url) {
-  QStringList tokens = url.toString().remove("vk://group/").split('/');
-  if (tokens.count() < 2) {
+  QStringList tokens = url.path().split('/');
+  if (tokens.count() < 3) {
     qLog(Error) << "Wrong url" << url;
     return UrlHandler::LoadResult();
   }
 
-  int gid = tokens[0].toInt();
-  int songs_count = tokens[1].toInt();
+  int gid = tokens[1].toInt();
+  int songs_count = tokens[2].toInt();
 
   if (songs_count > kMaxVkSongList) {
     songs_count = kMaxVkSongList;
@@ -1093,7 +1096,8 @@ UrlHandler::LoadResult VkService::GetGroupNextSongUrl(const QUrl& url) {
 
   if (HasAccount()) {
     // Getting one random song from groups playlist.
-    Vreen::AudioItemListReply* song_request = audio_provider_->getContactAudio(-gid,1,random() % songs_count);
+    Vreen::AudioItemListReply* song_request = audio_provider_->
+        getContactAudio(-gid, 1, random() % songs_count);
 
     emit StopWaiting(); // Stop all previous requests.
     bool succ = WaitForReply(song_request);
