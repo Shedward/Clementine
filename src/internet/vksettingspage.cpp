@@ -34,7 +34,7 @@ VkSettingsPage::VkSettingsPage(SettingsDialog *parent)
   connect(service_, SIGNAL(LoginSuccess(bool)),
           SLOT(LoginSuccess(bool)));
   connect(ui_->choose_path, SIGNAL(clicked()),
-          SLOT(CasheDirBrowse()));
+          SLOT(CacheDirBrowse()));
   connect(ui_->reset, SIGNAL(clicked()),
           SLOT(ResetCasheFilenames()));
 }
@@ -44,7 +44,7 @@ VkSettingsPage::~VkSettingsPage() {
 }
 
 void VkSettingsPage::Load() {
-  service_->UpdateSettings();
+  service_->ReloadSettings();
 
   ui_->maxGlobalSearch->setValue(service_->maxGlobalSearch());
   ui_->enable_caching->setChecked(service_->isCachingEnabled());
@@ -71,15 +71,15 @@ void VkSettingsPage::Save() {
   s.setValue("love_is_add_to_my_music", ui_->love_button_is_add_to_mymusic->isChecked());
   s.setValue("groups_in_global_search", ui_->groups_in_global_search->isChecked());
 
-  service_->UpdateSettings();
+  service_->ReloadSettings();
 }
 
 void VkSettingsPage::Login() {
   service_->Login();
 }
 
-void VkSettingsPage::LoginSuccess(bool succ) {
-  if (succ) {
+void VkSettingsPage::LoginSuccess(bool success) {
+  if (success) {
     LogoutWidgets();
   } else {
     LoginWidgets();
@@ -91,7 +91,7 @@ void VkSettingsPage::Logout() {
   LoginWidgets();
 }
 
-void VkSettingsPage::CasheDirBrowse() {
+void VkSettingsPage::CacheDirBrowse() {
   QString directory = QFileDialog::getExistingDirectory(
                         this, tr("Choose Vk.com cache directory"), ui_->cache_dir->text());
   if (directory.isEmpty()){

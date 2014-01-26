@@ -37,12 +37,12 @@ public:
   void Save();
 
 private slots:
-  void LoginSuccess(bool succ);
+  void LoginSuccess(bool success);
 
   void Login();
   void Logout();
 
-  void CasheDirBrowse();
+  void CacheDirBrowse();
   void ResetCasheFilenames();
 
 private:

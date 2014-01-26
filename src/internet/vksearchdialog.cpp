@@ -44,7 +44,7 @@ VkSearchDialog::VkSearchDialog(VkService* service, QWidget* parent) :
 
   connect(this, SIGNAL(Find(QString)), service_, SLOT(FindUserOrGroup(QString)));
   connect(service_, SIGNAL(UserOrGroupSearchResult(SearchID,MusicOwnerList)),
-          this, SLOT(ReciveResults(SearchID,MusicOwnerList)));
+          this, SLOT(ReceiveResults(SearchID,MusicOwnerList)));
 
   ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 }
@@ -65,7 +65,7 @@ void VkSearchDialog::selected() {
   popup->hide();
 }
 
-void VkSearchDialog::ReciveResults(const SearchID& id, const MusicOwnerList& owners) {
+void VkSearchDialog::ReceiveResults(const SearchID& id, const MusicOwnerList& owners) {
   if (id.id() > last_search_.id()) {
     popup->setUpdatesEnabled(false);
     popup->clear();

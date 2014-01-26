@@ -171,7 +171,7 @@ public:
   void GroupSearch(SearchID id, const QString& query);
 
   /* Settings */
-  void UpdateSettings();
+  void ReloadSettings();
   int maxGlobalSearch() const { return maxGlobalSearch_; }
   bool isCachingEnabled() const { return cachingEnabled_; }
   bool isGroupsInGlobalSearch() const { return groups_in_global_search_; }
@@ -223,10 +223,10 @@ private slots:
   void AddSelectedToBookmarks();
   void RemoveFromBookmark();
 
-  void SongSearchRecived(const SearchID& id, Vreen::AudioItemListReply* reply);
-  void GroupSearchRecived(const SearchID& id, Vreen::Reply* reply);
-  void UserOrGroupRecived(const SearchID& id, Vreen::Reply* reply);
-  void AlbumListRecived(Vreen::AudioAlbumItemListReply* reply);
+  void SongSearchReceived(const SearchID& id, Vreen::AudioItemListReply* reply);
+  void GroupSearchReceived(const SearchID& id, Vreen::Reply* reply);
+  void UserOrGroupReceived(const SearchID& id, Vreen::Reply* reply);
+  void AlbumListReceived(Vreen::AudioAlbumItemListReply* reply);
 
   void AppendLoadedSongs(QStandardItem* item, Vreen::AudioItemListReply* reply);
   void RecommendationsLoaded(Vreen::AudioItemListReply* reply);
@@ -235,7 +235,7 @@ private slots:
 private:
   /* Interface */
   QStandardItem* CreateAndAppendRow(QStandardItem* parent, VkService::ItemType type);
-  void ClearStandartItem(QStandardItem* item);
+  void ClearStandardItem(QStandardItem* item);
   QStandardItem* GetBookmarkItemById(int id);
   void CreateMenu();
 
@@ -254,9 +254,9 @@ private:
 
   /* Interface */
   QStandardItem* root_item_;
-  QStandardItem* recommendations_;
-  QStandardItem* my_music_;
-  QStandardItem* search_;
+  QStandardItem* recommendations_item_;
+  QStandardItem* my_music_item_;
+  QStandardItem* search_result_item_;
 
   QMenu* context_menu_;
 
