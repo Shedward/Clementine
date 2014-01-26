@@ -116,7 +116,7 @@ static SongId ExtractIds(const QUrl &url) {
   return SongId();
 }
 
-static Song SongFromUrl(QUrl url) {
+static Song SongFromUrl(const QUrl& url) {
   QString str = url.toString();
   Song result;
   if (str.startsWith("vk://song/")) {
@@ -951,7 +951,7 @@ void VkService::CopyShareUrl() {
  * Search
  */
 
-void VkService::FindSongs(QString query) {
+void VkService::FindSongs(const QString &query) {
   if (query.isEmpty()) {
     root_item_->removeRow(search_->row());
     search_ = NULL;
@@ -977,21 +977,21 @@ void VkService::FindMore() {
   SongSearch(rid,last_query_,kCustomSongCount,search_->rowCount()-1);
 }
 
-void VkService::SearchResultLoaded(SearchID rid, const SongList &songs) {
+void VkService::SearchResultLoaded(const SearchID &id, const SongList &songs) {
   if (!search_) {
     return; // Result received when search is already over.
   }
 
-  if (rid.id() >= last_search_id_){
-    if (rid.type() == SearchID::LocalSearch) {
+  if (id.id() >= last_search_id_){
+    if (id.type() == SearchID::LocalSearch) {
       ClearStandartItem(search_);
-    } else if (rid.type() == SearchID::MoreLocalSearch) {
+    } else if (id.type() == SearchID::MoreLocalSearch) {
       RemoveLastRow(search_); // Remove only  "Loading..."
     } else {
       return; // Others request types ignored.
     }
 
-    last_search_id_= rid.id();
+    last_search_id_= id.id();
 
     if (songs.count() > 0) {
       AppendSongs(search_, songs);
@@ -999,7 +999,7 @@ void VkService::SearchResultLoaded(SearchID rid, const SongList &songs) {
     }
 
     // If new search, scroll to search results.
-    if (rid.type() == SearchID::LocalSearch) {
+    if (id.type() == SearchID::LocalSearch) {
       QModelIndex index = model()->merged_model()->mapFromSource(search_->index());
       ScrollToIndex(index);
     }
@@ -1159,7 +1159,7 @@ void VkService::SongSearch(SearchID id, const QString &query, int count, int off
              id, reply);
 }
 
-void VkService::SongSearchRecived(SearchID id, Vreen::AudioItemListReply *reply) {
+void VkService::SongSearchRecived(const SearchID &id, Vreen::AudioItemListReply *reply) {
   SongList songs = FromAudioList(reply->result());
   emit SongSearchResult(id, songs);
 }
@@ -1204,7 +1204,7 @@ void VkService::GroupSearch(SearchID id, const QString &query) {
              id, reply);
 }
 
-void VkService::GroupSearchRecived(SearchID id, Vreen::Reply *reply) {
+void VkService::GroupSearchRecived(const SearchID &id, Vreen::Reply *reply) {
   QVariant groups = reply->response();
   emit GroupSearchResult(id, MusicOwner::parseMusicOwnerList(groups));
 }
@@ -1320,7 +1320,7 @@ void VkService::FindUserOrGroup(const QString &q)
              SearchID(SearchID::UserOrGroup), reply);
 }
 
-void VkService::UserOrGroupRecived(SearchID id, Vreen::Reply *reply)
+void VkService::UserOrGroupRecived(const SearchID &id, Vreen::Reply *reply)
 {
   QVariant owners = reply->response();
   emit UserOrGroupSearchResult(id, MusicOwner::parseMusicOwnerList(owners));

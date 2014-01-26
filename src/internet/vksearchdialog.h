@@ -24,7 +24,7 @@ signals:
   void Find(const QString &query);
 
 public slots:
-  void ReciveResults(SearchID id, const MusicOwnerList &owners);
+  void ReciveResults(const SearchID &id, const MusicOwnerList &owners);
 
 protected:
   void showEvent(QShowEvent *);

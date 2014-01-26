@@ -179,7 +179,7 @@ public:
   bool WaitForReply(Vreen::Reply *reply);
 
   /* Music */
-  VkMusicCache* cache() { return cache_; }
+  VkMusicCache* cache() const { return cache_; }
   void SetCurrentSongFromUrl(const QUrl &url); // Used if song taked from cache.
   QUrl GetSongPlayUrl(const QUrl &url, bool is_playing = true);
   // Return random song result from group playlist.
@@ -190,20 +190,20 @@ public:
 
   /* Settings */
   void UpdateSettings();
-  int maxGlobalSearch() { return maxGlobalSearch_; }
-  bool isCachingEnabled() { return cachingEnabled_; }
-  bool isGroupsInGlobalSearch() { return groups_in_global_search_; }
-  QString cacheDir() { return cacheDir_; }
-  QString cacheFilename() { return cacheFilename_; }
-  bool isLoveAddToMyMusic() { return love_is_add_to_mymusic_; }
+  int maxGlobalSearch() const { return maxGlobalSearch_; }
+  bool isCachingEnabled() const { return cachingEnabled_; }
+  bool isGroupsInGlobalSearch() const { return groups_in_global_search_; }
+  QString cacheDir() const { return cacheDir_; }
+  QString cacheFilename() const { return cacheFilename_; }
+  bool isLoveAddToMyMusic() const { return love_is_add_to_mymusic_; }
 
 signals:
-  void NameUpdated(QString name);
+  void NameUpdated(const QString &name);
   void ConnectionStateChanged(Vreen::Client::State state);
   void LoginSuccess(bool);
-  void SongSearchResult(SearchID id, const SongList &songs);
-  void GroupSearchResult(SearchID id, const MusicOwnerList &groups);
-  void UserOrGroupSearchResult(SearchID id, const MusicOwnerList &owners);
+  void SongSearchResult(const SearchID &id, const SongList &songs);
+  void GroupSearchResult(const SearchID &id, const MusicOwnerList &groups);
+  void UserOrGroupSearchResult(const SearchID &id, const MusicOwnerList &owners);
   void StopWaiting();
 
 public slots:
@@ -226,7 +226,7 @@ private slots:
   void UpdateMyMusic();
   void UpdateBookmarkSongs(QStandardItem *item);
   void UpdateAlbumSongs(QStandardItem *item);
-  void FindSongs(QString query);
+  void FindSongs(const QString &query);
   void FindMore();
   void UpdateRecommendations();
   void MoreRecommendations();
@@ -241,14 +241,14 @@ private slots:
   void AddSelectedToBookmarks();
   void RemoveFromBookmark();
 
-  void SongSearchRecived(SearchID id, Vreen::AudioItemListReply *reply);
-  void GroupSearchRecived(SearchID id, Vreen::Reply *reply);
-  void UserOrGroupRecived(SearchID id, Vreen::Reply *reply);
+  void SongSearchRecived(const SearchID &id, Vreen::AudioItemListReply *reply);
+  void GroupSearchRecived(const SearchID &id, Vreen::Reply *reply);
+  void UserOrGroupRecived(const SearchID &id, Vreen::Reply *reply);
   void AlbumListRecived(Vreen::AudioAlbumItemListReply *reply);
 
   void AppendLoadedSongs(QStandardItem* item, Vreen::AudioItemListReply *reply);
   void RecommendationsLoaded(Vreen::AudioItemListReply *reply);
-  void SearchResultLoaded(SearchID rid, const SongList &songs);
+  void SearchResultLoaded(const SearchID &id, const SongList &songs);
 
 private:
   /* Interface */

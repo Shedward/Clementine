@@ -68,7 +68,7 @@ void VkSearchDialog::selected()
   popup->hide();
 }
 
-void VkSearchDialog::ReciveResults(SearchID id, const MusicOwnerList &owners)
+void VkSearchDialog::ReciveResults(const SearchID &id, const MusicOwnerList &owners)
 {
   if (id.id() > last_search_.id()){
     popup->setUpdatesEnabled(false);

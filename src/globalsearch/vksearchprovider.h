@@ -34,14 +34,14 @@ public:
   InternetService* internet_service() { return service_; }
 
 public slots:
-  void SongSearchResult(SearchID rid, SongList songs);
-  void GroupSearchResult(SearchID rid, const MusicOwnerList &groups);
+  void SongSearchResult(const SearchID& rid, SongList songs);
+  void GroupSearchResult(const SearchID& rid, const MusicOwnerList& groups);
 
 private:
   bool songs_recived;
   bool groups_recived;
   void MaybeSearchFinished(int id);
-  void ClearSimilarSongs(SongList &list);
+  void ClearSimilarSongs(SongList& list);
   VkService* service_;
   QMap<int, PendingState> pending_searches_;
 };

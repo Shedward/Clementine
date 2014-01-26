@@ -63,7 +63,7 @@ void VkSearchProvider::ShowConfig() {
   service_->ShowConfig();
 }
 
-void VkSearchProvider::SongSearchResult(SearchID rid, SongList songs) {
+void VkSearchProvider::SongSearchResult(const SearchID &rid, SongList songs) {
   if (rid.type() == SearchID::GlobalSearch) {
     ClearSimilarSongs(songs);
     ResultList ret;
@@ -80,7 +80,7 @@ void VkSearchProvider::SongSearchResult(SearchID rid, SongList songs) {
   }
 }
 
-void VkSearchProvider::GroupSearchResult(SearchID rid, const MusicOwnerList &groups) {
+void VkSearchProvider::GroupSearchResult(const SearchID &rid, const MusicOwnerList &groups) {
   if (rid.type() == SearchID::GlobalSearch) {
     ResultList ret;
     foreach (const MusicOwner &group, groups) {
