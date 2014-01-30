@@ -846,8 +846,7 @@ void VkService::LoadAlbums() {
 }
 
 QStandardItem* VkService::AppendAlbum(const Vreen::AudioAlbumItem& album) {
-  QStandardItem* item = new QStandardItem(
-              QIcon(":vk/playlist.png"), album.title());
+  QStandardItem* item = new QStandardItem(QIcon(":vk/playlist.png"), album.title());
 
   item->setData(QVariant::fromValue(album), Role_AlbumMetadata);
   item->setData(Type_Album, InternetModel::Role_Type);
