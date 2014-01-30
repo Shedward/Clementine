@@ -963,7 +963,7 @@ void VkService::SearchResultLoaded(const SearchID& id, const SongList& songs) {
 
     last_search_id_= id.id();
 
-    if (songs.count() > 0) {
+    if (!songs.isEmpty()) {
       AppendSongs(search_result_item_, songs);
       CreateAndAppendRow(search_result_item_, Type_More);
     }
