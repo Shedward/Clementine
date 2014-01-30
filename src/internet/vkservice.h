@@ -273,7 +273,7 @@ private:
 
   /* Connection */
   std::unique_ptr<Vreen::Client> client_;
-  Vreen::OAuthConnection* connection_;
+  std::unique_ptr<Vreen::OAuthConnection> connection_;
   bool hasAccount_;
   int my_id_;
   QByteArray token_;

@@ -219,7 +219,6 @@ VkService::VkService(Application* app, InternetModel* parent) :
   search_box_(new SearchBoxWidget(this)),
   vk_search_dialog_(new VkSearchDialog(this)),
   client_(new Vreen::Client),
-  connection_(NULL),
   hasAccount_(false),
   my_id_(0),
   expiresIn_(0),
@@ -573,16 +572,16 @@ void VkService::Login() {
       ChangeMe(client_->me());
     }
   } else {
-    connection_ = new Vreen::OAuthConnection(kApiKey, client_.get());
+    connection_.reset(new Vreen::OAuthConnection(kApiKey, client_.get()));
     connection_->setConnectionOption(Vreen::Connection::ShowAuthDialog,true);
     connection_->setScopes(kScopes);
 
-    connect(connection_, SIGNAL(accessTokenChanged(QByteArray, time_t)),
+    connect(connection_.get(), SIGNAL(accessTokenChanged(QByteArray, time_t)),
             SLOT(ChangeAccessToken(QByteArray, time_t)));
     connect(client_->roster(), SIGNAL(uidChanged(int)),
             SLOT(ChangeUid(int)));
 
-    client_->setConnection(connection_);
+    client_->setConnection(connection_.get());
   }
 
   if (HasAccount()) {
@@ -605,8 +604,7 @@ void VkService::Logout() {
   if (connection_) {
     client_->disconnectFromHost();
     connection_->clear();
-    delete connection_;
-    connection_ = NULL;
+    connection_.release();
   }
 
   UpdateRoot();
