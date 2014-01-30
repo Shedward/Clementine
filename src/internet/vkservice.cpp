@@ -558,8 +558,6 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem* parent, VkService::I
   return item;
 }
 
-
-
 /***
  * Connection
  */
@@ -691,8 +689,6 @@ void VkService::Error(Vreen::Client::Error error) {
 
   qLog(Error) << "Client error: " << error << msg;
 }
-
-
 
 /***
  * My Music
