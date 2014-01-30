@@ -234,7 +234,7 @@ private:
   QStandardItem* CreateAndAppendRow(QStandardItem* parent, VkService::ItemType type);
   void ClearStandardItem(QStandardItem* item);
   QStandardItem* GetBookmarkItemById(int id);
-  void CreateMenu();
+  void EnsureMenuCreated();
 
   /* Music */
   void LoadAndAppendSongList(QStandardItem* item, int uid, int album_id = -1);

@@ -247,7 +247,6 @@ VkService::VkService(Application* app, InternetModel* parent) :
           SLOT(Error(Vreen::Client::Error)));
 
   /* Init interface */
-  CreateMenu();
 
   VkSearchProvider* search_provider = new VkSearchProvider(app_, this);
   search_provider->Init(this);
@@ -292,61 +291,66 @@ void VkService::LazyPopulate(QStandardItem* parent) {
   }
 }
 
-void VkService::CreateMenu() {
-  context_menu_ = new QMenu;
+void VkService::EnsureMenuCreated() {
+  if (!context_menu_) {
+    context_menu_ = new QMenu;
 
-  context_menu_->addActions(GetPlaylistActions());
-  context_menu_->addSeparator();
+    context_menu_->addActions(GetPlaylistActions());
+    context_menu_->addSeparator();
 
-  add_to_bookmarks_ = context_menu_->addAction(
-                        QIcon(":vk/add.png"), tr("Add to bookmarks"),
-                        this, SLOT(AddSelectedToBookmarks()));
+    add_to_bookmarks_ = context_menu_->addAction(
+                          QIcon(":vk/add.png"), tr("Add to bookmarks"),
+                          this, SLOT(AddSelectedToBookmarks()));
 
-  remove_from_bookmarks_ = context_menu_->addAction(
-                             QIcon(":vk/remove.png"), tr("Remove from bookmarks"),
-                             this, SLOT(RemoveFromBookmark()));
+    remove_from_bookmarks_ = context_menu_->addAction(
+                               QIcon(":vk/remove.png"), tr("Remove from bookmarks"),
+                               this, SLOT(RemoveFromBookmark()));
 
-  context_menu_->addSeparator();
+    context_menu_->addSeparator();
 
-  find_this_artist_ = context_menu_->addAction(
-                        QIcon(":vk/find.png"), tr("Find this artist"),
-                        this, SLOT(FindThisArtist()));
+    find_this_artist_ = context_menu_->addAction(
+                          QIcon(":vk/find.png"), tr("Find this artist"),
+                          this, SLOT(FindThisArtist()));
 
-  add_to_my_music_ = context_menu_->addAction(
-                       QIcon(":vk/add.png"), tr("Add to My Music"),
-                       this, SLOT(AddToMyMusic()));
+    add_to_my_music_ = context_menu_->addAction(
+                         QIcon(":vk/add.png"), tr("Add to My Music"),
+                         this, SLOT(AddToMyMusic()));
 
-  remove_from_my_music_ = context_menu_->addAction(
-                            QIcon(":vk/remove.png"), tr("Remove from My Music"),
-                            this, SLOT(RemoveFromMyMusic()));
+    remove_from_my_music_ = context_menu_->addAction(
+                              QIcon(":vk/remove.png"), tr("Remove from My Music"),
+                              this, SLOT(RemoveFromMyMusic()));
 
-  add_song_to_cache_ = context_menu_->addAction(
-                         QIcon(":vk/download.png"), tr("Add song to cache"),
-                         this, SLOT(AddToCache()));
+    add_song_to_cache_ = context_menu_->addAction(
+                           QIcon(":vk/download.png"), tr("Add song to cache"),
+                           this, SLOT(AddToCache()));
 
-  copy_share_url_ = context_menu_->addAction(
-                      QIcon(":vk/link.png"), tr("Copy share url to clipboard"),
-                      this, SLOT(CopyShareUrl()));
+    copy_share_url_ = context_menu_->addAction(
+                        QIcon(":vk/link.png"), tr("Copy share url to clipboard"),
+                        this, SLOT(CopyShareUrl()));
 
-  find_owner_ = context_menu_->addAction(
-                  QIcon(":vk/find.png"), tr("Add user/group to bookmarks"),
-                  this, SLOT(ShowSearchDialog()));
+    find_owner_ = context_menu_->addAction(
+                    QIcon(":vk/find.png"), tr("Add user/group to bookmarks"),
+                    this, SLOT(ShowSearchDialog()));
 
-  update_recommendations_ = context_menu_->addAction(
-                              IconLoader::Load("view-refresh"), tr("Update"),
-                              this, SLOT(UpdateRecommendations()));
+    update_recommendations_ = context_menu_->addAction(
+                                IconLoader::Load("view-refresh"), tr("Update"),
+                                this, SLOT(UpdateRecommendations()));
 
-  update_item_ = context_menu_->addAction(
-                       IconLoader::Load("view-refresh"), tr("Update"),
-                       this, SLOT(UpdateItem()));
+    update_item_ = context_menu_->addAction(
+                         IconLoader::Load("view-refresh"), tr("Update"),
+                         this, SLOT(UpdateItem()));
 
-  context_menu_->addSeparator();
-  context_menu_->addAction(
-        IconLoader::Load("configure"), tr("Configure Vk.com..."),
-        this, SLOT(ShowConfig()));
+    context_menu_->addSeparator();
+    context_menu_->addAction(
+          IconLoader::Load("configure"), tr("Configure Vk.com..."),
+          this, SLOT(ShowConfig()));
+  }
 }
 
 void VkService::ShowContextMenu(const QPoint& global_pos) {
+
+  EnsureMenuCreated();
+
   QModelIndex current(model()->current_index());
 
   const int item_type = current.data(InternetModel::Role_Type).toInt();
@@ -418,6 +422,8 @@ void VkService::ItemDoubleClicked(QStandardItem* item) {
 }
 
 QList<QAction*> VkService::playlistitem_actions(const Song& song) {
+  EnsureMenuCreated();
+
   QList<QAction*> actions;
 
   if (song.url().host() == "song") {
