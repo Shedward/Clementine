@@ -596,9 +596,9 @@ void VkService::Login() {
 void VkService::Logout() {
   QSettings s;
   s.beginGroup(kSettingGroup);
-  s.setValue("token", QByteArray());
-  s.setValue("expiresIn", 0);
-  s.setValue("uid",uint(0));
+  s.remove("token");
+  s.remove("expiresIn");
+  s.remove("uid");
 
   hasAccount_ = false;
 
