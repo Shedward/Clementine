@@ -900,8 +900,8 @@ void VkService::RemoveFromMyMusic() {
     connect(reply, SIGNAL(resultReady(QVariant)),
             this, SLOT(UpdateMyMusic()));
   } else {
-    qLog(Warning) << "You tried to delete not your (" << my_id_
-                  << ") song with url" << selected_song_.url();
+    qLog(Error) << "Tried to delete song that not owned by user (" << my_id_
+                  << selected_song_.url();
   }
 }
 
