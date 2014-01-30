@@ -1090,7 +1090,7 @@ UrlHandler::LoadResult VkService::GetGroupNextSongUrl(const QUrl& url) {
   if (HasAccount()) {
     // Getting one random song from groups playlist.
     Vreen::AudioItemListReply* song_request = audio_provider_->
-        getContactAudio(-gid, 1, random() % songs_count);
+        getContactAudio(-gid, 1, qrand() % songs_count);
 
     emit StopWaiting(); // Stop all previous requests.
     bool succ = WaitForReply(song_request);
