@@ -1,8 +1,8 @@
 set(QT_USE_QTNETWORK true)
 
-option(SYSTEM_VREEN "Force use system vreen instead build-in copy" OFF)
+option(USE_SYSTEM_VREEN "Force use system vreen instead build-in copy" OFF)
 
-if(SYSTEM_VREEN)
+if(USE_SYSTEM_VREEN)
   find_package(PkgConfig)
     if(PKG_CONFIG_FOUND)
       pkg_check_modules(VREEN REQUIRED vreen)
