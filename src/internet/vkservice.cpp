@@ -17,8 +17,7 @@
 
 #include "vkservice.h"
 
-#include <math.h>
-
+#include <qmath.h>
 #include <QApplication>
 #include <QByteArray>
 #include <QClipboard>
@@ -1020,7 +1019,7 @@ Song VkService::FromAudioItem(const Vreen::AudioItem& item) {
   Song song;
   song.set_title(SanitiseCharacters(item.title()));
   song.set_artist(SanitiseCharacters(item.artist()));
-  song.set_length_nanosec(floor(item.duration() * kNsecPerSec));
+  song.set_length_nanosec(qFloor(item.duration() * kNsecPerSec));
 
   QString url = QString("vk://song/%1_%2/%3/%4").
                 arg(item.ownerId()).
