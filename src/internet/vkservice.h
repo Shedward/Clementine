@@ -38,7 +38,6 @@ class SearchBoxWidget;
 class VkMusicCache;
 class VkSearchDialog;
 
-
 /***
  * Store information about user or group
  * using in bookmarks.
@@ -77,9 +76,7 @@ Q_DECLARE_METATYPE(MusicOwner)
 
 QDataStream& operator<<(QDataStream& stream, const MusicOwner& val);
 QDataStream& operator>>(QDataStream& stream, MusicOwner& var);
-QDebug operator<< (QDebug d, const MusicOwner& owner);
-
-
+QDebug operator<<(QDebug d, const MusicOwner& owner);
 
 /***
  * The simple structure allows the handler to determine
@@ -105,8 +102,6 @@ private:
   int id_;
   Type type_;
 };
-
-
 
 /***
  * VkService

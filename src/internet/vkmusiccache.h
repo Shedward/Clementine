@@ -30,7 +30,7 @@ class Application;
 class VkMusicCache : public QObject {
   Q_OBJECT
 public:
-  explicit VkMusicCache(Application* app, VkService* service, QObject* parent = 0);
+  explicit VkMusicCache(Application* app, VkService* service);
   ~VkMusicCache() {}
   // Return file path if file in cache otherwise
   // return internet url and add song to caching queue

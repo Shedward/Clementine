@@ -24,8 +24,8 @@
 #include "core/logging.h"
 #include "core/taskmanager.h"
 
-VkMusicCache::VkMusicCache(Application* app, VkService* service, QObject* parent)
-  :QObject(parent),
+VkMusicCache::VkMusicCache(Application* app, VkService* service)
+  :QObject(service),
     app_(app),
     service_(service),
     current_cashing_index(0),
