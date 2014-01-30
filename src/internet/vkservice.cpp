@@ -1093,9 +1093,9 @@ UrlHandler::LoadResult VkService::GetGroupNextSongUrl(const QUrl& url) {
         getContactAudio(-gid, 1, qrand() % songs_count);
 
     emit StopWaiting(); // Stop all previous requests.
-    bool succ = WaitForReply(song_request);
+    bool success = WaitForReply(song_request);
 
-    if (succ and not song_request->result().isEmpty()) {
+    if (success and not song_request->result().isEmpty()) {
       Vreen::AudioItem song = song_request->result()[0];
       current_group_url_ = url;
       current_song_ = FromAudioItem(song);
