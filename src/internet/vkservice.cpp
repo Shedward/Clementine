@@ -224,7 +224,7 @@ VkService::VkService(Application* app, InternetModel* parent) :
   my_id_(0),
   expiresIn_(0),
   url_handler_(new VkUrlHandler(this, this)),
-  audio_provider_(NULL),
+  audio_provider_(new Vreen::AudioProvider(client_.get())),
   cache_(new VkMusicCache(app_, this)),
   last_search_id_(0)
 {
@@ -232,8 +232,6 @@ VkService::VkService(Application* app, InternetModel* parent) :
   s.beginGroup(kSettingGroup);
 
   /* Init connection */
-  audio_provider_ = new Vreen::AudioProvider(client_);
-
   client_->setTrackMessages(false);
   client_->setInvisible(true);
 
@@ -243,9 +241,9 @@ VkService::VkService(Application* app, InternetModel* parent) :
     Login();
   }
 
-  connect(client_, SIGNAL(connectionStateChanged(Vreen::Client::State)),
+  connect(client_.get(), SIGNAL(connectionStateChanged(Vreen::Client::State)),
           SLOT(ChangeConnectionState(Vreen::Client::State)));
-  connect(client_, SIGNAL(error(Vreen::Client::Error)),
+  connect(client_.get(), SIGNAL(error(Vreen::Client::Error)),
           SLOT(Error(Vreen::Client::Error)));
 
   /* Init interface */
@@ -260,10 +258,6 @@ VkService::VkService(Application* app, InternetModel* parent) :
 }
 
 VkService::~VkService() {
-  delete audio_provider_;
-  audio_provider_ = NULL;
-  delete client_;
-  client_ = NULL;
 }
 
 /***
@@ -573,7 +567,7 @@ void VkService::Login() {
       ChangeMe(client_->me());
     }
   } else {
-    connection_ = new Vreen::OAuthConnection(kApiKey, client_);
+    connection_ = new Vreen::OAuthConnection(kApiKey, client_.get());
     connection_->setConnectionOption(Vreen::Connection::ShowAuthDialog,true);
     connection_->setScopes(kScopes);
 
@@ -635,7 +629,7 @@ void VkService::ChangeConnectionState(Vreen::Client::State state)
     hasAccount_ = true;
     emit LoginSuccess(true);
     UpdateRoot();
-    connect(client_, SIGNAL(meChanged(Vreen::Buddy*)),
+    connect(client_.get(), SIGNAL(meChanged(Vreen::Buddy*)),
             SLOT(ChangeMe(Vreen::Buddy*)));
     break;
 

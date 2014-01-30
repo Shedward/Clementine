@@ -18,6 +18,8 @@
 #ifndef VKSERVICE_H
 #define VKSERVICE_H
 
+#include <memory>
+
 #include "internetservice.h"
 #include "internetmodel.h"
 #include "core/song.h"
@@ -270,7 +272,7 @@ private:
   VkSearchDialog* vk_search_dialog_;
 
   /* Connection */
-  Vreen::Client* client_;
+  std::unique_ptr<Vreen::Client> client_;
   Vreen::OAuthConnection* connection_;
   bool hasAccount_;
   int my_id_;
@@ -279,7 +281,7 @@ private:
   VkUrlHandler* url_handler_;
 
  /* Music */
-  Vreen::AudioProvider* audio_provider_;
+  std::unique_ptr<Vreen::AudioProvider> audio_provider_;
   VkMusicCache* cache_;
   // Keeping when more recent results recived.
   // Using for prevent loading tardy result instead.
