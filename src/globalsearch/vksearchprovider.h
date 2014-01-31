@@ -25,6 +25,7 @@
 
 class VkSearchProvider : public SearchProvider {
   Q_OBJECT
+
 public:
   VkSearchProvider(Application* app, QObject* parent = 0);
   void Init(VkService* service);
@@ -46,4 +47,4 @@ private:
   QMap<int, PendingState> pending_searches_;
 };
 
-#endif // VKSEARCHPROVIDER_H
+#endif  // VKSEARCHPROVIDER_H

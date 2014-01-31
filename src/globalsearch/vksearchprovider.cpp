@@ -23,10 +23,9 @@
 #include "core/logging.h"
 #include "core/song.h"
 
-VkSearchProvider::VkSearchProvider(Application* app, QObject* parent) :
-  SearchProvider(app,parent),
-  service_(NULL)
-{
+VkSearchProvider::VkSearchProvider(Application* app, QObject* parent)
+  : SearchProvider(app, parent),
+    service_(NULL) {
 }
 
 void VkSearchProvider::Init(VkService* service) {
@@ -49,7 +48,7 @@ void VkSearchProvider::SearchAsync(int id, const QString& query) {
   groups_recived = false;
   pending_searches_[rid.id()] = PendingState(id, TokenizeQuery(query));
   service_->SongSearch(rid, query, count, 0);
-  if (service_->isGroupsInGlobalSearch()){
+  if (service_->isGroupsInGlobalSearch()) {
     service_->GroupSearch(rid, query);
   }
 }
@@ -107,14 +106,14 @@ void VkSearchProvider::ClearSimilarSongs(SongList& list) {
   // Stable sort don't mix similar song, so std::unique will remove bad quality copies.
   qStableSort(list.begin(), list.end(), [](const Song& a, const Song& b) {
     return (a.artist().localeAwareCompare(b.artist()) > 0)
-        or (a.title().localeAwareCompare(b.title()) > 0);
+        || (a.title().localeAwareCompare(b.title()) > 0);
   });
 
   int old = list.count();
 
   auto end = std::unique(list.begin(), list.end(), [](const Song& a, const Song& b) {
     return (a.artist().localeAwareCompare(b.artist()) == 0)
-        and (a.title().localeAwareCompare(b.title()) == 0);
+        && (a.title().localeAwareCompare(b.title()) == 0);
   });
 
   list.erase(end, list.end());

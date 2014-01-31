@@ -30,7 +30,7 @@ class VkSettingsPage : public SettingsPage {
   Q_OBJECT
 
 public:
-  VkSettingsPage(SettingsDialog* parent);
+  explicit VkSettingsPage(SettingsDialog* parent);
   ~VkSettingsPage();
 
   void Load();
@@ -52,4 +52,4 @@ private:
   VkService* service_;
 };
 
-#endif // VKSETTINGSPAGE_H
+#endif  // VKSETTINGSPAGE_H

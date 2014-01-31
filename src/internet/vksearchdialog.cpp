@@ -1,3 +1,20 @@
+/* This file is part of Clementine.
+   Copyright 2013, Vlad Maltsev <shedwardx@gmail.com>
+
+   Clementine is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Clementine is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Clementine.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <QKeyEvent>
 #include <QPushButton>
 
@@ -6,12 +23,12 @@
 #include "vksearchdialog.h"
 #include "ui_vksearchdialog.h"
 
-VkSearchDialog::VkSearchDialog(VkService* service, QWidget* parent) :
-  QDialog(parent),
-  ui(new Ui::VkSearchDialog),
-  service_(service),
-  last_search_(SearchID(SearchID::UserOrGroup))
-{
+VkSearchDialog::VkSearchDialog(VkService* service, QWidget* parent)
+  : QDialog(parent),
+    ui(new Ui::VkSearchDialog),
+    service_(service),
+    last_search_(SearchID(SearchID::UserOrGroup)) {
+
   ui->setupUi(this);
 
   timer = new QTimer(this);
@@ -43,8 +60,8 @@ VkSearchDialog::VkSearchDialog(VkService* service, QWidget* parent) :
           SLOT(selected()));
 
   connect(this, SIGNAL(Find(QString)), service_, SLOT(FindUserOrGroup(QString)));
-  connect(service_, SIGNAL(UserOrGroupSearchResult(SearchID,MusicOwnerList)),
-          this, SLOT(ReceiveResults(SearchID,MusicOwnerList)));
+  connect(service_, SIGNAL(UserOrGroupSearchResult(SearchID, MusicOwnerList)),
+          this, SLOT(ReceiveResults(SearchID, MusicOwnerList)));
 
   ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 }
@@ -71,7 +88,7 @@ void VkSearchDialog::ReceiveResults(const SearchID& id, const MusicOwnerList& ow
     popup->clear();
 
     if (owners.count() > 0) {
-      for(const MusicOwner &own : owners) {
+      for (const MusicOwner &own : owners) {
         popup->addTopLevelItem(createItem(own));
       }
     } else {
@@ -101,16 +118,14 @@ void VkSearchDialog::ReceiveResults(const SearchID& id, const MusicOwnerList& ow
   }
 }
 
-void VkSearchDialog::showEvent(QShowEvent*)
-{
+void VkSearchDialog::showEvent(QShowEvent*) {
   ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
   selected_ = MusicOwner();
   ui->searchLine->clear();
 }
 
-void VkSearchDialog::selectionChanged()
-{
-  if (popup->selectedItems().size() > 0){
+void VkSearchDialog::selectionChanged() {
+  if (popup->selectedItems().size() > 0) {
     QTreeWidgetItem* sel = popup->selectedItems()[0];
     selected_ = sel->data(0, Qt::UserRole).value<MusicOwner>();
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(selected_.id() != 0);
@@ -118,13 +133,11 @@ void VkSearchDialog::selectionChanged()
   }
 }
 
-MusicOwner VkSearchDialog::found() const
-{
+MusicOwner VkSearchDialog::found() const {
   return selected_;
 }
 
-bool VkSearchDialog::eventFilter(QObject* obj, QEvent* ev)
-{
+bool VkSearchDialog::eventFilter(QObject* obj, QEvent* ev) {
   if (obj != popup)
     return false;
 
@@ -135,7 +148,6 @@ bool VkSearchDialog::eventFilter(QObject* obj, QEvent* ev)
   }
 
   if (ev->type() == QEvent::KeyPress) {
-
     bool consumed = false;
     int key = static_cast<QKeyEvent*>(ev)->key();
 
@@ -171,8 +183,7 @@ bool VkSearchDialog::eventFilter(QObject* obj, QEvent* ev)
   return false;
 }
 
-QTreeWidgetItem* VkSearchDialog::createItem(const MusicOwner& own)
-{
+QTreeWidgetItem* VkSearchDialog::createItem(const MusicOwner& own) {
   QTreeWidgetItem* item = new QTreeWidgetItem(popup);
   item->setText(0, own.name());
   if (own.id() > 0) {

@@ -29,6 +29,7 @@ class Application;
 
 class VkMusicCache : public QObject {
   Q_OBJECT
+
 public:
   explicit VkMusicCache(Application* app, VkService* service);
   ~VkMusicCache() {}
@@ -74,4 +75,4 @@ private:
   QNetworkReply* reply_;
 };
 
-#endif // VKMUSICCACHE_H
+#endif  // VKMUSICCACHE_H

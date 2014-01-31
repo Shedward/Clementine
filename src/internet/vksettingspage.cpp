@@ -28,8 +28,8 @@
 VkSettingsPage::VkSettingsPage(SettingsDialog *parent)
   : SettingsPage(parent),
     ui_(new Ui::VkSettingsPage),
-    service_(dialog()->app()->internet_model()->Service<VkService>())
-{
+    service_(dialog()->app()->internet_model()->Service<VkService>()) {
+
   ui_->setupUi(this);
   connect(service_, SIGNAL(LoginSuccess(bool)),
           SLOT(LoginSuccess(bool)));
@@ -64,9 +64,9 @@ void VkSettingsPage::Save() {
   QSettings s;
   s.beginGroup(VkService::kSettingGroup);
 
-  s.setValue("max_global_search",ui_->maxGlobalSearch->value());
-  s.setValue("cache_enabled",ui_->enable_caching->isChecked());
-  s.setValue("cache_dir",ui_->cache_dir->text());
+  s.setValue("max_global_search", ui_->maxGlobalSearch->value());
+  s.setValue("cache_enabled", ui_->enable_caching->isChecked());
+  s.setValue("cache_dir", ui_->cache_dir->text());
   s.setValue("cache_filename", ui_->cache_filename->text());
   s.setValue("love_is_add_to_my_music", ui_->love_button_is_add_to_mymusic->isChecked());
   s.setValue("groups_in_global_search", ui_->groups_in_global_search->isChecked());
@@ -93,8 +93,8 @@ void VkSettingsPage::Logout() {
 
 void VkSettingsPage::CacheDirBrowse() {
   QString directory = QFileDialog::getExistingDirectory(
-                        this, tr("Choose Vk.com cache directory"), ui_->cache_dir->text());
-  if (directory.isEmpty()){
+    this, tr("Choose Vk.com cache directory"), ui_->cache_dir->text());
+  if (directory.isEmpty()) {
     return;
   }
 
@@ -105,8 +105,7 @@ void VkSettingsPage::ResetCasheFilenames() {
   ui_->cache_filename->setText(VkService::kDefCacheFilename);
 }
 
-void VkSettingsPage::LoginWidgets()
-{
+void VkSettingsPage::LoginWidgets() {
   ui_->login_button->setText(tr("Login"));
   ui_->name->setText("");
 
@@ -116,8 +115,7 @@ void VkSettingsPage::LoginWidgets()
              this, SLOT(Logout()));
 }
 
-void VkSettingsPage::LogoutWidgets()
-{
+void VkSettingsPage::LogoutWidgets() {
   ui_->login_button->setText(tr("Logout"));
 
   ui_->name->setText(tr("Loading..."));

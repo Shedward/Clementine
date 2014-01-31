@@ -131,11 +131,11 @@ static Song SongFromUrl(const QUrl& url) {
 MusicOwner::MusicOwner(const QUrl& group_url) {
   QStringList tokens = group_url.path().split('/');
   if (group_url.scheme() == "vk" && group_url.host() == "group"
-      && tokens.size() == 5){
+      && tokens.size() == 5) {
     id_ = -tokens[1].toInt();
     songs_count_ = tokens[2].toInt();
     screen_name_ = tokens[3];
-    name_ = tokens[4].replace('_','/');
+    name_ = tokens[4].replace('_', '/');
     } else {
       qLog(Error) << "Wrong group url" << group_url;
     }
@@ -148,7 +148,7 @@ Song MusicOwner::toOwnerRadio() const {
                     .arg(-id_)
                     .arg(songs_count_)
                     .arg(screen_name_)
-                    .arg(QString(name_).replace('/','_'))));
+                    .arg(QString(name_).replace('/', '_'))));
   song.set_artist(QObject::tr(" Group radio"));
   song.set_valid(true);
   return song;
@@ -198,34 +198,34 @@ MusicOwnerList MusicOwner::parseMusicOwnerList(const QVariant& request_result) {
   return result;
 }
 
-VkService::VkService(Application* app, InternetModel* parent) :
-  InternetService(kServiceName, app, parent, parent),
-  root_item_(NULL),
-  recommendations_item_(NULL),
-  my_music_item_(NULL),
-  search_result_item_(NULL),
-  context_menu_(NULL),
-  update_item_(NULL),
-  update_recommendations_(NULL),
-  find_this_artist_(NULL),
-  add_to_my_music_(NULL),
-  remove_from_my_music_(NULL),
-  add_song_to_cache_(NULL),
-  copy_share_url_(NULL),
-  add_to_bookmarks_(NULL),
-  remove_from_bookmarks_(NULL),
-  find_owner_(NULL),
-  search_box_(new SearchBoxWidget(this)),
-  vk_search_dialog_(new VkSearchDialog(this)),
-  client_(new Vreen::Client),
-  hasAccount_(false),
-  my_id_(0),
-  expiresIn_(0),
-  url_handler_(new VkUrlHandler(this, this)),
-  audio_provider_(new Vreen::AudioProvider(client_.get())),
-  cache_(new VkMusicCache(app_, this)),
-  last_search_id_(0)
-{
+VkService::VkService(Application* app, InternetModel* parent)
+  : InternetService(kServiceName, app, parent, parent),
+    root_item_(NULL),
+    recommendations_item_(NULL),
+    my_music_item_(NULL),
+    search_result_item_(NULL),
+    context_menu_(NULL),
+    update_item_(NULL),
+    update_recommendations_(NULL),
+    find_this_artist_(NULL),
+    add_to_my_music_(NULL),
+    remove_from_my_music_(NULL),
+    add_song_to_cache_(NULL),
+    copy_share_url_(NULL),
+    add_to_bookmarks_(NULL),
+    remove_from_bookmarks_(NULL),
+    find_owner_(NULL),
+    search_box_(new SearchBoxWidget(this)),
+    vk_search_dialog_(new VkSearchDialog(this)),
+    client_(new Vreen::Client),
+    hasAccount_(false),
+    my_id_(0),
+    expiresIn_(0),
+    url_handler_(new VkUrlHandler(this, this)),
+    audio_provider_(new Vreen::AudioProvider(client_.get())),
+    cache_(new VkMusicCache(app_, this)),
+    last_search_id_(0) {
+
   QSettings s;
   s.beginGroup(kSettingGroup);
 
@@ -262,7 +262,7 @@ VkService::~VkService() {
  */
 
 QStandardItem* VkService::CreateRootItem() {
-  root_item_ = new QStandardItem(QIcon(":providers/vk.png"),kServiceName);
+  root_item_ = new QStandardItem(QIcon(":providers/vk.png"), kServiceName);
   root_item_->setData(true, InternetModel::Role_CanLazyLoad);
   return root_item_;
 }
@@ -346,7 +346,6 @@ void VkService::EnsureMenuCreated() {
 }
 
 void VkService::ShowContextMenu(const QPoint& global_pos) {
-
   EnsureMenuCreated();
 
   QModelIndex current(model()->current_index());
@@ -356,26 +355,26 @@ void VkService::ShowContextMenu(const QPoint& global_pos) {
 
   const bool is_playable = model()->IsPlayable(current);
   const bool is_my_music_item =
-      item_type == Type_MyMusic or parent_type == Type_MyMusic;
+      item_type == Type_MyMusic || parent_type == Type_MyMusic;
   const bool is_recommend_item =
-      item_type == Type_Recommendations or parent_type == Type_Recommendations;
+      item_type == Type_Recommendations || parent_type == Type_Recommendations;
   const bool is_track =
       item_type == InternetModel::Type_Track;
 
   const bool is_bookmark = item_type == Type_Bookmark;
 
   const bool is_updatable = item_type == InternetModel::Type_Service
-                            or item_type == Type_MyMusic
-                            or item_type == Type_Album
-                            or is_bookmark
-                            or is_my_music_item;
+                            || item_type == Type_MyMusic
+                            || item_type == Type_Album
+                            || is_bookmark
+                            || is_my_music_item;
 
   bool is_in_mymusic = false;
   bool is_cached = false;
 
   if (is_track) {
     selected_song_ = current.data(InternetModel::Role_SongMetadata).value<Song>();
-    is_in_mymusic = is_my_music_item or
+    is_in_mymusic = is_my_music_item ||
                     ExtractIds(selected_song_.url()).owner_id == my_id_;
     is_cached = cache()->InCache(selected_song_.url());
   }
@@ -383,9 +382,9 @@ void VkService::ShowContextMenu(const QPoint& global_pos) {
   update_item_->setVisible(is_updatable);
   update_recommendations_->setVisible(is_recommend_item);
   find_this_artist_->setVisible(is_track);
-  add_song_to_cache_->setVisible(is_track and not is_cached);
-  add_to_my_music_->setVisible(is_track and not is_in_mymusic);
-  remove_from_my_music_->setVisible(is_track and is_in_mymusic);
+  add_song_to_cache_->setVisible(is_track && !is_cached);
+  add_to_my_music_->setVisible(is_track && !is_in_mymusic);
+  remove_from_my_music_->setVisible(is_track && is_in_mymusic);
   copy_share_url_->setVisible(is_track);
   remove_from_bookmarks_->setVisible(is_bookmark);
   add_to_bookmarks_->setVisible(false);
@@ -570,7 +569,7 @@ void VkService::Login() {
     }
   } else {
     connection_.reset(new Vreen::OAuthConnection(kApiKey, client_.get()));
-    connection_->setConnectionOption(Vreen::Connection::ShowAuthDialog,true);
+    connection_->setConnectionOption(Vreen::Connection::ShowAuthDialog, true);
     connection_->setScopes(kScopes);
 
     connect(connection_.get(), SIGNAL(accessTokenChanged(QByteArray, time_t)),
@@ -621,11 +620,9 @@ void VkService::ChangeUid(int uid) {
   my_id_ = uid;
 }
 
-void VkService::ChangeConnectionState(Vreen::Client::State state)
-{
+void VkService::ChangeConnectionState(Vreen::Client::State state) {
   qLog(Debug) << "Connection state changed to" << state;
   switch (state) {
-
   case Vreen::Client::StateOnline:
     hasAccount_ = true;
     emit LoginSuccess(true);
@@ -677,11 +674,13 @@ void VkService::Error(Vreen::Client::Error error) {
   case Vreen::Client::ErrorPermissionDenied:
     msg = "Permission denied";  break;
   case Vreen::Client::ErrorCaptchaNeeded:
-    msg = "Captcha needed";  break;
+    msg = "Captcha needed";
+    break;
   case Vreen::Client::ErrorMissingOrInvalidParameter:
     msg = "Missing or invalid parameter";  break;
   case Vreen::Client::ErrorNetworkReply:
-    msg = "Network reply";  break;
+    msg = "Network reply";
+    break;
   default:
     msg = "Unknown error";
     break;
@@ -695,7 +694,7 @@ void VkService::Error(Vreen::Client::Error error) {
  */
 
 void VkService::UpdateMyMusic() {
-  if (not my_music_item_) {
+  if (!my_music_item_) {
     // Internet services panel still not created.
     return;
   }
@@ -720,7 +719,7 @@ void VkService::UpdateRecommendations() {
 }
 
 void VkService::MoreRecommendations() {
-  RemoveLastRow(recommendations_item_); // Last row is "More"
+  RemoveLastRow(recommendations_item_);  // Last row is "More"
   update_recommendations_->setEnabled(false);
   CreateAndAppendRow(recommendations_item_, Type_Loading);
 
@@ -734,7 +733,7 @@ void VkService::MoreRecommendations() {
 void VkService::RecommendationsLoaded(Vreen::AudioItemListReply* reply) {
   update_recommendations_->setEnabled(true);
   SongList songs = FromAudioList(reply->result());
-  RemoveLastRow(recommendations_item_); // Last row is "Loading..."
+  RemoveLastRow(recommendations_item_);  // Last row is "Loading..."
   AppendSongs(recommendations_item_, songs);
   if (songs.count() > 0) {
     CreateAndAppendRow(recommendations_item_, Type_More);
@@ -791,7 +790,7 @@ void VkService::LoadBookmarks() {
   s.beginGroup(kSettingGroup);
 
   int max = s.beginReadArray("bookmarks");
-  for (int i = 0; i < max; ++i){
+  for (int i = 0; i < max; ++i) {
     s.setArrayIndex(i);
     MusicOwner owner = s.value("owner").value<MusicOwner>();
     qLog(Info) << "Load" << i << ":" << owner;
@@ -802,14 +801,14 @@ void VkService::LoadBookmarks() {
 
 QStandardItem* VkService::AppendBookmark(const MusicOwner& owner) {
   QIcon icon;
-  if (owner.id() > 0){
+  if (owner.id() > 0) {
     icon = QIcon(":vk/user.png");
   } else {
     icon = QIcon(":vk/group.png");
   }
   QStandardItem* item = new QStandardItem(icon, owner.name());
 
-  item->setData(QVariant::fromValue(owner) ,Role_MusicOwnerMetadata);
+  item->setData(QVariant::fromValue(owner), Role_MusicOwnerMetadata);
   item->setData(Type_Bookmark, InternetModel::Role_Type);
   item->setData(true, InternetModel::Role_CanLazyLoad);
   item->setData(InternetModel::PlayBehaviour_MultipleItems,
@@ -834,10 +833,10 @@ void VkService::UpdateBookmarkSongs(QStandardItem* item) {
  */
 
 void VkService::LoadAlbums() {
-    auto albums_request = audio_provider_->getAlbums(my_id_);
-    NewClosure(albums_request, SIGNAL(resultReady(QVariant)), this,
-               SLOT(AlbumListReceived(Vreen::AudioAlbumItemListReply*)),
-               albums_request);
+  auto albums_request = audio_provider_->getAlbums(my_id_);
+  NewClosure(albums_request, SIGNAL(resultReady(QVariant)), this,
+             SLOT(AlbumListReceived(Vreen::AudioAlbumItemListReply*)),
+             albums_request);
 }
 
 QStandardItem* VkService::AppendAlbum(const Vreen::AudioAlbumItem& album) {
@@ -928,14 +927,14 @@ void VkService::FindSongs(const QString& query) {
       connect(this, SIGNAL(SongSearchResult(SearchID, SongList)),
               SLOT(SearchResultLoaded(SearchID, SongList)));
     }
-    RemoveLastRow(search_result_item_); // Prevent multiple "Loading..." rows.
+    RemoveLastRow(search_result_item_);  // Prevent multiple "Loading..." rows.
     CreateAndAppendRow(search_result_item_, Type_Loading);
     SongSearch(SearchID(SearchID::LocalSearch), query);
   }
 }
 
 void VkService::FindMore() {
-  RemoveLastRow(search_result_item_); // Last row is "More"
+  RemoveLastRow(search_result_item_);  // Last row is "More"
   CreateAndAppendRow(recommendations_item_, Type_Loading);
 
   SearchID  id(SearchID::MoreLocalSearch);
@@ -944,16 +943,16 @@ void VkService::FindMore() {
 
 void VkService::SearchResultLoaded(const SearchID& id, const SongList& songs) {
   if (!search_result_item_) {
-    return; // Result received when search is already over.
+    return;  // Result received when search is already over.
   }
 
-  if (id.id() >= last_search_id_){
+  if (id.id() >= last_search_id_) {
     if (id.type() == SearchID::LocalSearch) {
       ClearStandardItem(search_result_item_);
     } else if (id.type() == SearchID::MoreLocalSearch) {
       RemoveLastRow(search_result_item_); // Remove only  "Loading..."
     } else {
-      return; // Others request types ignored.
+      return;  // Others request types ignored.
     }
 
     last_search_id_= id.id();
@@ -976,13 +975,13 @@ void VkService::SearchResultLoaded(const SearchID& id, const SongList& songs) {
  */
 
 void VkService::LoadAndAppendSongList(QStandardItem* item, int uid, int album_id) {
-  if (item){
-  ClearStandardItem(item);
-  CreateAndAppendRow(item, Type_Loading);
-  auto audioreq = audio_provider_->getContactAudio(uid, kMaxVkSongList,0, album_id);
-  NewClosure(audioreq, SIGNAL(resultReady(QVariant)),
-             this, SLOT(AppendLoadedSongs(QStandardItem*, Vreen::AudioItemListReply*)),
-             item, audioreq);
+  if (item) {
+    ClearStandardItem(item);
+    CreateAndAppendRow(item, Type_Loading);
+    auto audioreq = audio_provider_->getContactAudio(uid, kMaxVkSongList, 0, album_id);
+    NewClosure(audioreq, SIGNAL(resultReady(QVariant)),
+               this, SLOT(AppendLoadedSongs(QStandardItem*, Vreen::AudioItemListReply*)),
+               item, audioreq);
   }
 }
 
@@ -1020,8 +1019,8 @@ Song VkService::FromAudioItem(const Vreen::AudioItem& item) {
   QString url = QString("vk://song/%1_%2/%3/%4").
                 arg(item.ownerId()).
                 arg(item.id()).
-                arg(item.artist().replace('/','_')).
-                arg(item.title().replace('/','_'));
+                arg(item.artist().replace('/', '_')).
+                arg(item.title().replace('/', '_'));
 
   song.set_url(QUrl(url));
   song.set_valid(true);
@@ -1052,10 +1051,10 @@ QUrl VkService::GetSongPlayUrl(const QUrl& url, bool is_playing) {
 
   if (HasAccount()) {
     Vreen::AudioItemListReply* song_request = audio_provider_->getAudiosByIds(song_id);
-    emit StopWaiting(); // Stop all previous requests.
+    emit StopWaiting();  // Stop all previous requests.
     bool success = WaitForReply(song_request);
 
-    if (success and not song_request->result().isEmpty()) {
+    if (success && !song_request->result().isEmpty()) {
       Vreen::AudioItem song = song_request->result()[0];
       if (is_playing) {
         current_song_ = FromAudioItem(song);
@@ -1091,7 +1090,7 @@ UrlHandler::LoadResult VkService::GetGroupNextSongUrl(const QUrl& url) {
     emit StopWaiting(); // Stop all previous requests.
     bool success = WaitForReply(song_request);
 
-    if (success and not song_request->result().isEmpty()) {
+    if (success && !song_request->result().isEmpty()) {
       Vreen::AudioItem song = song_request->result()[0];
       current_group_url_ = url;
       current_song_ = FromAudioItem(song);
@@ -1116,9 +1115,9 @@ void VkService::SetCurrentSongFromUrl(const QUrl& url) {
  */
 
 void VkService::SongSearch(SearchID id, const QString& query, int count, int offset) {
-  auto reply = audio_provider_->searchAudio(query,count,offset,false,Vreen::AudioProvider::SortByPopularity);
+  auto reply = audio_provider_->searchAudio(query, count, offset, false, Vreen::AudioProvider::SortByPopularity);
   NewClosure(reply, SIGNAL(resultReady(QVariant)), this,
-             SLOT(SongSearchReceived(SearchID,Vreen::AudioItemListReply*)),
+             SLOT(SongSearchReceived(SearchID, Vreen::AudioItemListReply*)),
              id, reply);
 }
 
@@ -1141,7 +1140,7 @@ void VkService::GroupSearch(SearchID id, const QString& query) {
 
       var i = 1;
       var res = [];
-      while (i < groups.length - 1){
+      while (i < groups.length - 1) {
           i = i + 1;
           var grp = groups[i];
           var songs = API.audio.getCount({oid: -grp.gid});
@@ -1160,10 +1159,10 @@ void VkService::GroupSearch(SearchID id, const QString& query) {
   //
   //    I leave it here in case if my vk app disappear or smth.
 
-  auto reply = client_->request("execute.searchMusicGroup",args);
+  auto reply = client_->request("execute.searchMusicGroup", args);
 
   NewClosure(reply, SIGNAL(resultReady(QVariant)), this,
-             SLOT(GroupSearchReceived(SearchID,Vreen::Reply*)),
+             SLOT(GroupSearchReceived(SearchID, Vreen::Reply*)),
              id, reply);
 }
 
@@ -1177,7 +1176,7 @@ void VkService::GroupSearchReceived(const SearchID& id, Vreen::Reply* reply) {
  */
 
 void VkService::ShowSearchDialog() {
-  if (vk_search_dialog_->exec() == QDialog::Accepted){
+  if (vk_search_dialog_->exec() == QDialog::Accepted) {
     AppendBookmark(vk_search_dialog_->found());
     SaveBookmarks();
   }
@@ -1229,7 +1228,7 @@ void VkService::FindUserOrGroup(const QString& q) {
                 // If profile not banned add to results
                 if (p.deactivated + "" == "") {
                     var songs = p.counters.audios;
-                    if (songs > 1){
+                    if (songs > 1) {
                         res = res + [{
                             "songs_count" : songs,
                             "id" : p.uid,
@@ -1276,7 +1275,7 @@ void VkService::FindUserOrGroup(const QString& q) {
   auto reply = client_->request("execute.searchMusicOwner", args);
 
   NewClosure(reply, SIGNAL(resultReady(QVariant)), this,
-             SLOT(UserOrGroupReceived(SearchID,Vreen::Reply*)),
+             SLOT(UserOrGroupReceived(SearchID, Vreen::Reply*)),
              SearchID(SearchID::UserOrGroup), reply);
 }
 
@@ -1298,20 +1297,20 @@ void VkService::AppendSongs(QStandardItem *parent, const SongList &songs) {
 void VkService::ReloadSettings() {
   QSettings s;
   s.beginGroup(kSettingGroup);
-  maxGlobalSearch_ = s.value("max_global_search",kCustomSongCount).toInt();
+  maxGlobalSearch_ = s.value("max_global_search", kCustomSongCount).toInt();
   cachingEnabled_ = s.value("cache_enabled", false).toBool();
-  cacheDir_ = s.value("cache_dir",DefaultCacheDir()).toString();
+  cacheDir_ = s.value("cache_dir", DefaultCacheDir()).toString();
   cacheFilename_ = s.value("cache_filename", kDefCacheFilename).toString();
-  love_is_add_to_mymusic_ = s.value("love_is_add_to_my_music",false).toBool();
+  love_is_add_to_mymusic_ = s.value("love_is_add_to_my_music", false).toBool();
   groups_in_global_search_ = s.value("groups_in_global_search", false).toBool();
   token_ = s.value("token", QByteArray()).toByteArray();
   expiresIn_ = s.value("expiresIn", 0).toUInt();
-  my_id_ = s.value("uid",0).toInt();
-  hasAccount_ = (my_id_ != 0) and !token_.isEmpty();
+  my_id_ = s.value("uid", 0).toInt();
+  hasAccount_ = (my_id_ != 0) && !token_.isEmpty();
 }
 
 void VkService::ClearStandardItem(QStandardItem* item) {
-  if (item and item->hasChildren()) {
+  if (item && item->hasChildren()) {
     item->removeRows(0, item->rowCount());
   }
 }

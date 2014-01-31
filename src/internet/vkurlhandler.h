@@ -41,4 +41,4 @@ private:
   VkService* service_;
 };
 
-#endif // VKURLHANDLER_H
+#endif  // VKURLHANDLER_H

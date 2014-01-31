@@ -25,8 +25,7 @@
 
 VkUrlHandler::VkUrlHandler(VkService* service, QObject* parent)
   : UrlHandler(parent),
-    service_(service)
-{
+    service_(service) {
 }
 
 UrlHandler::LoadResult VkUrlHandler::StartLoading(const QUrl& url) {
