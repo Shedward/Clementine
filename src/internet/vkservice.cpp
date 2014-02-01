@@ -491,19 +491,16 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem* parent, VkService::I
 
   switch (type) {
   case Type_NeedLogin:
-    item = new QStandardItem(
-             tr("Double click to login"));
+    item = new QStandardItem(tr("Double click to login"));
     item->setData(InternetModel::PlayBehaviour_DoubleClickAction,
                   InternetModel::Role_PlayBehaviour);
     break;
   case Type_Loading:
-    item = new QStandardItem(
-             tr("Loading..."));
+    item = new QStandardItem(tr("Loading..."));
     break;
 
   case Type_More:
-    item = new QStandardItem(
-             tr("More"));
+    item = new QStandardItem(tr("More"));
     item->setData(InternetModel::PlayBehaviour_DoubleClickAction,
                   InternetModel::Role_PlayBehaviour);
     break;
