@@ -80,11 +80,12 @@ uint SearchID::last_id_ = 0;
  */
 
 inline static void RemoveLastRow(QStandardItem* item, VkService::ItemType type) {
-  int last_row_index = item->rowCount() - 1;
-  if (item->child(last_row_index)->type() == type) {
-    item->removeRow(last_row_index);
+  QStandardItem* last_item = item->child(item->rowCount() - 1);
+  if (last_item->data(InternetModel::Role_Type).toInt() == type) {
+    item->removeRow(item->rowCount() - 1);
   } else {
-    qLog(Error) << "Tryed to remove row of type" << item->child(last_row_index)->type()
+    qLog(Error) << "Tryed to remove row" << last_item->text()
+                << "of type" << last_item->data(InternetModel::Role_Type).toInt()
                 << "instead of" << type << "from" << item->text();
   }
 }
