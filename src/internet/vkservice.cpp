@@ -79,8 +79,14 @@ uint SearchID::last_id_ = 0;
  * Little functions
  */
 
-inline static void RemoveLastRow(QStandardItem* item) {
-  item->removeRow(item->rowCount() - 1);
+inline static void RemoveLastRow(QStandardItem* item, VkService::ItemType type) {
+  int last_row_index = item->rowCount() - 1;
+  if (item->child(last_row_index)->type() == type) {
+    item->removeRow(last_row_index);
+  } else {
+    qLog(Error) << "Tryed to remove row of type" << item->child(last_row_index)->type()
+                << "instead of" << type << "from" << item->text();
+  }
 }
 
 struct SongId {
@@ -722,7 +728,7 @@ void VkService::UpdateRecommendations() {
 }
 
 void VkService::MoreRecommendations() {
-  RemoveLastRow(recommendations_item_);  // Last row is "More"
+  RemoveLastRow(recommendations_item_, Type_More);
   update_recommendations_->setEnabled(false);
   CreateAndAppendRow(recommendations_item_, Type_Loading);
 
@@ -736,7 +742,7 @@ void VkService::MoreRecommendations() {
 void VkService::RecommendationsLoaded(Vreen::AudioItemListReply* reply) {
   update_recommendations_->setEnabled(true);
   SongList songs = FromAudioList(reply->result());
-  RemoveLastRow(recommendations_item_);  // Last row is "Loading..."
+  RemoveLastRow(recommendations_item_, Type_Loading);
   AppendSongs(recommendations_item_, songs);
   if (songs.count() > 0) {
     CreateAndAppendRow(recommendations_item_, Type_More);
@@ -930,14 +936,14 @@ void VkService::FindSongs(const QString& query) {
       connect(this, SIGNAL(SongSearchResult(SearchID, SongList)),
               SLOT(SearchResultLoaded(SearchID, SongList)));
     }
-    RemoveLastRow(search_result_item_);  // Prevent multiple "Loading..." rows.
+    ClearStandardItem(search_result_item_);
     CreateAndAppendRow(search_result_item_, Type_Loading);
     SongSearch(SearchID(SearchID::LocalSearch), query);
   }
 }
 
 void VkService::FindMore() {
-  RemoveLastRow(search_result_item_);  // Last row is "More"
+  RemoveLastRow(search_result_item_, Type_More);
   CreateAndAppendRow(recommendations_item_, Type_Loading);
 
   SearchID  id(SearchID::MoreLocalSearch);
@@ -953,7 +959,7 @@ void VkService::SearchResultLoaded(const SearchID& id, const SongList& songs) {
     if (id.type() == SearchID::LocalSearch) {
       ClearStandardItem(search_result_item_);
     } else if (id.type() == SearchID::MoreLocalSearch) {
-      RemoveLastRow(search_result_item_); // Remove only  "Loading..."
+      RemoveLastRow(search_result_item_, Type_Loading);
     } else {
       return;  // Others request types ignored.
     }
