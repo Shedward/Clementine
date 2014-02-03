@@ -25,6 +25,7 @@
 #include <QEventLoop>
 #include <QFile>
 #include <QMenu>
+#include <QMessageBox>
 #include <QSettings>
 #include <QTimer>
 
@@ -672,12 +673,17 @@ void VkService::Error(Vreen::Client::Error error) {
     msg = "Permission denied";  break;
   case Vreen::Client::ErrorCaptchaNeeded:
     msg = "Captcha needed";
+    QMessageBox::critical(NULL,
+      tr("Error"),
+      tr("Captcha is needed.\n"
+         "Try to login into Vk.com with your browser,"
+         "to fix this problem."),
+      QMessageBox::Close);
     break;
   case Vreen::Client::ErrorMissingOrInvalidParameter:
     msg = "Missing or invalid parameter";  break;
   case Vreen::Client::ErrorNetworkReply:
-    msg = "Network reply";
-    break;
+    msg = "Network reply";  break;
   default:
     msg = "Unknown error";
     break;
