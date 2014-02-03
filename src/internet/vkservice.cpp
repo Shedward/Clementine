@@ -718,7 +718,9 @@ void VkService::UpdateMyMusic() {
 void VkService::UpdateRecommendations() {
   ClearStandardItem(recommendations_item_);
   CreateAndAppendRow(recommendations_item_, Type_Loading);
-  update_recommendations_->setEnabled(false);
+  if (update_recommendations_) {
+    update_recommendations_->setEnabled(false);
+  }
 
   auto my_audio = audio_provider_->getRecommendationsForUser(0, kCustomSongCount, 0);
 
@@ -729,7 +731,9 @@ void VkService::UpdateRecommendations() {
 
 void VkService::MoreRecommendations() {
   RemoveLastRow(recommendations_item_, Type_More);
-  update_recommendations_->setEnabled(false);
+  if (update_recommendations_) {
+    update_recommendations_->setEnabled(false);
+  }
   CreateAndAppendRow(recommendations_item_, Type_Loading);
 
   auto my_audio = audio_provider_->getRecommendationsForUser(0, kCustomSongCount, recommendations_item_->rowCount()-1);
@@ -740,7 +744,9 @@ void VkService::MoreRecommendations() {
 }
 
 void VkService::RecommendationsLoaded(Vreen::AudioItemListReply* reply) {
-  update_recommendations_->setEnabled(true);
+  if (update_recommendations_) {
+    update_recommendations_->setEnabled(true);
+  }
   SongList songs = FromAudioList(reply->result());
   RemoveLastRow(recommendations_item_, Type_Loading);
   AppendSongs(recommendations_item_, songs);
