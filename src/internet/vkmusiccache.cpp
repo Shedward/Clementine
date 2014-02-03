@@ -148,7 +148,7 @@ void VkMusicCache::Downloaded() {
   app_->task_manager()->SetTaskFinished(task_id);
   if (is_aborted || reply_->error()) {
     if (reply_->error()) {
-      qLog(Error) << "Downloading failed" << reply_->errorString();
+      qLog(Info) << "Downloading failed" << reply_->errorString();
     }
   } else {
     DownloadReadyToRead();  // Save all recent recived data.
