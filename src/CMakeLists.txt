@@ -1149,6 +1149,7 @@ optional_source(HAVE_VK
     globalsearch/vksearchprovider.cpp
     internet/vkmusiccache.cpp
     internet/vksearchdialog.cpp
+    internet/vkconnection.cpp
   HEADERS
     internet/vkservice.h
     internet/vksettingspage.h
@@ -1156,6 +1157,7 @@ optional_source(HAVE_VK
     globalsearch/vksearchprovider.h
     internet/vkmusiccache.h
     internet/vksearchdialog.h
+    internet/vkconnection.h
   UI
     internet/vksettingspage.ui
     internet/vksearchdialog.ui

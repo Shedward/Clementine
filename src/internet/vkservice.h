@@ -24,15 +24,14 @@
 #include "internetmodel.h"
 #include "core/song.h"
 
-#include "vreen/auth/oauthconnection.h"
 #include "vreen/audio.h"
 #include "vreen/contact.h"
 
+#include "vkconnection.h"
 #include "vkurlhandler.h"
 
 namespace Vreen {
 class Client;
-class OAuthConnection;
 class Buddy;
 }
 
@@ -117,8 +116,6 @@ public:
   static const char* kServiceName;
   static const char* kSettingGroup;
   static const char* kUrlScheme;
-  static const uint  kApiKey;
-  static const Vreen::OAuthConnection::Scopes kScopes;
   static const char* kDefCacheFilename;
   static QString DefaultCacheDir();
   static const int kMaxVkSongList;
@@ -153,7 +150,8 @@ public:
   /* Connection */
   void Login();
   void Logout();
-  bool HasAccount() const { return hasAccount_; }
+  bool HasAccount() const;
+  bool UserID() const;
   bool WaitForReply(Vreen::Reply* reply);
 
   /* Music */
@@ -194,8 +192,6 @@ private slots:
   void UpdateItem();
 
   /* Connection */
-  void ChangeAccessToken(const QByteArray& token, time_t expiresIn);
-  void ChangeUid(int uid);
   void ChangeConnectionState(Vreen::Client::State state);
   void ChangeMe(Vreen::Buddy* me);
   void Error(Vreen::Client::Error error);
@@ -272,11 +268,7 @@ private:
 
   /* Connection */
   std::unique_ptr<Vreen::Client> client_;
-  std::unique_ptr<Vreen::OAuthConnection> connection_;
-  bool hasAccount_;
-  int my_id_;
-  QByteArray token_;
-  time_t expiresIn_;
+  std::unique_ptr<VkConnection> connection_;
   VkUrlHandler* url_handler_;
 
   /* Music */

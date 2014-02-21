@@ -47,7 +47,6 @@
 #include "searchboxwidget.h"
 
 #include "vreen/audio.h"
-#include "vreen/auth/oauthconnection.h"
 #include "vreen/contact.h"
 #include "vreen/roster.h"
 
@@ -58,12 +57,6 @@
 const char*  VkService::kServiceName = "Vk.com";
 const char*  VkService::kSettingGroup = "Vk.com";
 const char*  VkService::kUrlScheme = "vk";
-const uint   VkService::kApiKey = 3421812;
-const Vreen::OAuthConnection::Scopes VkService::kScopes =
-  Vreen::OAuthConnection::Offline |
-  Vreen::OAuthConnection::Audio |
-  Vreen::OAuthConnection::Friends |
-  Vreen::OAuthConnection::Groups;
 
 const char* VkService::kDefCacheFilename = "%artist - %title";
 const int VkService::kMaxVkSongList = 6000;
@@ -226,9 +219,7 @@ VkService::VkService(Application* app, InternetModel* parent)
     search_box_(new SearchBoxWidget(this)),
     vk_search_dialog_(new VkSearchDialog(this)),
     client_(new Vreen::Client),
-    hasAccount_(false),
-    my_id_(0),
-    expiresIn_(0),
+    connection_(new VkConnection(this)),
     url_handler_(new VkUrlHandler(this, this)),
     audio_provider_(new Vreen::AudioProvider(client_.get())),
     cache_(new VkMusicCache(app_, this)),
@@ -240,6 +231,7 @@ VkService::VkService(Application* app, InternetModel* parent)
   /* Init connection */
   client_->setTrackMessages(false);
   client_->setInvisible(true);
+  client_->setConnection(connection_.get());
 
   ReloadSettings();
 
@@ -383,7 +375,7 @@ void VkService::ShowContextMenu(const QPoint& global_pos) {
   if (is_track) {
     selected_song_ = current.data(InternetModel::Role_SongMetadata).value<Song>();
     is_in_mymusic = is_my_music_item ||
-                    ExtractIds(selected_song_.url()).owner_id == my_id_;
+                    ExtractIds(selected_song_.url()).owner_id == UserID();
     is_cached = cache()->InCache(selected_song_.url());
   }
 
@@ -450,7 +442,7 @@ QList<QAction*> VkService::playlistitem_actions(const Song& song) {
   find_this_artist_->setVisible(true);
   actions << find_this_artist_;
 
-  if (ExtractIds(selected_song_.url()).owner_id != my_id_) {
+  if (ExtractIds(selected_song_.url()).owner_id != UserID()) {
     add_to_my_music_->setVisible(true);
     actions << add_to_my_music_;
   } else {
@@ -567,83 +559,43 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem* parent, VkService::I
  */
 
 void VkService::Login() {
-  if (connection_) {
-    emit LoginSuccess(true);
-    if (client_->me()) {
-      ChangeMe(client_->me());
-    }
-  } else {
-    connection_.reset(new Vreen::OAuthConnection(kApiKey, client_.get()));
-    connection_->setConnectionOption(Vreen::Connection::ShowAuthDialog, true);
-    connection_->setScopes(kScopes);
-
-    connect(connection_.get(), SIGNAL(accessTokenChanged(QByteArray, time_t)),
-            SLOT(ChangeAccessToken(QByteArray, time_t)));
-    connect(client_->roster(), SIGNAL(uidChanged(int)),
-            SLOT(ChangeUid(int)));
-
-    client_->setConnection(connection_.get());
-  }
-
-  if (HasAccount()) {
-    connection_->setAccessToken(token_, expiresIn_);
-    connection_->setUid(my_id_);
-  }
-
   client_->connectToHost();
 }
 
 void VkService::Logout() {
-  QSettings s;
-  s.beginGroup(kSettingGroup);
-  s.remove("token");
-  s.remove("expiresIn");
-  s.remove("uid");
-
-  hasAccount_ = false;
-
   if (connection_) {
     client_->disconnectFromHost();
     connection_->clear();
-    connection_.release();
   }
 
   UpdateRoot();
 }
 
-void VkService::ChangeAccessToken(const QByteArray& token, time_t expiresIn) {
-  QSettings s;
-  s.beginGroup(kSettingGroup);
-  s.setValue("token", token);
-  s.setValue("expiresIn", uint(expiresIn));
+bool VkService::HasAccount() const {
+  return connection_->hasAccount();
 }
 
-void VkService::ChangeUid(int uid) {
-  QSettings s;
-  s.beginGroup(kSettingGroup);
-  s.setValue("uid", uid);
-  my_id_ = uid;
+bool VkService::UserID() const {
+  return client_->id();
 }
 
 void VkService::ChangeConnectionState(Vreen::Client::State state) {
   qLog(Debug) << "Connection state changed to" << state;
   switch (state) {
   case Vreen::Client::StateOnline:
-    hasAccount_ = true;
+    connect(client_.get(), SIGNAL(meChanged(Vreen::Buddy*)),
+            SLOT(ChangeMe(Vreen::Buddy*)), Qt::UniqueConnection);
     emit LoginSuccess(true);
     UpdateRoot();
-    connect(client_.get(), SIGNAL(meChanged(Vreen::Buddy*)),
-            SLOT(ChangeMe(Vreen::Buddy*)));
     break;
 
   case Vreen::Client::StateInvalid:
   case Vreen::Client::StateOffline:
-  case Vreen::Client::StateConnecting:
-    hasAccount_ = false;
     emit LoginSuccess(false);
     UpdateRoot();
     break;
-
+  case Vreen::Client::StateConnecting:
+    break;
   default:
     qLog(Error) << "Wrong connection state "<< state;
     break;
@@ -849,7 +801,7 @@ void VkService::UpdateBookmarkSongs(QStandardItem* item) {
  */
 
 void VkService::LoadAlbums() {
-  auto albums_request = audio_provider_->getAlbums(my_id_);
+  auto albums_request = audio_provider_->getAlbums(UserID());
   NewClosure(albums_request, SIGNAL(resultReady(QVariant)), this,
              SLOT(AlbumListReceived(Vreen::AudioAlbumItemListReply*)),
              albums_request);
@@ -905,12 +857,12 @@ void VkService::AddToMyMusicCurrent() {
 
 void VkService::RemoveFromMyMusic() {
   SongId id = ExtractIds(selected_song_.url());
-  if (id.owner_id == my_id_) {
+  if (id.owner_id == UserID()) {
     auto reply = audio_provider_->removeFromLibrary(id.audio_id, id.owner_id);
     connect(reply, SIGNAL(resultReady(QVariant)),
             this, SLOT(UpdateMyMusic()));
   } else {
-    qLog(Error) << "Tried to delete song that not owned by user (" << my_id_
+    qLog(Error) << "Tried to delete song that not owned by user (" << UserID()
                   << selected_song_.url();
   }
 }
@@ -1319,10 +1271,6 @@ void VkService::ReloadSettings() {
   cacheFilename_ = s.value("cache_filename", kDefCacheFilename).toString();
   love_is_add_to_mymusic_ = s.value("love_is_add_to_my_music", false).toBool();
   groups_in_global_search_ = s.value("groups_in_global_search", false).toBool();
-  token_ = s.value("token", QByteArray()).toByteArray();
-  expiresIn_ = s.value("expiresIn", 0).toUInt();
-  my_id_ = s.value("uid", 0).toInt();
-  hasAccount_ = (my_id_ != 0) && !token_.isEmpty();
 }
 
 void VkService::ClearStandardItem(QStandardItem* item) {

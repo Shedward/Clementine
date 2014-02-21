@@ -54,9 +54,9 @@ void VkSettingsPage::Load() {
   ui_->groups_in_global_search->setChecked(service_->isGroupsInGlobalSearch());
 
   if (service_->HasAccount()) {
-    Login();
+    LogoutWidgets();
   } else {
-    Logout();
+    LoginWidgets();
   }
 }
 
@@ -75,6 +75,7 @@ void VkSettingsPage::Save() {
 }
 
 void VkSettingsPage::Login() {
+  ui_->login_button->setEnabled(false);
   service_->Login();
 }
 
@@ -87,6 +88,7 @@ void VkSettingsPage::LoginSuccess(bool success) {
 }
 
 void VkSettingsPage::Logout() {
+  ui_->login_button->setEnabled(false);
   service_->Logout();
   LoginWidgets();
 }
@@ -108,22 +110,24 @@ void VkSettingsPage::ResetCasheFilenames() {
 void VkSettingsPage::LoginWidgets() {
   ui_->login_button->setText(tr("Login"));
   ui_->name->setText("");
+  ui_->login_button->setEnabled(true);
 
   connect(ui_->login_button, SIGNAL(clicked()),
-          SLOT(Login()));
+          SLOT(Login()), Qt::UniqueConnection);
   disconnect(ui_->login_button, SIGNAL(clicked()),
              this, SLOT(Logout()));
 }
 
 void VkSettingsPage::LogoutWidgets() {
   ui_->login_button->setText(tr("Logout"));
-
   ui_->name->setText(tr("Loading..."));
+  ui_->login_button->setEnabled(true);
+
   connect(service_, SIGNAL(NameUpdated(QString)),
-          ui_->name, SLOT(setText(QString)));
+          ui_->name, SLOT(setText(QString)), Qt::UniqueConnection);
 
   connect(ui_->login_button, SIGNAL(clicked()),
-          SLOT(Logout()));
+          SLOT(Logout()), Qt::UniqueConnection);
   disconnect(ui_->login_button, SIGNAL(clicked()),
              this, SLOT(Login()));
 }
