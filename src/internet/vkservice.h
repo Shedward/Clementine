@@ -152,6 +152,7 @@ public:
   void Logout();
   bool HasAccount() const;
   int UserID() const;
+  void RequestUserProfile();
   bool WaitForReply(Vreen::Reply* reply);
 
   /* Music */
@@ -193,7 +194,7 @@ private slots:
 
   /* Connection */
   void ChangeConnectionState(Vreen::Client::State state);
-  void ChangeMe(Vreen::Buddy* me);
+  void UserProfileRecived(const QVariant& result);
   void Error(Vreen::Client::Error error);
 
   /* Music */

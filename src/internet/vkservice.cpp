@@ -583,8 +583,6 @@ void VkService::ChangeConnectionState(Vreen::Client::State state) {
   qLog(Debug) << "Connection state changed to" << state;
   switch (state) {
   case Vreen::Client::StateOnline:
-    connect(client_.get(), SIGNAL(meChanged(Vreen::Buddy*)),
-            SLOT(ChangeMe(Vreen::Buddy*)), Qt::UniqueConnection);
     emit LoginSuccess(true);
     UpdateRoot();
     break;
@@ -602,16 +600,25 @@ void VkService::ChangeConnectionState(Vreen::Client::State state) {
   }
 }
 
-void VkService::ChangeMe(Vreen::Buddy* me) {
-  if (!me) {
-    qLog(Warning) << "Me is NULL.";
-    return;
-  }
+void VkService::RequestUserProfile() {
+  QVariantMap args;
+  args.insert("users_ids", "0");
+  Vreen::Reply* reply = client_->request("users.get", args);
 
-  emit NameUpdated(me->name());
-  connect(me, SIGNAL(nameChanged(QString)),
-          SIGNAL(NameUpdated(QString)));
-  me->update(QStringList("name"));
+  connect(reply, SIGNAL(resultReady(QVariant)),
+          this,  SLOT(UserProfileRecived(QVariant)), Qt::UniqueConnection);
+}
+
+void VkService::UserProfileRecived(const QVariant& result) {
+  auto list = result.toList();
+  if (!list.isEmpty()) {
+    auto profile = list[0].toMap();
+    QString name = profile.value("first_name").toString()
+        + " " + profile.value("last_name").toString();
+    emit NameUpdated(name);
+  } else {
+    qLog(Debug) << "Fetching user profile failed" << result;
+  }
 }
 
 void VkService::Error(Vreen::Client::Error error) {

@@ -125,6 +125,7 @@ void VkSettingsPage::LogoutWidgets() {
 
   connect(service_, SIGNAL(NameUpdated(QString)),
           ui_->name, SLOT(setText(QString)), Qt::UniqueConnection);
+  service_->RequestUserProfile();
 
   connect(ui_->login_button, SIGNAL(clicked()),
           SLOT(Logout()), Qt::UniqueConnection);
