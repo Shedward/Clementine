@@ -151,7 +151,7 @@ void VkConnection::accessTokenRecived(QNetworkReply* reply) {
 
   access_token_ = result["access_token"].toByteArray();
   expires_in_ = result["expires_in"].toUInt();
-  uid_ = result["uid"].toInt();
+  uid_ = result["user_id"].toInt();
 
   if (expires_in_) {
     expires_in_ += QDateTime::currentDateTime().toTime_t();

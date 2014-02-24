@@ -151,7 +151,7 @@ public:
   void Login();
   void Logout();
   bool HasAccount() const;
-  bool UserID() const;
+  int UserID() const;
   bool WaitForReply(Vreen::Reply* reply);
 
   /* Music */

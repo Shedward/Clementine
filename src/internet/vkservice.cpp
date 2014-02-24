@@ -575,8 +575,8 @@ bool VkService::HasAccount() const {
   return connection_->hasAccount();
 }
 
-bool VkService::UserID() const {
-  return client_->id();
+int VkService::UserID() const {
+  return connection_->uid();
 }
 
 void VkService::ChangeConnectionState(Vreen::Client::State state) {
