@@ -224,7 +224,6 @@ VkService::VkService(Application* app, InternetModel* parent)
     audio_provider_(new Vreen::AudioProvider(client_.get())),
     cache_(new VkMusicCache(app_, this)),
     last_search_id_(0) {
-
   QSettings s;
   s.beginGroup(kSettingGroup);
 
@@ -1062,7 +1061,7 @@ UrlHandler::LoadResult VkService::GetGroupNextSongUrl(const QUrl& url) {
     Vreen::AudioItemListReply* song_request = audio_provider_->
         getContactAudio(-gid, 1, qrand() % songs_count);
 
-    emit StopWaiting(); // Stop all previous requests.
+    emit StopWaiting();  // Stop all previous requests.
     bool success = WaitForReply(song_request);
 
     if (success && !song_request->result().isEmpty()) {

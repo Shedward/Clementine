@@ -29,7 +29,6 @@ VkSettingsPage::VkSettingsPage(SettingsDialog *parent)
   : SettingsPage(parent),
     ui_(new Ui::VkSettingsPage),
     service_(dialog()->app()->internet_model()->Service<VkService>()) {
-
   ui_->setupUi(this);
   connect(service_, SIGNAL(LoginSuccess(bool)),
           SLOT(LoginSuccess(bool)));

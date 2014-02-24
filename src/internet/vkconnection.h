@@ -27,6 +27,7 @@ class VkConnection : public Vreen::Connection {
   Q_OBJECT
   Q_ENUMS(DisplayType)
   Q_FLAGS(Scopes)
+
 public:
   enum DisplayType {
     Page,
@@ -65,13 +66,16 @@ public:
   int uid() const { return uid_; }
   void clear();
   bool hasAccount();
+
 protected:
   QNetworkRequest makeRequest(const QString& method,
                               const QVariantMap& args = QVariantMap());
   void decorateRequest(QNetworkRequest& request);
+
 private slots:
   void codeRecived(LocalRedirectServer* server, QUrl redirect_uri);
   void accessTokenRecived(QNetworkReply* reply);
+
 private:
   void requestAccessToken();
   void setConnectionState(Vreen::Client::State state);
@@ -87,4 +91,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(VkConnection::Scopes)
 
-#endif // VKCONNECTION_H
+#endif  // VKCONNECTION_H

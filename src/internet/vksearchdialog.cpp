@@ -28,7 +28,6 @@ VkSearchDialog::VkSearchDialog(VkService* service, QWidget* parent)
     ui(new Ui::VkSearchDialog),
     service_(service),
     last_search_(SearchID(SearchID::UserOrGroup)) {
-
   ui->setupUi(this);
 
   timer = new QTimer(this);

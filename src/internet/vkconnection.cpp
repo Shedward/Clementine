@@ -27,22 +27,22 @@
 
 #include "vkservice.h"
 
-const static QUrl kVkOAuthEndpoint("https://oauth.vk.com/authorize");
-const static QUrl kVkOAuthTokenEndpoint("https://oauth.vk.com/access_token");
-const static QUrl kApiUrl("https://api.vk.com/method/");
-const static char *kScopeNames[] = { "notify", "friends", "photos", "audio",
+static const QUrl kVkOAuthEndpoint("https://oauth.vk.com/authorize");
+static const QUrl kVkOAuthTokenEndpoint("https://oauth.vk.com/access_token");
+static const QUrl kApiUrl("https://api.vk.com/method/");
+static const char *kScopeNames[] = { "notify", "friends", "photos", "audio",
   "video", "docs", "notes", "pages", "status", "offers", "questions", "wall",
   "groups", "messages", "notifications", "stats", "ads", "offline" };
 
-const static QString kAppID = "3421812";
-const static QString kAppSecret = "cY7KMyX46Fq3nscZlbdo";
-const static VkConnection::Scopes kScopes =
+static const QString kAppID = "3421812";
+static const QString kAppSecret = "cY7KMyX46Fq3nscZlbdo";
+static const VkConnection::Scopes kScopes =
   VkConnection::Offline |
   VkConnection::Audio |
   VkConnection::Friends |
   VkConnection::Groups;
 
-const static char* kSettingsGroup = "Vk.com/oauth";
+static const char* kSettingsGroup = "Vk.com/oauth";
 
 VkConnection::VkConnection(QObject* parent)
   : Connection(parent),
@@ -119,7 +119,7 @@ void VkConnection::requestAccessToken() {
   qLog(Debug) << "Try to login to Vk.com" << url;
 
   NewClosure(server, SIGNAL(Finished()),
-             this, SLOT(codeRecived(LocalRedirectServer*,QUrl)),
+             this, SLOT(codeRecived(LocalRedirectServer*, QUrl)),
              server, server->url());
   QDesktopServices::openUrl(url);
 }
