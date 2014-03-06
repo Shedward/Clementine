@@ -1164,85 +1164,55 @@ void VkService::FindUserOrGroup(const QString& q) {
   //    this VKScript method on vk server:
   /*
       var q = Args.q;
+      if (q + "" == ""){
+          return [];
+      }
 
-      // First try check hints, hints return your friends
-      // and your groups by query
-
-      var hints = API.search.getHints({"q": q, "limit" : 10});
+      var results_count = 0;
       var res = [];
 
+      // Search groups
+      var groups = API.groups.search({"q": q});
+
       var i = 0;
-      while(i < hints.length) {
-          var h = hints[i];
-          if (h.type == "group") {
-                var g = h.group;
-                var songs = API.audio.getCount({oid :-g.gid});
+      while (i < groups.length - 1 && results_count <= 5) {
+          i = i + 1;
+          var grp = groups[i];
+          var songs = API.audio.getCount({oid: -grp.gid});
+          // Add only accessible groups with songs
+          if ( songs > 1 &&
+              (grp.is_closed == 0 || grp.is_member == 1))
+          {
+              results_count = results_count + 1;
+              res = res + [{"songs_count" : songs,
+                              "id" : -grp.gid,
+                              "name" : grp.name,
+                              "screen_name" : grp.screen_name,
+                              "photo": grp.photo}];
+          }
+      }
 
-                // If group have more than one songs and you have access add to results
-                if (songs > 1 &&
-                (g.is_closed == 0 || g.is_member == 1)) {
-                    res = res + [{
-                        "songs_count" : songs,
-                        "id" : -g.gid,
-                        "name" : g.name,
-                        "screen_name" : g.screen_name,
-                        "photo": g.photo
-                    }];
-                }
-            } else if (h.type == "profile") {
-                var uid = h.profile.uid;
+      // Search peoples
+      var peoples = API.users.search({"q": q,
+                                      "count":10,
+                                      "fields":"screen_name,photo"});
+      var i = 0;
+      while (i < peoples.length - 1 && results_count <= 7) {
+          i = i + 1;
+          var user = peoples[i];
+          var songs = API.audio.getCount({"oid": user.uid});
+          // Add groups only with songs
+          if (songs > 1) {
+              results_count = results_count + 1;
+              res = res + [{"songs_count" : songs,
+                            "id" : user.uid,
+                            "name" : user.first_name + " " + user.last_name,
+                            "screen_name" : user.screen_name,
+                            "phone" : user.photo}];
+          }
+      }
 
-                var p = API.users.get({
-                    uids : uid,
-                    fields : "photo_50, screen_name, counters"
-                })[0]; // users.get return list of 1 element
-
-                // Hacky way to check existance of feld 'deactivated'
-                // (because of limitation of VkScript)
-                // If profile not banned add to results
-                if (p.deactivated + "" == "") {
-                    var songs = p.counters.audios;
-                    if (songs > 1) {
-                        res = res + [{
-                            "songs_count" : songs,
-                            "id" : p.uid,
-                            "name" : p.first_name + " " + p.last_name,
-                            "screen_name" : p.screen_name,
-                            "photo": p.photo_50
-                        }];
-                    }
-                }
-            }
-            i = i + 1;
-        }
-
-        // If there is no hints, try to find any groups
-        // suited our query
-
-        if (res.length == 0) {
-            var groups = API.groups.search({"q": q});
-            if (groups.length == 0) {
-                return [];
-            }
-
-            var i = 0;
-            while (i < groups.length - 1) {
-               i = i + 1;
-                var grp = groups[i];
-                var songs = API.audio.getCount({oid: -grp.gid});
-                if ( songs > 1 &&
-                    (grp.is_closed == 0 || grp.is_member == 1))
-                {
-                    res = res + [{"songs_count" : songs,
-                                  "id" : -grp.gid,
-                                  "name" : grp.name,
-                                  "screen_name" : grp.screen_name,
-                                  "photo": grp.photo}];
-                }
-            }
-        }
-
-      return res;
+      return  res;
   */
   //    I leave it here just in case if my vk app will disappear or smth.
 
