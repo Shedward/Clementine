@@ -5873,8 +5873,8 @@ msgid "Find this artist"
 msgstr "Искать этого исполнителя"
 
 #: ../build/src/ui_vksettingspage.h:213
-msgid "Last.fm \"Love\" button also add song to My Music"
-msgstr "Кнопка \"Love\" на Last.fm также добавляет композицию в Мою музыку"
+msgid "Add songs to \"My Music\" when the \"Love\" button is clicked"
+msgstr "Кнопка \"Love\" также добавляет композицию в Мою музыку"
 
 #: ../build/src/ui_vksettingspage.h:212
 msgid "Max global search results"

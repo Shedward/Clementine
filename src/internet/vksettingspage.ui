@@ -99,7 +99,7 @@
       <item>
        <widget class="QCheckBox" name="love_button_is_add_to_mymusic">
         <property name="text">
-         <string>Last.fm &quot;Love&quot; button also add song to My Music</string>
+         <string>Add songs to &quot;My Music&quot; when the &quot;Love&quot; button is clicked</string>
         </property>
        </widget>
       </item>
