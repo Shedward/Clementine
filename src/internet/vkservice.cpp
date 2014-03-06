@@ -397,9 +397,6 @@ void VkService::ShowContextMenu(const QPoint& global_pos) {
 
 void VkService::ItemDoubleClicked(QStandardItem* item) {
   switch (item->data(InternetModel::Role_Type).toInt()) {
-  case Type_NeedLogin:
-    ShowConfig();
-    break;
   case Type_More:
     switch (item->parent()->data(InternetModel::Role_Type).toInt()) {
     case Type_Recommendations:
@@ -473,7 +470,7 @@ void VkService::UpdateRoot() {
     LoadAlbums();
     LoadBookmarks();
   } else {
-    CreateAndAppendRow(root_item_, Type_NeedLogin);
+    ShowConfig();
   }
 }
 
@@ -489,11 +486,6 @@ QStandardItem* VkService::CreateAndAppendRow(QStandardItem* parent, VkService::I
   QStandardItem* item = NULL;
 
   switch (type) {
-  case Type_NeedLogin:
-    item = new QStandardItem(tr("Double click to login"));
-    item->setData(InternetModel::PlayBehaviour_DoubleClickAction,
-                  InternetModel::Role_PlayBehaviour);
-    break;
   case Type_Loading:
     item = new QStandardItem(tr("Loading..."));
     break;
