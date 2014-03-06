@@ -5795,7 +5795,7 @@ msgid "track %1"
 msgstr "композиция %1"
 
 #: internet/vkservice.cpp:155
-msgid " Group radio"
+msgid "Group radio"
 msgstr "Радио группы"
 
 #: internet/vkservice.cpp:149
