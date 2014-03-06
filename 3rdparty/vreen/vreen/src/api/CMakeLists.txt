@@ -1,5 +1,5 @@
 add_simple_library(vreen
-    SHARED CXX11
+    STATIC CXX11
     ${INTERNAL_FLAG}
     ${DEVELOPER_FLAG}
     DEFINE_SYMBOL VK_LIBRARY
