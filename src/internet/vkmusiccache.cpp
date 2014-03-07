@@ -40,10 +40,9 @@ VkMusicCache::VkMusicCache(Application* app, VkService* service)
 QUrl VkMusicCache::Get(const QUrl& url) {
   QString cached_filename = CachedFilename(url);
   QUrl result;
-
   if (InCache(cached_filename)) {
     qLog(Info) << "Use cashed file" << cached_filename;
-    result = QUrl("file://" + cached_filename);
+    result = QUrl::fromLocalFile(cached_filename);
   } else {
     result = service_->GetSongPlayUrl(url, false);
 
@@ -210,5 +209,5 @@ QString VkMusicCache::CachedFilename(const QUrl& url) {
     return "";
   }
   // TODO(Vk): Maybe use extenstion from link? Seems it's always mp3.
-  return cache_dir+'/'+cache_filename+".mp3";
+  return cache_dir+QDir::separator()+cache_filename+".mp3";
 }

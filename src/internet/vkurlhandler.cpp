@@ -30,6 +30,7 @@ VkUrlHandler::VkUrlHandler(VkService* service, QObject* parent)
 
 UrlHandler::LoadResult VkUrlHandler::StartLoading(const QUrl& url) {
   QStringList args = url.path().split("/");
+  LoadResult result;
 
   if (args.size() < 2) {
     qLog(Error) << "Invalid Vk.com URL: " << url
@@ -37,18 +38,17 @@ UrlHandler::LoadResult VkUrlHandler::StartLoading(const QUrl& url) {
                 << "For example vk://song/61145020_166946521/Daughtry/Gone Too Soon";
   } else {
     QString action = url.host();
-    QString id = args[1];
 
     if (action == "song") {
       service_->SetCurrentSongFromUrl(url);
-      return LoadResult(url, LoadResult::TrackAvailable, service_->cache()->Get(url));
+      result = LoadResult(url, LoadResult::TrackAvailable, service_->cache()->Get(url));
     } else if (action == "group") {
-      return service_->GetGroupNextSongUrl(url);
+      result = service_->GetGroupNextSongUrl(url);
     } else {
       qLog(Error) << "Invalid vk.com url action:" << action;
     }
   }
-  return LoadResult();
+  return result;
 }
 
 void VkUrlHandler::TrackSkipped() {

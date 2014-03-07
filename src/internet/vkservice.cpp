@@ -63,7 +63,7 @@ const int VkService::kMaxVkSongList = 6000;
 const int VkService::kCustomSongCount = 50;
 
 QString VkService::DefaultCacheDir() {
-  return Utilities::GetConfigPath(Utilities::Path_CacheRoot) + "/vkcache";
+  return QDir::toNativeSeparators(Utilities::GetConfigPath(Utilities::Path_CacheRoot) + "/vkcache");
 }
 
 uint SearchID::last_id_ = 0;
