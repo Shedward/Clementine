@@ -65,7 +65,7 @@ void VkSearchProvider::SongSearchResult(const SearchID& id, SongList songs) {
   if (id.type() == SearchID::GlobalSearch) {
     ClearSimilarSongs(songs);
     ResultList ret;
-    foreach (const Song& song, songs) {
+    for (const Song& song : songs) {
       Result result(this);
       result.metadata_ = song;
       ret << result;
@@ -81,7 +81,7 @@ void VkSearchProvider::SongSearchResult(const SearchID& id, SongList songs) {
 void VkSearchProvider::GroupSearchResult(const SearchID& rid, const MusicOwnerList& groups) {
   if (rid.type() == SearchID::GlobalSearch) {
     ResultList ret;
-    foreach (const MusicOwner& group, groups) {
+    for (const MusicOwner& group : groups) {
       Result result(this);
       result.metadata_ = group.toOwnerRadio();
       ret << result;

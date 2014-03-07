@@ -184,7 +184,7 @@ QDebug operator<<(QDebug d, const MusicOwner& owner) {
 MusicOwnerList MusicOwner::parseMusicOwnerList(const QVariant& request_result) {
   auto list  = request_result.toList();
   MusicOwnerList result;
-  foreach (auto item, list) {
+  for (const auto& item : list) {
     auto map = item.toMap();
     MusicOwner owner;
     owner.songs_count_ = map.value("songs_count").toInt();
@@ -995,7 +995,7 @@ Song VkService::FromAudioItem(const Vreen::AudioItem& item) {
 
 SongList VkService::FromAudioList(const Vreen::AudioItemList& list) {
   SongList song_list;
-  foreach (const Vreen::AudioItem& item, list) {
+  for (const Vreen::AudioItem& item : list) {
     song_list.append(FromAudioItem(item));
   }
   return song_list;
@@ -1225,7 +1225,7 @@ void VkService::UserOrGroupReceived(const SearchID& id, Vreen::Reply* reply) {
  */
 
 void VkService::AppendSongs(QStandardItem *parent, const SongList &songs) {
-  foreach (auto song, songs) {
+  for (const auto& song : songs) {
     parent->appendRow(CreateSongItem(song));
   }
 }
