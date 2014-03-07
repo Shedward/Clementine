@@ -15,7 +15,6 @@
    along with Clementine.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "vksearchprovider.h"
 
 #include <algorithm>
@@ -24,20 +23,17 @@
 #include "core/song.h"
 
 VkSearchProvider::VkSearchProvider(Application* app, QObject* parent)
-  : SearchProvider(app, parent),
-    service_(NULL) {
-}
+    : SearchProvider(app, parent), service_(NULL) {}
 
 void VkSearchProvider::Init(VkService* service) {
   service_ = service;
-  SearchProvider::Init("Vk.com", "vk.com",
-                       QIcon(":providers/vk.png"),
+  SearchProvider::Init("Vk.com", "vk.com", QIcon(":providers/vk.png"),
                        WantsDelayedQueries | CanShowConfig);
 
-  connect(service_, SIGNAL(SongSearchResult(SearchID, SongList)),
-          this, SLOT(SongSearchResult(SearchID, SongList)));
-  connect(service_, SIGNAL(GroupSearchResult(SearchID, MusicOwnerList)),
-          this, SLOT(GroupSearchResult(SearchID, MusicOwnerList)));
+  connect(service_, SIGNAL(SongSearchResult(SearchID, SongList)), this,
+          SLOT(SongSearchResult(SearchID, SongList)));
+  connect(service_, SIGNAL(GroupSearchResult(SearchID, MusicOwnerList)), this,
+          SLOT(GroupSearchResult(SearchID, MusicOwnerList)));
 }
 
 void VkSearchProvider::SearchAsync(int id, const QString& query) {
@@ -57,9 +53,7 @@ bool VkSearchProvider::IsLoggedIn() {
   return (service_ && service_->HasAccount());
 }
 
-void VkSearchProvider::ShowConfig() {
-  service_->ShowConfig();
-}
+void VkSearchProvider::ShowConfig() { service_->ShowConfig(); }
 
 void VkSearchProvider::SongSearchResult(const SearchID& id, SongList songs) {
   if (id.type() == SearchID::GlobalSearch) {
@@ -78,7 +72,8 @@ void VkSearchProvider::SongSearchResult(const SearchID& id, SongList songs) {
   }
 }
 
-void VkSearchProvider::GroupSearchResult(const SearchID& rid, const MusicOwnerList& groups) {
+void VkSearchProvider::GroupSearchResult(const SearchID& rid,
+                                         const MusicOwnerList& groups) {
   if (rid.type() == SearchID::GlobalSearch) {
     ResultList ret;
     for (const MusicOwner& group : groups) {
@@ -95,26 +90,30 @@ void VkSearchProvider::GroupSearchResult(const SearchID& rid, const MusicOwnerLi
 }
 
 void VkSearchProvider::MaybeSearchFinished(int id) {
-  if (pending_searches_.keys(PendingState(id, QStringList())).isEmpty() && songs_recived && groups_recived) {
+  if (pending_searches_.keys(PendingState(id, QStringList())).isEmpty() &&
+      songs_recived && groups_recived) {
     const PendingState state = pending_searches_.take(id);
     emit SearchFinished(state.orig_id_);
   }
 }
 
 void VkSearchProvider::ClearSimilarSongs(SongList& list) {
-  // Search result sorted by relevance, and better quality songs usualy come first.
-  // Stable sort don't mix similar song, so std::unique will remove bad quality copies.
+  // Search result sorted by relevance, and better quality songs usualy come
+  // first.
+  // Stable sort don't mix similar song, so std::unique will remove bad quality
+  // copies.
   qStableSort(list.begin(), list.end(), [](const Song& a, const Song& b) {
-    return (a.artist().localeAwareCompare(b.artist()) > 0)
-        || (a.title().localeAwareCompare(b.title()) > 0);
+    return (a.artist().localeAwareCompare(b.artist()) > 0) ||
+           (a.title().localeAwareCompare(b.title()) > 0);
   });
 
   int old = list.count();
 
-  auto end = std::unique(list.begin(), list.end(), [](const Song& a, const Song& b) {
-    return (a.artist().localeAwareCompare(b.artist()) == 0)
-        && (a.title().localeAwareCompare(b.title()) == 0);
-  });
+  auto end =
+      std::unique(list.begin(), list.end(), [](const Song& a, const Song& b) {
+        return (a.artist().localeAwareCompare(b.artist()) == 0) &&
+               (a.title().localeAwareCompare(b.title()) == 0);
+      });
 
   list.erase(end, list.end());
 
